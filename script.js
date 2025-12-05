@@ -1,5 +1,6 @@
-// 22 大秘儀資料
-// 每張牌包含：name, upright( keyword, meaning, advice ), reversed(...)
+/* =========================
+   22 大秘儀資料（正逆位＋建議）
+   ========================= */
 const majorArcana = [
   {
     id: 0,
@@ -399,15 +400,19 @@ const majorArcana = [
   }
 ];
 
-// 工具函式：取得隨機整數（含 0, 不含 max）
+/* =========================
+   抽牌工具函式
+   ========================= */
+
+// 取得 0 ~ max-1 的隨機整數
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
 // 抽一張牌
 function drawOneCard() {
-  const cardIndex = getRandomInt(majorArcana.length);
-  const card = majorArcana[cardIndex];
+  const index = getRandomInt(majorArcana.length);
+  const card = majorArcana[index];
   const isUpright = Math.random() < 0.5;
   return [
     {
@@ -418,7 +423,7 @@ function drawOneCard() {
   ];
 }
 
-// 抽三張牌：過去、現在、未來（不重複）
+// 抽三張牌：過去／現在／未來（不重複）
 function drawThreeCards() {
   const used = new Set();
   const results = [];
@@ -440,34 +445,88 @@ function drawThreeCards() {
       positionLabel: positions[i]
     });
   }
-
   return results;
 }
 
-// 把結果渲染到畫面上
-function renderResults(cardsInfo, userQuestion) {
+/* =========================
+   熊熊對話內容產生
+   ========================= */
+
+function generateBearMessage(cardsInfo, userQuestion, mode) {
+  const hasReversed = cardsInfo.some((c) => c.orientation === "reversed");
+  const mainCard = cardsInfo[0];
+  const cardName = mainCard.card.name;
+  const orientationText = mainCard.orientation === "upright" ? "正位" : "逆位";
+
+  const q = (userQuestion || "").trim();
+  const questionPart = q
+    ? `關於你問的「${q}」，`
+    : "就算你沒有寫下具體問題，";
+
+  if (mode === "one") {
+    if (hasReversed) {
+      return (
+        `村長熊熊聞到一點點不安心的味道～\n` +
+        `${questionPart}這張 ${cardName}（${orientationText}）提醒你：` +
+        `現在最重要的不是責怪自己，而是看見可以調整的一小步。你不需要一次就把所有事情修好，慢慢來就可以。`
+      );
+    } else {
+      return (
+        `這張 ${cardName} 的能量其實滿溫暖的。\n` +
+        `${questionPart}請先肯定自己已經努力到這裡了，再一步一步把牌面上的建議變成小行動，` +
+        `你會發現事情比想像中更有彈性。`
+      );
+    }
+  } else {
+    if (hasReversed) {
+      return (
+        `從過去、現在到未來，你的牌裡同時有順風也有提醒。\n` +
+        `村長熊熊想跟你說：不用急著一次看懂全部，只要抓住「今天可以做什麼不同的小選擇」，` +
+        `命運的輪子就已經在慢慢轉向囉。`
+      );
+    } else {
+      return (
+        `三張牌整體能量其實是偏光亮的。\n` +
+        `即使路上有挑戰，你並不是一個人慢慢摸索，這些牌都在陪你確認：` +
+        `只要持續往對自己真實的方向走，宇宙會一點一滴給你回應。`
+      );
+    }
+  }
+}
+
+/* =========================
+   占卜結果畫面渲染
+   ========================= */
+
+function renderResults(cardsInfo, userQuestion, mode) {
   const resultArea = document.getElementById("result-area");
   const cardsContainer = document.getElementById("cards-container");
   const questionDisplay = document.getElementById("question-display");
+  const bearBox = document.getElementById("bear-box");
+  const bearTextEl = document.getElementById("bear-text");
 
-  cardsContainer.innerHTML = "";
-
-  if (userQuestion && userQuestion.trim() !== "") {
-    questionDisplay.textContent = "你問的是：\n「" + userQuestion.trim() + "」";
+  // 問題文字
+  const q = (userQuestion || "").trim();
+  if (q) {
+    questionDisplay.textContent = `你問的是：\n「${q}」`;
   } else {
     questionDisplay.textContent = "你沒有寫下具體問題，但沒關係，請感受牌面給你的提醒。";
   }
 
+  // 先清空舊結果
+  cardsContainer.innerHTML = "";
+
+  // 建立每一張牌的卡片（讓三張牌分開、清楚）
   cardsInfo.forEach((info) => {
     const { card, orientation, positionLabel } = info;
     const data = card[orientation];
 
-    const cardDiv = document.createElement("div");
-    cardDiv.className = "tarot-card-result";
+    const wrapper = document.createElement("div");
+    wrapper.className = "tarot-card-result";
 
-    const positionEl = document.createElement("div");
-    positionEl.className = "tarot-position";
-    positionEl.textContent = positionLabel;
+    const posEl = document.createElement("div");
+    posEl.className = "tarot-position";
+    posEl.textContent = positionLabel;
 
     const nameRow = document.createElement("div");
     nameRow.className = "tarot-name-row";
@@ -504,45 +563,226 @@ function renderResults(cardsInfo, userQuestion) {
     adviceEl.className = "tarot-text";
     adviceEl.textContent = data.advice;
 
-    cardDiv.appendChild(positionEl);
-    cardDiv.appendChild(nameRow);
-    cardDiv.appendChild(keywordEl);
-    cardDiv.appendChild(meaningTitle);
-    cardDiv.appendChild(meaningEl);
-    cardDiv.appendChild(adviceTitle);
-    cardDiv.appendChild(adviceEl);
+    wrapper.appendChild(posEl);
+    wrapper.appendChild(nameRow);
+    wrapper.appendChild(keywordEl);
+    wrapper.appendChild(meaningTitle);
+    wrapper.appendChild(meaningEl);
+    wrapper.appendChild(adviceTitle);
+    wrapper.appendChild(adviceEl);
 
-    cardsContainer.appendChild(cardDiv);
+    cardsContainer.appendChild(wrapper);
   });
 
+  // 熊熊對話框
+  const bearMessage = generateBearMessage(cardsInfo, userQuestion, mode);
+  if (bearMessage && bearTextEl && bearBox) {
+    bearTextEl.textContent = bearMessage;
+    bearBox.classList.remove("hidden");
+  }
+
+  // 顯示結果區
   resultArea.classList.remove("hidden");
+
+  // 捲動到結果
+  resultArea.scrollIntoView({ behavior: "smooth" });
+
+  // 回傳給日記使用
+  return bearMessage;
 }
 
-// 綁定按鈕事件
+/* =========================
+   占卜日記（localStorage）
+   ========================= */
+
+const DIARY_KEY = "bearTarotDiaryV1";
+
+function loadDiary() {
+  try {
+    const raw = localStorage.getItem(DIARY_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+    return [];
+  } catch (e) {
+    console.error("loadDiary error", e);
+    return [];
+  }
+}
+
+function saveDiary(diary) {
+  try {
+    localStorage.setItem(DIARY_KEY, JSON.stringify(diary));
+  } catch (e) {
+    console.error("saveDiary error", e);
+  }
+}
+
+function addDiaryEntry(mode, userQuestion, cardsInfo, bearMessage) {
+  const diary = loadDiary();
+
+  const entry = {
+    time: new Date().toISOString(),
+    mode,
+    question: (userQuestion || "").trim(),
+    cards: cardsInfo.map((c) => ({
+      name: c.card.name,
+      orientation: c.orientation,
+      positionLabel: c.positionLabel
+    })),
+    bearMessage: bearMessage || ""
+  };
+
+  diary.unshift(entry); // 最新放前面
+  // 限制最多 50 筆
+  if (diary.length > 50) diary.length = 50;
+  saveDiary(diary);
+  return diary;
+}
+
+function formatTime(iso) {
+  const d = new Date(iso);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${y}/${m}/${day} ${hh}:${mm}`;
+}
+
+function renderDiaryList(diary) {
+  const listEl = document.getElementById("diary-list");
+  if (!listEl) return;
+
+  listEl.innerHTML = "";
+
+  if (!diary || diary.length === 0) {
+    const empty = document.createElement("div");
+    empty.textContent = "目前還沒有占卜紀錄，抽一張牌看看吧。";
+    empty.style.fontSize = "0.85rem";
+    empty.style.color = "#8a6b7a";
+    listEl.appendChild(empty);
+    return;
+  }
+
+  diary.forEach((entry) => {
+    const entryDiv = document.createElement("div");
+    entryDiv.className = "diary-entry";
+
+    const topRow = document.createElement("div");
+    topRow.className = "diary-entry-top";
+
+    const dateEl = document.createElement("div");
+    dateEl.className = "diary-date";
+    dateEl.textContent = formatTime(entry.time);
+
+    const tagsEl = document.createElement("div");
+    tagsEl.className = "diary-tags";
+
+    const modeTag = document.createElement("span");
+    modeTag.className = "tag mode-tag";
+    modeTag.textContent =
+      entry.mode === "one" ? "單張占卜" : "三張占卜：過去/現在/未來";
+    tagsEl.appendChild(modeTag);
+
+    (entry.cards || []).forEach((c) => {
+      const cardTag = document.createElement("span");
+      cardTag.className = "tag card-tag";
+      cardTag.textContent =
+        c.name + " " + (c.orientation === "upright" ? "正位" : "逆位");
+      tagsEl.appendChild(cardTag);
+    });
+
+    topRow.appendChild(dateEl);
+    topRow.appendChild(tagsEl);
+
+    // 問題
+    const questionEl = document.createElement("div");
+    questionEl.className = "diary-question";
+    const qLabel = document.createElement("span");
+    qLabel.className = "diary-label";
+    qLabel.textContent = "Q：";
+    const qText = document.createElement("span");
+    qText.textContent =
+      entry.question || "未輸入文字（但當時你有在心裡默念問題喔）";
+    questionEl.appendChild(qLabel);
+    questionEl.appendChild(qText);
+
+    // 熊熊提醒
+    const summaryEl = document.createElement("div");
+    summaryEl.className = "diary-summary";
+    const sLabel = document.createElement("span");
+    sLabel.className = "diary-label";
+    sLabel.textContent = "熊熊提醒：";
+    const sText = document.createElement("span");
+    sText.textContent =
+      entry.bearMessage ||
+      "那次的占卜也有給你一些溫柔的提醒，可以再回去感受當時的心情。";
+    summaryEl.appendChild(sLabel);
+    summaryEl.appendChild(sText);
+
+    entryDiv.appendChild(topRow);
+    entryDiv.appendChild(questionEl);
+    entryDiv.appendChild(summaryEl);
+
+    listEl.appendChild(entryDiv);
+  });
+}
+
+/* =========================
+   DOM 綁定
+   ========================= */
+
 document.addEventListener("DOMContentLoaded", () => {
   const drawBtn = document.getElementById("draw-btn");
   const questionInput = document.getElementById("user-question");
   const yearSpan = document.getElementById("year");
+  const toggleDiaryBtn = document.getElementById("toggle-diary-btn");
+  const diaryList = document.getElementById("diary-list");
 
   if (yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
   }
 
-  drawBtn.addEventListener("click", () => {
-    const mode = document.querySelector('input[name="mode"]:checked')?.value || "one";
-    const userQuestion = questionInput.value;
+  // 初始載入日記
+  const initialDiary = loadDiary();
+  renderDiaryList(initialDiary);
 
-    let cardsInfo;
-    if (mode === "one") {
-      cardsInfo = drawOneCard();
-    } else {
-      cardsInfo = drawThreeCards();
-    }
+  // 預設隱藏日記內容
+  if (diaryList) {
+    diaryList.classList.add("hidden");
+  }
 
-    renderResults(cardsInfo, userQuestion);
+  if (toggleDiaryBtn && diaryList) {
+    toggleDiaryBtn.addEventListener("click", () => {
+      diaryList.classList.toggle("hidden");
+      toggleDiaryBtn.textContent = diaryList.classList.contains("hidden")
+        ? "顯示日記"
+        : "隱藏日記";
+    });
+    // 初始文字
+    toggleDiaryBtn.textContent = "顯示日記";
+  }
 
-    // 捲動到結果區
-    const resultArea = document.getElementById("result-area");
-    resultArea.scrollIntoView({ behavior: "smooth" });
-  });
+  if (drawBtn) {
+    drawBtn.addEventListener("click", () => {
+      const mode =
+        document.querySelector('input[name="mode"]:checked')?.value || "one";
+      const userQuestion = questionInput ? questionInput.value : "";
+
+      let cardsInfo;
+      if (mode === "one") {
+        cardsInfo = drawOneCard();
+      } else {
+        cardsInfo = drawThreeCards();
+      }
+
+      // 渲染結果 + 熊熊訊息
+      const bearMessage = renderResults(cardsInfo, userQuestion, mode);
+
+      // 加入日記並重新渲染日記列表
+      const diary = addDiaryEntry(mode, userQuestion, cardsInfo, bearMessage);
+      renderDiaryList(diary);
+    });
+  }
 });
