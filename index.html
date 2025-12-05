@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <title>熊熊塔羅占卜 ｜ 22 大秘儀抽牌</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-wrap">
+      <header class="site-header card">
+        <h1>🐻 熊熊塔羅占卜</h1>
+        <p class="subtitle">22 大秘儀 ｜ 正逆位解析 ｜ 溫柔給予你建議</p>
+
+        <section class="about">
+          <h2>關於占卜師</h2>
+          <p>
+            嗨，我是 <strong>村長熊熊</strong>，喜歡用塔羅牌陪伴大家走過各種人生迷惘，
+            用溫柔的語言說真話，幫你看見自己心裡真正的想法。<br />
+            這個小小的占卜網頁，希望能在你需要時，給你一點勇氣與方向。
+          </p>
+          <p class="ig-link">
+            📸 歡迎來我的 IG 找我聊聊：<br />
+            <a href="https://www.instagram.com/你的IG帳號" target="_blank" rel="noopener noreferrer">
+              @你的IG帳號
+            </a>
+          </p>
+        </section>
+      </header>
+
+      <main class="card">
+        <section class="question-area">
+          <h2>請先在心中想好你的問題</h2>
+          <p class="hint">
+            例：<br />
+            「我適合現在換工作嗎？」<br />
+            「這段關係未來的發展是什麼？」<br />
+            「接下來三個月，我需要特別注意什麼？」
+          </p>
+          <label for="user-question" class="label">（可選）把問題寫下來：</label>
+          <textarea
+            id="user-question"
+            placeholder="在這裡寫下你的問題，讓自己更專注也更誠實面對內心。"
+          ></textarea>
+        </section>
+
+        <section class="mode-area">
+          <h2>選擇抽牌方式</h2>
+          <div class="mode-options">
+            <label class="mode-item">
+              <input type="radio" name="mode" value="one" checked />
+              <span>單張牌占卜（針對一個問題的核心訊息）</span>
+            </label>
+            <label class="mode-item">
+              <input type="radio" name="mode" value="three" />
+              <span>三張牌：過去／現在／未來</span>
+            </label>
+          </div>
+          <button id="draw-btn">✨ 抽牌開始占卜</button>
+        </section>
+
+        <section id="result-area" class="result-area hidden">
+          <h2>占卜結果</h2>
+          <p id="question-display" class="question-display"></p>
+          <div id="cards-container" class="cards-container"></div>
+          <p class="disclaimer">
+            ⚠️ 小提醒：塔羅是一面「照見自己」的鏡子，提供的是方向與思考角度，<br />
+            真正的選擇與行動，仍然掌握在你自己手中。
+          </p>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>© <span id="year"></span> 熊熊塔羅占卜 ｜ 僅供娛樂與自我覺察參考</p>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
