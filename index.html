@@ -1,107 +1,106 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <title>熊熊塔羅占卜 ｜ 22 大秘儀抽牌</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="page-wrap">
-      <header class="site-header card">
-        <h1>🐻 熊熊塔羅占卜</h1>
-        <p class="subtitle">22 大秘儀 ｜ 正逆位解析 ｜ 溫柔給予你建議</p>
+<head>
+  <meta charset="UTF-8" />
+  <title>熊熊塔羅占卜 ｜ 22 大秘儀抽牌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="page-wrap">
 
-        <section class="about">
-          <h2>關於占卜師</h2>
-          <p>
-            嗨，我是 <strong>村長熊熊</strong>，喜歡用塔羅牌陪伴大家走過各種人生迷惘，
-            用溫柔的語言說真話，幫你看見自己心裡真正的想法。<br />
-            這個小小的占卜網頁，希望能在你需要時，給你一點勇氣與方向。
-          </p>
-          <p class="ig-link">
-            📸 歡迎來我的 IG 找我聊聊：<br />
-            <a href="https://www.instagram.com/luckygbear" target="_blank" rel="noopener noreferrer">
-              @luckygbear
-            </a>
-          </p>
-        </section>
-      </header>
+  <!-- Header -->
+  <header class="site-header card">
+    <h1>🐻 熊熊塔羅占卜</h1>
+    <p class="subtitle">22 大秘儀｜正逆位解析｜溫柔引導你前進</p>
 
-      <main class="card">
-        <section class="question-area">
-          <h2>請先在心中想好你的問題</h2>
-          <p class="hint">
-            例：<br />
-            「我適合現在換工作嗎？」<br />
-            「這段關係未來的發展是什麼？」<br />
-            「接下來三個月，我需要特別注意什麼？」
-          </p>
-          <label for="user-question" class="label">（可選）把問題寫下來：</label>
-          <textarea
-            id="user-question"
-            placeholder="在這裡寫下你的問題，讓自己更專注也更誠實面對內心。"
-          ></textarea>
-        </section>
+    <section class="about">
+      <h2>關於占卜師</h2>
+      <p>
+        嗨，我是 <strong>村長熊熊</strong>。  
+        希望用簡單又溫暖的塔羅占卜陪你走過迷茫，把心裡的聲音慢慢看清楚。
+      </p>
+      <p class="ig-link">
+        📸 IG：  @luckygbear
+        <a href="https://www.instagram.com/luckygbear" target="_blank">@luckygbear</a>
+      </p>
+    </section>
+  </header>
 
-        <section class="mode-area">
-          <h2>選擇抽牌方式</h2>
-          <div class="mode-options">
-            <label class="mode-item">
-              <input type="radio" name="mode" value="one" checked />
-              <span>單張牌占卜（針對一個問題的核心訊息）</span>
-            </label>
-            <label class="mode-item">
-              <input type="radio" name="mode" value="three" />
-              <span>三張牌：過去／現在／未來</span>
-            </label>
-          </div>
-          <button id="draw-btn">✨ 抽牌開始占卜</button>
-        </section>
+  <!-- 問題 -->
+  <main class="card">
+    <section class="question-area">
+      <h2>請在心中想好你的問題</h2>
+      <p class="hint">
+        例：  
+        「我現在適合換工作嗎？」  
+        「這段關係未來會如何？」  
+        「接下來三個月我需要注意什麼？」
+      </p>
 
-        <section id="result-area" class="result-area hidden">
-          <h2>占卜結果</h2>
-          <p id="question-display" class="question-display"></p>
-          <div id="cards-container" class="cards-container"></div>
+      <label class="label">（可選）把問題寫下來：</label>
+      <textarea id="user-question" placeholder="寫下你的問題，有助於更清晰聚焦。"></textarea>
+    </section>
 
-          <!-- 熊熊對話框 -->
-          <section class="bear-box">
-            <div class="bear-emoji">🐻</div>
-            <div class="bear-content">
-              <div class="bear-title">村長熊熊給你的提醒</div>
-              <p id="bear-message" class="bear-text">
-                （占卜之後，熊熊會在這裡跟你說話～）
-              </p>
-            </div>
-          </section>
+    <!-- 抽牌模式 -->
+    <section class="mode-area">
+      <h2>選擇抽牌方式</h2>
+      <div class="mode-options">
+        <label class="mode-item">
+          <input type="radio" name="mode" value="one" checked />
+          單張牌｜核心訊息
+        </label>
 
-          <p class="disclaimer">
-            ⚠️ 小提醒：塔羅是一面「照見自己」的鏡子，提供的是方向與思考角度，<br />
-            真正的選擇與行動，仍然掌握在你自己手中。
-          </p>
-        </section>
+        <label class="mode-item">
+          <input type="radio" name="mode" value="three" />
+          三張牌｜過去 / 現在 / 未來
+        </label>
+      </div>
 
-        <!-- 占卜日記 -->
-        <section id="diary-area" class="diary-area">
-          <h2>📔 占卜日記</h2>
-          <p class="diary-hint">
-            每一次抽牌結果都會自動記錄在這裡，只有你自己看得到。<br />
-            你可以回頭看看，自己一路走來的心情變化與成長。
-          </p>
-          <div id="diary-list" class="diary-list">
-            <!-- 由 JavaScript 動態填入 -->
-          </div>
-          <button id="clear-diary-btn" class="clear-diary-btn">
-            🗑 清除全部占卜紀錄
-          </button>
-        </section>
-      </main>
+      <button id="draw-btn">✨ 開始抽牌</button>
+    </section>
+  </main>
 
-      <footer class="site-footer">
-        <p>© <span id="year"></span> 熊熊塔羅占卜 ｜ 僅供娛樂與自我覺察參考</p>
-      </footer>
+  <!-- 結果區 -->
+  <section id="result-area" class="result-area hidden card">
+    <h2>占卜結果</h2>
+    <p id="question-display" class="question-display"></p>
+
+    <!-- 熊熊對話框 -->
+    <div id="bear-box" class="card bear-box hidden">
+      <div class="bear-avatar">🐻</div>
+      <div class="bear-content">
+        <div class="bear-title">村長熊熊給你的溫暖提醒</div>
+        <div id="bear-text" class="bear-text"></div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
-  </body>
+    <!-- 抽牌結果 -->
+    <div id="cards-container" class="cards-container"></div>
+
+    <p class="disclaimer">
+      ⚠️ 塔羅是一面照見自己的鏡子。  
+      答案在你心裡，我只是幫你把光打亮一些。
+    </p>
+  </section>
+
+  <!-- 占卜日記 -->
+  <section class="card diary-area">
+    <div class="diary-header">
+      <h2>📓 占卜日記</h2>
+      <button id="toggle-diary-btn">顯示/隱藏</button>
+    </div>
+
+    <p class="diary-hint">系統會自動記錄你的抽牌結果，只存在你的手機／電腦裡。</p>
+
+    <div id="diary-list" class="diary-list hidden"></div>
+  </section>
+
+  <footer class="site-footer">
+    © <span id="year"></span> 熊熊塔羅占卜
+  </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
 </html>
