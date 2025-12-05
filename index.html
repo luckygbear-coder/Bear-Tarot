@@ -21,8 +21,8 @@
           </p>
           <p class="ig-link">
             📸 歡迎來我的 IG 找我聊聊：<br />
-            <a href="https://www.instagram.com/luckygbear" target="_blank" rel="noopener noreferrer">
-              @luckygbear
+            <a href="https://www.instagram.com/你的IG帳號" target="_blank" rel="noopener noreferrer">
+              @你的IG帳號
             </a>
           </p>
         </section>
@@ -63,10 +63,37 @@
           <h2>占卜結果</h2>
           <p id="question-display" class="question-display"></p>
           <div id="cards-container" class="cards-container"></div>
+
+          <!-- 熊熊對話框 -->
+          <section class="bear-box">
+            <div class="bear-emoji">🐻</div>
+            <div class="bear-content">
+              <div class="bear-title">村長熊熊給你的提醒</div>
+              <p id="bear-message" class="bear-text">
+                （占卜之後，熊熊會在這裡跟你說話～）
+              </p>
+            </div>
+          </section>
+
           <p class="disclaimer">
             ⚠️ 小提醒：塔羅是一面「照見自己」的鏡子，提供的是方向與思考角度，<br />
             真正的選擇與行動，仍然掌握在你自己手中。
           </p>
+        </section>
+
+        <!-- 占卜日記 -->
+        <section id="diary-area" class="diary-area">
+          <h2>📔 占卜日記</h2>
+          <p class="diary-hint">
+            每一次抽牌結果都會自動記錄在這裡，只有你自己看得到。<br />
+            你可以回頭看看，自己一路走來的心情變化與成長。
+          </p>
+          <div id="diary-list" class="diary-list">
+            <!-- 由 JavaScript 動態填入 -->
+          </div>
+          <button id="clear-diary-btn" class="clear-diary-btn">
+            🗑 清除全部占卜紀錄
+          </button>
         </section>
       </main>
 
