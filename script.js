@@ -744,14 +744,9 @@ document.addEventListener("DOMContentLoaded", () => {
     yearSpan.textContent = new Date().getFullYear();
   }
 
-  // 初始載入日記
+  // 初始載入日記（預設就顯示）
   const initialDiary = loadDiary();
   renderDiaryList(initialDiary);
-
-  // 預設隱藏日記內容
-  if (diaryList) {
-    diaryList.classList.add("hidden");
-  }
 
   if (toggleDiaryBtn && diaryList) {
     toggleDiaryBtn.addEventListener("click", () => {
@@ -760,8 +755,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ? "顯示日記"
         : "隱藏日記";
     });
-    // 初始文字
-    toggleDiaryBtn.textContent = "顯示日記";
+    // 一開始是顯示，所以文字先寫「隱藏日記」
+    toggleDiaryBtn.textContent = "隱藏日記";
   }
 
   if (drawBtn) {
