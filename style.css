@@ -1,0 +1,258 @@
+/* 基本設定 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", system-ui,
+    sans-serif;
+  background: radial-gradient(circle at top, #ffece0, #f7d6ff 40%, #f6f0ff 80%);
+  color: #4a2b37;
+}
+
+/* 外層寬度控制 */
+.page-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* 卡片樣式 */
+.card {
+  background: rgba(255, 247, 236, 0.96);
+  border-radius: 18px;
+  border: 2px solid #e3c28f;
+  box-shadow: 0 4px 12px rgba(112, 72, 46, 0.18);
+  padding: 16px 18px 20px;
+  margin-bottom: 16px;
+}
+
+/* 標題 */
+.site-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  margin: 6px 0 14px;
+  font-size: 0.95rem;
+  color: #996b52;
+}
+
+.about h2,
+.question-area h2,
+.mode-area h2,
+.result-area h2 {
+  margin-top: 4px;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+/* 關於 + IG */
+.about p {
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.ig-link a {
+  color: #b55abf;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.ig-link a:hover {
+  text-decoration: underline;
+}
+
+/* 問題區 */
+.label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 80px;
+  border-radius: 10px;
+  border: 1.5px solid #d3b28a;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  resize: vertical;
+  outline: none;
+  background: rgba(255, 252, 246, 0.96);
+}
+
+textarea:focus {
+  border-color: #c28ad9;
+  box-shadow: 0 0 0 2px rgba(194, 138, 217, 0.2);
+}
+
+/* 抽牌模式選擇 */
+.mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.mode-item {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.mode-item input {
+  margin-top: 3px;
+}
+
+/* 抽牌按鈕 */
+#draw-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #f7a9ff, #ffce7a);
+  color: #4a2b37;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 3px 8px rgba(180, 99, 129, 0.4);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.12s ease,
+    filter 0.12s ease;
+}
+
+#draw-btn:hover {
+  filter: brightness(1.05);
+}
+
+#draw-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 4px rgba(180, 99, 129, 0.35);
+}
+
+/* 結果區 */
+.hidden {
+  display: none;
+}
+
+.result-area {
+  margin-top: 16px;
+}
+
+.question-display {
+  font-size: 0.9rem;
+  color: #7c5868;
+  margin-top: 0;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+
+/* 卡片排版 */
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 每一張牌 */
+.tarot-card-result {
+  border-radius: 14px;
+  border: 1.5px solid #e3c28f;
+  background: #fffaf2;
+  padding: 10px 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tarot-position {
+  font-size: 0.85rem;
+  color: #a47556;
+  margin-bottom: 4px;
+}
+
+.tarot-name-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tarot-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.tarot-orientation {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.tarot-orientation.upright {
+  color: #3b8c4d;
+}
+
+.tarot-orientation.reversed {
+  color: #b6424e;
+}
+
+.tarot-keyword {
+  font-size: 0.9rem;
+  margin: 4px 0 4px;
+  color: #80556a;
+}
+
+.tarot-section-title {
+  font-size: 0.86rem;
+  margin: 4px 0 2px;
+  font-weight: 600;
+  color: #8a5c3b;
+}
+
+.tarot-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* 免責聲明 */
+.disclaimer {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #a17b7b;
+  line-height: 1.6;
+}
+
+/* 頁尾 */
+.site-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #8a6d75;
+  margin: 16px 0 8px;
+}
+
+/* RWD */
+@media (min-width: 768px) {
+  .page-wrap {
+    padding: 24px;
+  }
+
+  .card {
+    padding: 20px 22px 24px;
+  }
+
+  #draw-btn {
+    max-width: 320px;
+    margin: 0 auto;
+    display: block;
+  }
+}
