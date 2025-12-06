@@ -156,6 +156,10 @@
       flex-direction: column;
       justify-content: space-between;
     }
+    /* 逆位時，邊框顏色稍微不同 */
+    .card.is-reversed .card-front {
+      border-color: #b895f5;
+    }
     .card-name {
       font-size: 13px;
       font-weight: 700;
@@ -232,6 +236,7 @@
     .bear-message {
       font-size: 13px;
       line-height: 1.5;
+      white-space: pre-line;
       margin-bottom: 6px;
     }
     .bear-actions {
@@ -376,55 +381,161 @@
   </div>
 
   <script>
-    // 簡易塔羅牌資料（可之後再擴充成完整版）
+    // 22 張大秘儀：名稱、主題、正位、逆位（簡版解釋）
     const tarotCards = [
       {
-        name: "太陽",
-        tag: "溫暖・自信・成功",
-        icon: "☀️",
-        meaningPast: "過去曾有讓你發光的時刻，那些成功的記憶其實還在支持著你。",
-        meaningPresent: "現在的你，比自己想像中更有力量，只是還沒完全相信自己。",
-        meaningFuture: "未來會迎來一個更適合展現你的舞台，請大方地站上去。"
-      },
-      {
-        name: "月亮",
-        tag: "情緒・直覺・不安",
-        icon: "🌙",
-        meaningPast: "曾經有一段時間，你常常猜測別人的想法，也容易懷疑自己。",
-        meaningPresent: "現在的你很敏感，請先照顧好睡眠與情緒，相信自己的直覺。",
-        meaningFuture: "未來迷霧會慢慢散開，只要一步一步前進，答案自然會浮現。"
-      },
-      {
         name: "愚者",
-        tag: "新的開始・勇氣",
+        tag: "新的開始・自由・旅程",
         icon: "🎒",
-        meaningPast: "你曾經勇敢做過一些別人不太懂的選擇，那是很珍貴的經驗。",
-        meaningPresent: "現在很適合學習新東西，允許自己像新手一樣慢慢摸索。",
-        meaningFuture: "前方有新的旅程在等你，帶著好奇心和一點點傻勁就足夠。"
+        upright: "正位：新的旅程、勇敢嘗試、帶著好奇心往前走，允許自己當新手。",
+        reversed: "逆位：衝動或過度逃避，提醒你在冒險前先做好基本準備。"
+      },
+      {
+        name: "魔術師",
+        tag: "行動・創造・專注",
+        icon: "✨",
+        upright: "正位：你其實已經有足夠的工具與能力，可以開始實際行動、把想法變成現實。",
+        reversed: "逆位：力量有點分散，提醒你別一心多用，把注意力收回到真正重要的事。"
+      },
+      {
+        name: "女祭司",
+        tag: "直覺・潛意識",
+        icon: "🌙",
+        upright: "正位：安靜下來，你的直覺會給你答案，相信心裡那個溫柔而堅定的聲音。",
+        reversed: "逆位：想太多、情緒太亂，先照顧好自己，再來解答別人的問題。"
+      },
+      {
+        name: "皇后",
+        tag: "滋養・美感・豐盛",
+        icon: "👑",
+        upright: "正位：適合好好照顧身體與生活環境，享受創作、美感與被愛的感覺。",
+        reversed: "逆位：過度付出、忽略自己，提醒你先把一部分愛留給自己。"
+      },
+      {
+        name: "皇帝",
+        tag: "結構・責任・穩定",
+        icon: "🏛️",
+        upright: "正位：需要你站出來做決定、設定界線，建立穩定的規則與秩序。",
+        reversed: "逆位：控制感太強或太僵硬，可以多一點彈性與傾聽。"
+      },
+      {
+        name: "教皇",
+        tag: "學習・規範・傳承",
+        icon: "📖",
+        upright: "正位：適合向老師、專業人士請教，也代表守規則、跟隨既有的路線。",
+        reversed: "逆位：過度在意別人期待，提醒你也要聽聽自己真正相信的是什麼。"
       },
       {
         name: "戀人",
         tag: "關係・選擇・連結",
         icon: "💖",
-        meaningPast: "過去的關係讓你學會什麼是心動，也學會怎麼保護自己。",
-        meaningPresent: "現在的關係課題，正在邀請你更誠實地表達真實的感受。",
-        meaningFuture: "只要願意互相傾聽，未來會出現讓你感到被理解、被接住的夥伴。"
+        upright: "正位：重要的關係或合作來到眼前，要真誠溝通、做出符合內心的選擇。",
+        reversed: "逆位：誤會、猶豫或不平衡，適合停下來重新確認彼此的需要。"
       },
       {
-        name: "隱者",
-        tag: "獨處・思考・整理",
-        icon: "🕯️",
-        meaningPast: "曾經的你需要很多獨處時間，慢慢整理心裡的複雜感受。",
-        meaningPresent: "現在適合把步調放慢一點，先陪自己好好想清楚真正需要的是什麼。",
-        meaningFuture: "未來的你會帶著現在的思考結果，變成一種成熟的智慧。"
+        name: "戰車",
+        tag: "前進・意志・突破",
+        icon: "🏇",
+        upright: "正位：適合勇敢往前衝、面對挑戰，專注在自己的方向上。",
+        reversed: "逆位：方向感混亂或太急躁，先調整節奏與目標再出發。"
       },
       {
         name: "力量",
-        tag: "溫柔的堅定",
+        tag: "溫柔的堅定・勇氣",
         icon: "🦁",
-        meaningPast: "過去有些挑戰其實已經證明，你比自己以為的還要勇敢。",
-        meaningPresent: "現在不需要大吼大叫的力量，只要溫柔但不退讓就很好。",
-        meaningFuture: "未來的你能用溫暖與穩定，安撫別人的不安，也成為自己的靠山。"
+        upright: "正位：用溫柔而穩定的方式，安撫自己的情緒，也能安撫別人的不安。",
+        reversed: "逆位：心裡有些疲累或自我懷疑，提醒你休息和自我肯定很重要。"
+      },
+      {
+        name: "隱者",
+        tag: "獨處・內在探索",
+        icon: "🕯️",
+        upright: "正位：需要一段安靜的時間，整理心情與想法，聽聽自己真正的聲音。",
+        reversed: "逆位：太孤單或封閉，適合慢慢打開一點點，讓信任的人靠近。"
+      },
+      {
+        name: "命運之輪",
+        tag: "轉折・機運・周期",
+        icon: "🎡",
+        upright: "正位：運勢正在轉動，有新的機會或改變出現，擁抱變化。",
+        reversed: "逆位：事情卡卡的，提醒你先調整心態，耐心等待時機再出手。"
+      },
+      {
+        name: "正義",
+        tag: "公平・決策・誠實",
+        icon: "⚖️",
+        upright: "正位：需要理性分析、面對真相，做出對自己與他人都負責的選擇。",
+        reversed: "逆位：覺得不公平或被誤解，適合把話說清楚、也檢視自己的立場。"
+      },
+      {
+        name: "吊人",
+        tag: "暫停・換角度",
+        icon: "🪜",
+        upright: "正位：暫時的停滯是為了看見新的觀點，慢下來反而能走得更穩。",
+        reversed: "逆位：一直卡在同一個位置，提醒你可以試著鬆手、改變看事情的方式。"
+      },
+      {
+        name: "死神",
+        tag: "結束・轉化・重生",
+        icon: "☠️",
+        upright: "正位：一個階段要告一段落了，為新的開始騰出空間。",
+        reversed: "逆位：害怕結束或改變，反而讓自己更辛苦，試著允許「舊的」慢慢離開。"
+      },
+      {
+        name: "節制",
+        tag: "平衡・調和・適量",
+        icon: "💧",
+        upright: "正位：找到剛剛好的節奏，不用極端，用溫和的方式調整生活與關係。",
+        reversed: "逆位：過度忙碌或過度放縱，提醒你回到中間值，照顧身心。"
+      },
+      {
+        name: "惡魔",
+        tag: "束縛・慾望・壓力",
+        icon: "😈",
+        upright: "正位：看見自己被什麼綁住（習慣、壓力、關係），是改變的第一步。",
+        reversed: "逆位：有機會鬆開枷鎖，只要你願意對自己坦誠，慢慢脫離消耗的模式。"
+      },
+      {
+        name: "高塔",
+        tag: "突變・覺醒",
+        icon: "🏰",
+        upright: "正位：突然的變化打亂原本的計畫，但也打破舊有、不適合的東西。",
+        reversed: "逆位：一直害怕崩壞、卻又緊抓不放，提醒你學習「安全地放下」。"
+      },
+      {
+        name: "星星",
+        tag: "希望・療癒・靈感",
+        icon: "⭐",
+        upright: "正位：溫柔的希望正在靠近，你值得被溫柔對待，慢慢療癒就好。",
+        reversed: "逆位：暫時看不到光，但星星還在，只是被雲遮住了，給自己多一點時間。"
+      },
+      {
+        name: "月亮",
+        tag: "情緒・迷霧・夢境",
+        icon: "🌙",
+        upright: "正位：情緒起伏較大，適合記錄夢境與感受，留意直覺給的訊息。",
+        reversed: "逆位：想像與現實有點混在一起，試著用簡單的事實幫自己踩穩地板。"
+      },
+      {
+        name: "太陽",
+        tag: "喜悅・成功・自信",
+        icon: "☀️",
+        upright: "正位：能量明亮、有機會被看見與肯定，勇敢地展現真實的自己。",
+        reversed: "逆位：有點累、有點提不起勁，提醒你先休息充電，再來追逐目標也不遲。"
+      },
+      {
+        name: "審判",
+        tag: "醒悟・召喚・第二次機會",
+        icon: "📣",
+        upright: "正位：過去的經驗在呼喚你做出新的選擇，是重新開始的好時機。",
+        reversed: "逆位：對過去過度糾結，讓你遲遲無法往前，試著原諒自己走錯的路。"
+      },
+      {
+        name: "世界",
+        tag: "完成・整合・圓滿",
+        icon: "🌍",
+        upright: "正位：一個重要的階段將近完成，你學到的東西會成為下一段旅程的寶藏。",
+        reversed: "逆位：還差最後一小步，提醒你穩穩收尾，不要急著放棄。"
       }
     ];
 
@@ -440,6 +551,7 @@
       future: document.querySelector('.card-slot[data-position="future"] .card')
     };
 
+    // reading = { past: { card, reversed }, present: {...}, future: {...} }
     let reading = null;
     let flippedCount = 0;
     let gameReady = false;
@@ -473,57 +585,56 @@
       }
     }
 
-    // 工具：設定單張卡片正面文字
-    function fillCard(cardEl, cardData, positionKey) {
+    // 設定單張卡片內容（含正逆位）
+    function fillCard(cardEl, slotData) {
+      const { card, reversed } = slotData;
       const nameEl    = cardEl.querySelector(".card-name");
       const tagEl     = cardEl.querySelector(".card-tag");
       const meaningEl = cardEl.querySelector(".card-meaning");
       const iconEl    = cardEl.querySelector(".card-icon");
 
-      nameEl.textContent    = cardData.name;
-      tagEl.textContent     = cardData.tag;
-      iconEl.textContent    = cardData.icon;
+      cardEl.classList.toggle("is-reversed", reversed);
 
-      if (positionKey === "past") {
-        meaningEl.textContent = cardData.meaningPast;
-      } else if (positionKey === "present") {
-        meaningEl.textContent = cardData.meaningPresent;
-      } else {
-        meaningEl.textContent = cardData.meaningFuture;
-      }
+      nameEl.textContent    = card.name + (reversed ? "（逆位）" : "（正位）");
+      tagEl.textContent     = card.tag;
+      meaningEl.textContent = reversed ? card.reversed : card.upright;
+      iconEl.textContent    = card.icon;
     }
 
-    // 生成整體解讀，給熊熊說
+    // 產生熊熊總結文字
     function buildBearMessage(reading) {
-      const { past, present, future } = reading;
+      function label(slot) {
+        return slot.card.name + (slot.reversed ? "（逆位）" : "（正位）");
+      }
       return (
-        `過去的你抽到「${past.name}」，提醒你那些經驗其實一直在陪你長大。\n` +
-        `現在的位置是「${present.name}」，熊熊覺得這是你現在最重要的主題。\n` +
-        `未來則出現「${future.name}」，代表前方還有新的可能在等你嘗試。\n\n` +
-        `🐻 村長熊熊想說：不管牌面怎麼說，你都有權利慢慢來、好好照顧自己的心。`
+        `過去的位置抽到：${label(reading.past)}。\n` +
+        `現在的位置抽到：${label(reading.present)}。\n` +
+        `未來的位置抽到：${label(reading.future)}。\n\n` +
+        `🐻 村長熊熊想說：\n牌只是提醒，不是命令。請把它當作一個溫柔的指引，真正的選擇還是在你手上喔。`
       );
     }
 
     // 開始一次新的占卜
     function startReading() {
-      // 洗牌，取前三張做為過去／現在／未來
       const shuffled = shuffle(tarotCards);
+
+      // 三張牌 + 各自隨機正位／逆位
       reading = {
-        past: shuffled[0],
-        present: shuffled[1],
-        future: shuffled[2]
+        past:    { card: shuffled[0], reversed: Math.random() < 0.5 },
+        present: { card: shuffled[1], reversed: Math.random() < 0.5 },
+        future:  { card: shuffled[2], reversed: Math.random() < 0.5 }
       };
       flippedCount = 0;
       gameReady = true;
 
       // 將三張牌復原成背面 & 出場動畫
-      Object.entries(slots).forEach(([key, cardEl], index) => {
-        cardEl.classList.remove("flipped");
+      Object.entries(slots).forEach(([key, cardEl]) => {
+        cardEl.classList.remove("flipped", "is-reversed");
         cardEl.style.pointerEvents = "auto";
-        cardEl.classList.remove("show"); // 重新觸發動畫
-        void cardEl.offsetWidth;        // 強制回流以便重新播放動畫
+        cardEl.classList.remove("show");
+        void cardEl.offsetWidth; // 重新觸發動畫
         cardEl.classList.add("show");
-        fillCard(cardEl, reading[key], key);
+        fillCard(cardEl, reading[key]);
       });
 
       // 隱藏熊熊對話
@@ -540,10 +651,10 @@
       }, 1200);
     }
 
-    // 卡片點擊事件
+    // 綁定卡片點擊事件
     function bindCardEvents() {
       Object.entries(slots).forEach(([key, cardEl]) => {
-        cardEl.addEventListener("click", (e) => {
+        cardEl.addEventListener("click", () => {
           if (!gameReady) return;
           if (cardEl.classList.contains("flipped")) return;
 
@@ -555,7 +666,6 @@
           spawnStarBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 10);
 
           if (flippedCount === 3) {
-            // 全部翻完，稍微延遲一下，讓翻牌動畫跑完再顯示熊熊
             setTimeout(() => {
               bearMessageEl.textContent = buildBearMessage(reading);
               bearDialog.classList.remove("hidden");
@@ -567,13 +677,8 @@
     }
 
     // 按鈕綁定
-    startBtn.addEventListener("click", () => {
-      startReading();
-    });
-
-    againBtn.addEventListener("click", () => {
-      startReading();
-    });
+    startBtn.addEventListener("click", startReading);
+    againBtn.addEventListener("click", startReading);
 
     // 初始化
     bindCardEvents();
