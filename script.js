@@ -295,3 +295,27 @@ historyBox.innerHTML = historyList
       </div>`;
   })
   .join("");
+  // 抽牌紀錄（會存到 localStorage）
+const HISTORY_KEY = "bearTarotHistoryV1";
+let historyList = [];   // 內容格式：[{ time: "02/03 11:54", text: "..." }, ...]
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      historyList = parsed;
+    }
+  } catch (e) {
+    console.warn("讀取占卜紀錄失敗：", e);
+  }
+}
+
+function saveHistory() {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(historyList));
+  } catch (e) {
+    console.warn("儲存占卜紀錄失敗：", e);
+  }
+}
