@@ -5,6 +5,23 @@
   <title>熊熊塔羅占卜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+  /* 熊熊結果大卡片（不擋住牌） */
+.result-panel {
+  margin-top: 14px;
+  background: #fff7e6;                     /* 跟之前一樣的奶油色卡片 */
+  border-radius: 18px;
+  border: 2px solid #f5d3a6;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  padding: 12px 14px 14px;
+}
+
+/* 熊熊文字：顏色加深、行距加大、保留換行 */
+.result-panel-content {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4b3044;                          /* 比之前更深一點 */
+  white-space: pre-line;                   /* \n 會變成真正的換行 */
+}
     * { box-sizing: border-box; }
     body {
       margin: 0;
