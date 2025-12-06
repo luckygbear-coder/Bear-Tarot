@@ -1195,4 +1195,57 @@ textarea:focus {
   font-weight: 700;
   margin-bottom: 4px;
 }
+/* 統一按鈕 icon 內距 */
+.result-btns button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Icon 基底 */
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+
+/* =========================
+   1. 再占一次 Icon（↻）
+   ========================= */
+.icon-repeat {
+  background: radial-gradient(circle at 30% 30%, #fff2d9, #ffb86c);
+  mask: url('data:image/svg+xml;utf8,\
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">\
+<path fill="black" d="M12 5v2.79c0 .45.54.67.85.35l3.78-3.78a.5.5 0 0 0 0-.71L12.85.86a.5.5 0 0 0-.85.36V4a8 8 0 1 0 8 8h-2a6 6 0 1 1-6-6z"/>\
+</svg>');
+  mask-size: cover;
+}
+
+
+/* =========================
+   2. 抽牌紀錄 Icon（卷軸）
+   ========================= */
+.icon-scroll {
+  background: radial-gradient(circle at 30% 30%, #fff2d9, #ffb86c);
+  mask: url('data:image/svg+xml;utf8,\
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">\
+<path fill="black" d="M4 4h16v2H4V4zm2 4h12v10H6V8zm-2 12h16v2H4v-2z"/>\
+</svg>');
+  mask-size: cover;
+}
+
+
+/* =========================
+   3. 下載 Icon（⬇）
+   ========================= */
+.icon-download {
+  background: radial-gradient(circle at 30% 30%, #fff2d9, #ffb86c);
+  mask: url('data:image/svg+xml;utf8,\
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">\
+<path fill="black" d="M5 20h14v-2H5v2zm7-18l-5 5h3v6h4V7h3l-5-5z"/>\
+</svg>');
+  mask-size: cover;
+}
 }
