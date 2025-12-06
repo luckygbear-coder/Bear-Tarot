@@ -23,14 +23,73 @@ body {
   padding: 16px;
 }
 
-/* 卡片樣式 */
+/* ========== 卡片高度調整 ========== */
 .card {
-  background: rgba(255, 247, 236, 0.96);
-  border-radius: 18px;
-  border: 2px solid #e3c28f;
-  box-shadow: 0 4px 12px rgba(112, 72, 46, 0.18);
-  padding: 16px 18px 20px;
-  margin-bottom: 16px;
+  width: 100%;
+  max-width: 110px;
+  height: 180px;             /* ↑ 高度變高 */
+  perspective: 900px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  pointer-events: none;
+}
+
+/* 手機更高一點，避免溢出 */
+@media (max-width: 420px) {
+  .card {
+    height: 200px;
+  }
+}
+
+/* 文字可捲動 */
+.card-meaning {
+  font-size: 12px;
+  line-height: 1.45;
+  max-height: 90px;         /* 限制高度 */
+  overflow-y: auto;         /* 超出可捲 */
+  padding-right: 4px;
+}
+
+/* 逆位卡片依然適用翻轉動畫 */
+.card.is-reversed .card-front {
+  border-color: #b895f5;
+}
+
+/* 卡片「出場動畫」保留 */
+.card.show {
+  animation: cardEnter .45s forwards;
+}
+
+/* ========== 新：占卜結果下方展開區域 ========== */
+.result-panel {
+  margin-top: 18px;
+  background: rgba(255,247,230,0.95);
+  border-radius: 14px;
+  border: 2px solid #f3d9b4;
+  padding: 14px 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: none;                /* 翻完三張才顯示 */
+}
+
+/* 讓結果可捲動，不遮擋卡片 */
+.result-panel-content {
+  max-height: 260px;
+  overflow-y: auto;
+  white-space: pre-line;        /* 保留換行 */
+  font-size: 14px;
+}
+
+/* 新：按鈕列 */
+.result-btns {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+.result-btns button {
+  flex: 1;
+  font-size: 13px;
+  padding: 8px 12px;
 }
 
 /* =========================
