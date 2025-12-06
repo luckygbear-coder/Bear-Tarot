@@ -582,4 +582,24 @@ textarea:focus {
   color: #8a4d5c !important;          /* 深一點的標題色 */
   margin-bottom: 4px;
 }
+/* 抽牌紀錄的可視化強化 */
+#historyBox {
+  color: #4b3044 !important;      /* 與上面熊熊提醒同色系 */
+  font-size: 14px !important;
+  line-height: 1.6;
+}
+
+#historyBox pre {
+  color: #4b3044 !important;      /* 讓內容變清楚 */
+  font-size: 14px !important;
+  line-height: 1.6;
+  white-space: pre-line !important;
+  margin-top: 4px;
+}
+
+.history-title {
+  color: #8a4d5c !important;      /* 深色標題，更清楚 */
+  font-weight: 700;
+  margin-bottom: 4px;
+}
 }
