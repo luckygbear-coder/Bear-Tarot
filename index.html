@@ -2,105 +2,581 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>熊熊塔羅占卜 ｜ 22 大秘儀抽牌</title>
+  <title>熊熊塔羅占卜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #2d254a, #6a4f9c, #f9e4c8);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .game-wrap {
+      max-width: 480px;
+      width: 100%;
+      padding: 16px;
+      margin-top: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-panel {
+      background: rgba(255, 247, 230, 0.95);
+      border-radius: 18px;
+      border: 2px solid #f7dba5;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      padding: 18px 14px 20px;
+      color: #4a3450;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      text-align: center;
+      letter-spacing: 0.15em;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #7c5c88;
+      margin-bottom: 12px;
+    }
+    .star-divider {
+      text-align: center;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .btn-bar {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ffcf5f, #ff9f7b);
+      color: #4a2a18;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+    }
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    /* 三張牌區域 */
+    .table {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .slot-title {
+      text-align: center;
+      font-size: 12px;
+      color: #8f6c9b;
+      margin-bottom: 4px;
+    }
+    .card-slot {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 卡片本體 */
+    .card {
+      width: 90px;
+      height: 140px;
+      perspective: 900px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+      pointer-events: none;
+    }
+    .card.show {
+      animation: cardEnter 0.45s forwards;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s ease;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      backface-visibility: hidden;
+      box-shadow: 0 4px 9px rgba(0,0,0,0.25);
+    }
+    .card-back {
+      background: radial-gradient(circle at 30% 20%, #ffeaa7, #f0932b, #e056fd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      color: #fffdf0;
+      border: 2px solid rgba(255,255,255,0.85);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-back::before {
+      content: "★";
+      position: absolute;
+      font-size: 48px;
+      opacity: 0.2;
+      top: -8px;
+      right: 8px;
+    }
+    .card-front {
+      transform: rotateY(180deg);
+      background: #fff9ef;
+      border: 2px solid #f3c79b;
+      padding: 10px 7px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-name {
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      color: #7a3f5f;
+      margin-bottom: 4px;
+    }
+    .card-tag {
+      font-size: 11px;
+      text-align: center;
+      color: #c77a68;
+      margin-bottom: 6px;
+    }
+    .card-meaning {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #5c3b4c;
+      flex: 1;
+    }
+    .card-icon {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 4px;
+    }
+
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(20px) scale(0.9); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* 熊熊對話框 */
+    .bear-dialog {
+      position: fixed;
+      left: 50%;
+      bottom: 8%;
+      transform: translateX(-50%);
+      max-width: 460px;
+      width: calc(100% - 32px);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(255, 247, 230, 0.98);
+      border-radius: 18px;
+      border: 2px solid #f5d3a6;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+      padding: 10px 12px 12px;
+      color: #4b3044;
+      z-index: 30;
+      animation: bearPop 0.4s ease-out;
+    }
+    .bear-dialog.hidden {
+      display: none;
+    }
+    .bear-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffeaa7, #ff9f7b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .bear-text {
+      flex: 1;
+      font-size: 13px;
+    }
+    .bear-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #8a4d5c;
+    }
+    .bear-message {
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+    .bear-actions {
+      text-align: right;
+    }
+    .bear-actions button {
+      font-size: 12px;
+      padding: 6px 14px;
+      box-shadow: none;
+    }
+    @keyframes bearPop {
+      from { transform: translate(-50%, 40px) scale(0.9); opacity: 0; }
+      to   { transform: translate(-50%, 0) scale(1); opacity: 1; }
+    }
+
+    /* 星星粒子層 */
+    .star-layer {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 6px rgba(255,255,255,0.9);
+      animation: starFloat 1.4s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes starFloat {
+      0% {
+        transform: translate3d(0, 10px, 0) scale(0.3);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(0, -40px, 0) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* 小提示文字 */
+    .hint {
+      text-align: center;
+      font-size: 11px;
+      color: #edd2f4;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 400px) {
+      .card {
+        width: 80px;
+        height: 124px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="page-wrap">
+  <div class="game-wrap">
+    <!-- 星星粒子層 -->
+    <div class="star-layer" id="starLayer"></div>
 
-  <!-- Header -->
-  <header class="site-header card">
-    <h1>🐻 熊熊塔羅占卜</h1>
-    <p class="subtitle">22 大秘儀｜正逆位解析｜溫柔引導你前進</p>
+    <div class="card-panel">
+      <h1>熊熊塔羅占卜</h1>
+      <div class="subtitle">深呼吸 3 秒，心裡默念問題，然後點下按鈕。</div>
+      <div class="star-divider">✦ ✦ ✦</div>
 
-    <section class="about">
-      <h2>關於占卜師</h2>
-      <p>
-        嗨，我是 <strong>村長熊熊</strong>。  
-        希望用簡單又溫暖的塔羅占卜陪你走過迷茫，把心裡的聲音慢慢看清楚。
-      </p>
-      <p class="ig-link">
-        📸 IG：  
-        <a href="https://www.instagram.com/luckygbear" target="_blank">@luckygbear</a>
-      </p>
-    </section>
-  </header>
-
-  <!-- 問題 -->
-  <main class="card">
-    <section class="question-area">
-      <h2>請在心中想好你的問題</h2>
-      <p class="hint">
-        例：  
-        「我現在適合換工作嗎？」  
-        「這段關係未來會如何？」  
-        「接下來三個月我需要注意什麼？」
-      </p>
-
-      <label class="label">（可選）把問題寫下來：</label>
-      <textarea id="user-question" placeholder="寫下你的問題，有助於更清晰聚焦。"></textarea>
-    </section>
-
-    <!-- 抽牌模式 -->
-    <section class="mode-area">
-      <h2>選擇抽牌方式</h2>
-      <div class="mode-options">
-        <label class="mode-item">
-          <input type="radio" name="mode" value="one" checked />
-          單張牌｜核心訊息
-        </label>
-
-        <label class="mode-item">
-          <input type="radio" name="mode" value="three" />
-          三張牌｜過去 / 現在 / 未來
-        </label>
+      <div class="btn-bar">
+        <button id="startBtn">開始占卜</button>
       </div>
 
-      <button id="draw-btn">✨ 開始抽牌</button>
-    </section>
-  </main>
+      <div class="table">
+        <!-- 過去 -->
+        <div class="card-slot" data-position="past">
+          <div class="slot-title">過去</div>
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-face card-back">★</div>
+              <div class="card-face card-front">
+                <div class="card-name"></div>
+                <div class="card-tag"></div>
+                <div class="card-meaning"></div>
+                <div class="card-icon"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 現在 -->
+        <div class="card-slot" data-position="present">
+          <div class="slot-title">現在</div>
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-face card-back">★</div>
+              <div class="card-face card-front">
+                <div class="card-name"></div>
+                <div class="card-tag"></div>
+                <div class="card-meaning"></div>
+                <div class="card-icon"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 未來 -->
+        <div class="card-slot" data-position="future">
+          <div class="slot-title">未來</div>
+          <div class="card">
+            <div class="card-inner">
+              <div class="card-face card-back">★</div>
+              <div class="card-face card-front">
+                <div class="card-name"></div>
+                <div class="card-tag"></div>
+                <div class="card-meaning"></div>
+                <div class="card-icon"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- .table -->
+    </div><!-- .card-panel -->
 
-  <!-- 結果區 -->
-  <section id="result-area" class="result-area hidden card">
-    <h2>占卜結果</h2>
-    <p id="question-display" class="question-display"></p>
+    <div class="hint">提示：按「開始占卜」後，依序點三張牌翻開唷 ✨</div>
+  </div><!-- .game-wrap -->
 
-    <!-- 熊熊對話框 -->
-    <div id="bear-box" class="card bear-box hidden">
-      <div class="bear-avatar">🐻</div>
-      <div class="bear-content">
-        <div class="bear-title">村長熊熊給你的溫暖提醒</div>
-        <div id="bear-text" class="bear-text"></div>
+  <!-- 熊熊對話框 -->
+  <div id="bearDialog" class="bear-dialog hidden">
+    <div class="bear-avatar">🐻</div>
+    <div class="bear-text">
+      <div class="bear-title">村長熊熊的小提醒</div>
+      <div class="bear-message" id="bearMessage">
+        今天的能量正在準備中…
+      </div>
+      <div class="bear-actions">
+        <button id="againBtn">再占一次</button>
       </div>
     </div>
+  </div>
 
-    <!-- 抽牌結果 -->
-    <div id="cards-container" class="cards-container"></div>
+  <script>
+    // 簡易塔羅牌資料（可之後再擴充成完整版）
+    const tarotCards = [
+      {
+        name: "太陽",
+        tag: "溫暖・自信・成功",
+        icon: "☀️",
+        meaningPast: "過去曾有讓你發光的時刻，那些成功的記憶其實還在支持著你。",
+        meaningPresent: "現在的你，比自己想像中更有力量，只是還沒完全相信自己。",
+        meaningFuture: "未來會迎來一個更適合展現你的舞台，請大方地站上去。"
+      },
+      {
+        name: "月亮",
+        tag: "情緒・直覺・不安",
+        icon: "🌙",
+        meaningPast: "曾經有一段時間，你常常猜測別人的想法，也容易懷疑自己。",
+        meaningPresent: "現在的你很敏感，請先照顧好睡眠與情緒，相信自己的直覺。",
+        meaningFuture: "未來迷霧會慢慢散開，只要一步一步前進，答案自然會浮現。"
+      },
+      {
+        name: "愚者",
+        tag: "新的開始・勇氣",
+        icon: "🎒",
+        meaningPast: "你曾經勇敢做過一些別人不太懂的選擇，那是很珍貴的經驗。",
+        meaningPresent: "現在很適合學習新東西，允許自己像新手一樣慢慢摸索。",
+        meaningFuture: "前方有新的旅程在等你，帶著好奇心和一點點傻勁就足夠。"
+      },
+      {
+        name: "戀人",
+        tag: "關係・選擇・連結",
+        icon: "💖",
+        meaningPast: "過去的關係讓你學會什麼是心動，也學會怎麼保護自己。",
+        meaningPresent: "現在的關係課題，正在邀請你更誠實地表達真實的感受。",
+        meaningFuture: "只要願意互相傾聽，未來會出現讓你感到被理解、被接住的夥伴。"
+      },
+      {
+        name: "隱者",
+        tag: "獨處・思考・整理",
+        icon: "🕯️",
+        meaningPast: "曾經的你需要很多獨處時間，慢慢整理心裡的複雜感受。",
+        meaningPresent: "現在適合把步調放慢一點，先陪自己好好想清楚真正需要的是什麼。",
+        meaningFuture: "未來的你會帶著現在的思考結果，變成一種成熟的智慧。"
+      },
+      {
+        name: "力量",
+        tag: "溫柔的堅定",
+        icon: "🦁",
+        meaningPast: "過去有些挑戰其實已經證明，你比自己以為的還要勇敢。",
+        meaningPresent: "現在不需要大吼大叫的力量，只要溫柔但不退讓就很好。",
+        meaningFuture: "未來的你能用溫暖與穩定，安撫別人的不安，也成為自己的靠山。"
+      }
+    ];
 
-    <p class="disclaimer">
-      ⚠️ 塔羅是一面照見自己的鏡子。  
-      答案在你心裡，我只是幫你把光打亮一些。
-    </p>
-  </section>
+    const startBtn = document.getElementById("startBtn");
+    const starLayer = document.getElementById("starLayer");
+    const bearDialog = document.getElementById("bearDialog");
+    const bearMessageEl = document.getElementById("bearMessage");
+    const againBtn = document.getElementById("againBtn");
 
-  <!-- 占卜日記 -->
-  <section class="card diary-area">
-    <div class="diary-header">
-      <h2>📓 占卜日記</h2>
-      <button id="toggle-diary-btn">顯示/隱藏</button>
-    </div>
+    const slots = {
+      past:  document.querySelector('.card-slot[data-position="past"]  .card'),
+      present: document.querySelector('.card-slot[data-position="present"] .card'),
+      future: document.querySelector('.card-slot[data-position="future"] .card')
+    };
 
-    <p class="diary-hint">系統會自動記錄你的抽牌結果，只存在你的手機／電腦裡。</p>
+    let reading = null;
+    let flippedCount = 0;
+    let gameReady = false;
 
-    <div id="diary-list" class="diary-list"></div>
-  </section>
+    // 工具：洗牌
+    function shuffle(array) {
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
 
-  <footer class="site-footer">
-    © <span id="year"></span> 熊熊塔羅占卜
-  </footer>
-</div>
+    // 工具：產生星星粒子
+    function spawnStarBurst(centerX, centerY, count = 8) {
+      const rect = starLayer.getBoundingClientRect();
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        const offsetX = (Math.random() - 0.5) * 40;
+        const offsetY = (Math.random() - 0.5) * 10;
+        star.style.left = (centerX - rect.left + offsetX) + "px";
+        star.style.top  = (centerY - rect.top + offsetY) + "px";
+        const delay = (Math.random() * 0.25).toFixed(2);
+        star.style.animationDelay = delay + "s";
+        starLayer.appendChild(star);
+        star.addEventListener("animationend", () => {
+          star.remove();
+        });
+      }
+    }
 
-<script src="script.js"></script>
+    // 工具：設定單張卡片正面文字
+    function fillCard(cardEl, cardData, positionKey) {
+      const nameEl    = cardEl.querySelector(".card-name");
+      const tagEl     = cardEl.querySelector(".card-tag");
+      const meaningEl = cardEl.querySelector(".card-meaning");
+      const iconEl    = cardEl.querySelector(".card-icon");
+
+      nameEl.textContent    = cardData.name;
+      tagEl.textContent     = cardData.tag;
+      iconEl.textContent    = cardData.icon;
+
+      if (positionKey === "past") {
+        meaningEl.textContent = cardData.meaningPast;
+      } else if (positionKey === "present") {
+        meaningEl.textContent = cardData.meaningPresent;
+      } else {
+        meaningEl.textContent = cardData.meaningFuture;
+      }
+    }
+
+    // 生成整體解讀，給熊熊說
+    function buildBearMessage(reading) {
+      const { past, present, future } = reading;
+      return (
+        `過去的你抽到「${past.name}」，提醒你那些經驗其實一直在陪你長大。\n` +
+        `現在的位置是「${present.name}」，熊熊覺得這是你現在最重要的主題。\n` +
+        `未來則出現「${future.name}」，代表前方還有新的可能在等你嘗試。\n\n` +
+        `🐻 村長熊熊想說：不管牌面怎麼說，你都有權利慢慢來、好好照顧自己的心。`
+      );
+    }
+
+    // 開始一次新的占卜
+    function startReading() {
+      // 洗牌，取前三張做為過去／現在／未來
+      const shuffled = shuffle(tarotCards);
+      reading = {
+        past: shuffled[0],
+        present: shuffled[1],
+        future: shuffled[2]
+      };
+      flippedCount = 0;
+      gameReady = true;
+
+      // 將三張牌復原成背面 & 出場動畫
+      Object.entries(slots).forEach(([key, cardEl], index) => {
+        cardEl.classList.remove("flipped");
+        cardEl.style.pointerEvents = "auto";
+        cardEl.classList.remove("show"); // 重新觸發動畫
+        void cardEl.offsetWidth;        // 強制回流以便重新播放動畫
+        cardEl.classList.add("show");
+        fillCard(cardEl, reading[key], key);
+      });
+
+      // 隱藏熊熊對話
+      bearDialog.classList.add("hidden");
+
+      // 星星小噴發
+      const rect = startBtn.getBoundingClientRect();
+      spawnStarBurst(rect.left + rect.width / 2, rect.top);
+
+      // 按鈕鎖定，避免連按
+      startBtn.disabled = true;
+      setTimeout(() => {
+        startBtn.disabled = false;
+      }, 1200);
+    }
+
+    // 卡片點擊事件
+    function bindCardEvents() {
+      Object.entries(slots).forEach(([key, cardEl]) => {
+        cardEl.addEventListener("click", (e) => {
+          if (!gameReady) return;
+          if (cardEl.classList.contains("flipped")) return;
+
+          cardEl.classList.add("flipped");
+          flippedCount++;
+
+          // 在卡片附近噴發星星
+          const rect = cardEl.getBoundingClientRect();
+          spawnStarBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 10);
+
+          if (flippedCount === 3) {
+            // 全部翻完，稍微延遲一下，讓翻牌動畫跑完再顯示熊熊
+            setTimeout(() => {
+              bearMessageEl.textContent = buildBearMessage(reading);
+              bearDialog.classList.remove("hidden");
+              gameReady = false;
+            }, 600);
+          }
+        });
+      });
+    }
+
+    // 按鈕綁定
+    startBtn.addEventListener("click", () => {
+      startReading();
+    });
+
+    againBtn.addEventListener("click", () => {
+      startReading();
+    });
+
+    // 初始化
+    bindCardEvents();
+  </script>
 </body>
 </html>
