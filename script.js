@@ -286,15 +286,26 @@ const tarotCards = [
     }
   }
 ];
-historyBox.innerHTML = historyList
-  .map((h, i) => {
-    return `
-      <div style="margin-bottom:14px;">
-        <div class="history-title">第 ${i + 1} 次占卜</div>
-        <pre>${h}</pre>
-      </div>`;
-  })
-  .join("");
+function updateHistoryBox() {
+  if (!historyList.length) {
+    historyBox.innerHTML =
+      '<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>';
+    return;
+  }
+
+  historyBox.innerHTML = historyList
+    .map((item, index) => {
+      return `
+        <div style="margin-bottom:14px;">
+          <div class="history-title">
+            第 ${index + 1} 次占卜（${item.time}）
+          </div>
+          <pre>${item.text}</pre>
+        </div>
+      `;
+    })
+    .join("");
+}
   // 抽牌紀錄（會存到 localStorage）
 const HISTORY_KEY = "bearTarotHistoryV1";
 let historyList = [];   // 內容格式：[{ time: "02/03 11:54", text: "..." }, ...]
