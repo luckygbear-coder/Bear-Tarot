@@ -415,6 +415,476 @@
     <div class="hint">提示：按「開始占卜」後，依序點三張牌翻開唷 ✨</div>
   </div><!-- .game-wrap -->
 
-  <!-- 第三段我們會在這裡放 <script> ... </script> -->
+<script>
+// =============== 22 大秘儀（含正位＋逆位＋熊熊語錄） ===============
+const tarotCards = [
+  {
+    name: "愚者",
+    tag: "新的開始・自由・旅程",
+    icon: "🎒",
+    upright: {
+      meaning: "新的旅程、勇敢嘗試、帶著好奇心往前走。",
+      bear: "🐻 熊熊說：每一步都是冒險的開始，你已經做得很好囉！"
+    },
+    reversed: {
+      meaning: "衝動或猶豫，需要重新檢視方向。",
+      bear: "🐻 熊熊說：先別急，等心安靜下來再出發也沒關係。"
+    }
+  },
+  {
+    name: "魔術師",
+    tag: "行動・創造・專注",
+    icon: "✨",
+    upright: {
+      meaning: "你擁有足夠的能力，可以開始行動。",
+      bear: "🐻 熊熊說：你真的很有才華，現在就是最好的開始時機！"
+    },
+    reversed: {
+      meaning: "注意分心、動力不足。",
+      bear: "🐻 熊熊說：休息一下沒關係，等你準備好，靈感會再次回來。"
+    }
+  },
+  {
+    name: "女祭司",
+    tag: "直覺・內在・靜心",
+    icon: "🌙",
+    upright: {
+      meaning: "信任你的直覺，你心裡已有答案。",
+      bear: "🐻 熊熊說：你心裡的聲音很溫柔，也值得被聽見。"
+    },
+    reversed: {
+      meaning: "情緒混亂，需要更多休息。",
+      bear: "🐻 熊熊說：別勉強自己，可以慢慢來，我陪你一起。"
+    }
+  },
+  {
+    name: "皇后",
+    tag: "滋養・美感・愛",
+    icon: "👑",
+    upright: {
+      meaning: "值得被照顧、被愛、享受生活。",
+      bear: "🐻 熊熊說：今天請對自己好一點，你真的值得溫柔。"
+    },
+    reversed: {
+      meaning: "忽略自己、情緒疲累。",
+      bear: "🐻 熊熊說：你已經很努力了，讓自己休息一下吧。"
+    }
+  },
+  {
+    name: "皇帝",
+    tag: "結構・秩序・責任",
+    icon: "🏛️",
+    upright: {
+      meaning: "建立界線、掌控方向。",
+      bear: "🐻 熊熊說：你比自己想像中的還要堅強又穩定喔！"
+    },
+    reversed: {
+      meaning: "過度控制或壓力。",
+      bear: "🐻 熊熊說：你不需要一個人扛所有，熊熊陪著你。"
+    }
+  },
+  {
+    name: "教皇",
+    tag: "學習・指引・傳統",
+    icon: "📖",
+    upright: {
+      meaning: "向專業求助、汲取知識。",
+      bear: "🐻 熊熊說：向人尋求幫助是勇敢的表現，你做得很好。"
+    },
+    reversed: {
+      meaning: "渴望自由、不想被規則綁住。",
+      bear: "🐻 熊熊說：你可以走自己的路，世界會支持你的。"
+    }
+  },
+  {
+    name: "戀人",
+    tag: "關係・選擇・合一",
+    icon: "💖",
+    upright: {
+      meaning: "關係和諧、重要選擇。",
+      bear: "🐻 熊熊說：真誠的心能打造最美的連結。"
+    },
+    reversed: {
+      meaning: "誤會、猶豫、情緒不平衡。",
+      bear: "🐻 熊熊說：別急，先聽聽自己真正想要的是什麼。"
+    }
+  },
+  {
+    name: "戰車",
+    tag: "意志・前進・掌控力",
+    icon: "🏇",
+    upright: {
+      meaning: "突破困難、掌控方向。",
+      bear: "🐻 熊熊說：你真的很努力，熊熊替你拍手！"
+    },
+    reversed: {
+      meaning: "方向不清、太急躁。",
+      bear: "🐻 熊熊說：慢一點沒關係，你會看得更清楚。"
+    }
+  },
+  {
+    name: "力量",
+    tag: "溫柔力量・勇氣",
+    icon: "🦁",
+    upright: {
+      meaning: "內在力量、溫柔自信。",
+      bear: "🐻 熊熊說：你本來就很勇敢，不需要證明什麼。"
+    },
+    reversed: {
+      meaning: "疲倦、自我懷疑。",
+      bear: "🐻 熊熊說：讓熊熊抱一下，你值得休息。"
+    }
+  },
+  {
+    name: "隱者",
+    tag: "內省・智慧・獨處",
+    icon: "🕯️",
+    upright: {
+      meaning: "安靜沉澱、找到方向。",
+      bear: "🐻 熊熊說：你的心很聰明，只需要多一些安靜。"
+    },
+    reversed: {
+      meaning: "孤單、封閉太久。",
+      bear: "🐻 熊熊說：你不用一個人，我在這裡陪你。"
+    }
+  },
+  {
+    name: "命運之輪",
+    tag: "轉變・運勢・機會",
+    icon: "🎡",
+    upright: {
+      meaning: "好運來臨、事情加速。",
+      bear: "🐻 熊熊說：你的命運之輪正在轉向更好的地方！"
+    },
+    reversed: {
+      meaning: "停滯、反覆、時機未到。",
+      bear: "🐻 熊熊說：別怕，你想要的正在慢慢靠近你。"
+    }
+  },
+  {
+    name: "正義",
+    tag: "平衡・誠實・真相",
+    icon: "⚖️",
+    upright: {
+      meaning: "公平、理性、需要面對真實。",
+      bear: "🐻 熊熊說：你願意誠實，已經比很多人強大了。"
+    },
+    reversed: {
+      meaning: "感到不公平、誤會。",
+      bear: "🐻 熊熊說：你值得被理解，請先照顧好自己的心。"
+    }
+  },
+  {
+    name: "吊人",
+    tag: "等待・轉化・新視角",
+    icon: "🪜",
+    upright: {
+      meaning: "停下才能看見新方向。",
+      bear: "🐻 熊熊說：慢下來不是落後，而是讓奇蹟追上你。"
+    },
+    reversed: {
+      meaning: "卡住、抗拒改變。",
+      bear: "🐻 熊熊說：小小一步就很好，你不需要一次改變全部。"
+    }
+  },
+  {
+    name: "死神",
+    tag: "結束・重生・轉化",
+    icon: "☠️",
+    upright: {
+      meaning: "舊的結束、新的開始。",
+      bear: "🐻 熊熊說：放下不是失去，是為了迎接更好的。"
+    },
+    reversed: {
+      meaning: "害怕改變、停滯。",
+      bear: "🐻 熊熊說：不用急，熊熊會陪著你慢慢往前。"
+    }
+  },
+  {
+    name: "節制",
+    tag: "平衡・療癒・流動",
+    icon: "💧",
+    upright: {
+      meaning: "找到自己的節奏。",
+      bear: "🐻 熊熊說：舒服的步伐，就是最好的速度。"
+    },
+    reversed: {
+      meaning: "失衡、過度或不足。",
+      bear: "🐻 熊熊說：你值得休息，也值得重獲平衡。"
+    }
+  },
+  {
+    name: "惡魔",
+    tag: "束縛・慾望・壓力",
+    icon: "😈",
+    upright: {
+      meaning: "看見問題、開始解放。",
+      bear: "🐻 熊熊說：看見陰影並不可怕，你比它們更強大。"
+    },
+    reversed: {
+      meaning: "脫離壞習慣、重獲自由。",
+      bear: "🐻 熊熊說：你正在變得更自由，好棒！"
+    }
+  },
+  {
+    name: "高塔",
+    tag: "劇變・重建・真相",
+    icon: "🏰",
+    upright: {
+      meaning: "舊結構崩解，是重建的開始。",
+      bear: "🐻 熊熊說：雖然不舒服，但這會帶你走向更好的未來。"
+    },
+    reversed: {
+      meaning: "擔心失控、害怕崩壞。",
+      bear: "🐻 熊熊說：慢慢面對就好，你不需要一次處理全部。"
+    }
+  },
+  {
+    name: "星星",
+    tag: "希望・療癒・願望",
+    icon: "⭐",
+    upright: {
+      meaning: "希望與光正在靠近你。",
+      bear: "🐻 熊熊說：你值得被光照亮，未來會越來越好的。"
+    },
+    reversed: {
+      meaning: "失去方向、能量不足。",
+      bear: "🐻 熊熊說：先休息一下，星星會在夜裡等你。"
+    }
+  },
+  {
+    name: "月亮",
+    tag: "情緒・潛意識・迷霧",
+    icon: "🌙",
+    upright: {
+      meaning: "敏感、直覺、情緒波動。",
+      bear: "🐻 熊熊說：你的感受都很重要，請不要忽略自己。"
+    },
+    reversed: {
+      meaning: "害怕、想像過度。",
+      bear: "🐻 熊熊說：做一件小小的事，你會慢慢穩定下來。"
+    }
+  },
+  {
+    name: "太陽",
+    tag: "喜悅・成功・自信",
+    icon: "☀️",
+    upright: {
+      meaning: "能量滿滿、喜悅與成功。",
+      bear: "🐻 熊熊說：你真的很棒！世界正在為你拍手喔～"
+    },
+    reversed: {
+      meaning: "累了、光變弱。",
+      bear: "🐻 熊熊說：發光不是義務，累了就來熊熊這裡充電。"
+    }
+  },
+  {
+    name: "審判",
+    tag: "復活・醒悟・召喚",
+    icon: "📣",
+    upright: {
+      meaning: "第二次機會、重新開始。",
+      bear: "🐻 熊熊說：你比以前更成熟，這次你會做得更好。"
+    },
+    reversed: {
+      meaning: "糾結、不敢放下。",
+      bear: "🐻 熊熊說：你已經盡力了，可以溫柔地放過自己。"
+    }
+  },
+  {
+    name: "世界",
+    tag: "完成・整合・圓滿",
+    icon: "🌍",
+    upright: {
+      meaning: "任務完成、進入新階段。",
+      bear: "🐻 熊熊說：恭喜你！你的努力正在開花結果。"
+    },
+    reversed: {
+      meaning: "差最後一步、未完成。",
+      bear: "🐻 熊熊說：再努力一下下，你就會看到很美的結果。"
+    }
+  }
+];
+
+// =============== DOM 選取 ===============
+const startBtn = document.getElementById("startBtn");
+const againBtn = document.getElementById("againBtn");
+const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const resultPanel = document.getElementById("resultPanel");
+const resultText = document.getElementById("resultText");
+const historyBox = document.getElementById("historyBox");
+
+const starLayer = document.getElementById("starLayer");
+
+// 三張牌 DOM
+const slots = {
+  past: document.querySelector('.card-slot[data-position="past"] .card'),
+  present: document.querySelector('.card-slot[data-position="present"] .card'),
+  future: document.querySelector('.card-slot[data-position="future"] .card')
+};
+
+// =============== 狀態 ===============
+let reading = null;
+let flippedCount = 0;
+let historyList = []; // 存每次占卜紀錄
+
+// =============== 工具：洗牌 ===============
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// =============== 星星粒子動畫 ===============
+function spawnStar(x, y, count = 8) {
+  const rect = starLayer.getBoundingClientRect();
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("div");
+    el.className = "star";
+    el.style.left = x - rect.left + (Math.random() * 40 - 20) + "px";
+    el.style.top = y - rect.top + (Math.random() * 20 - 10) + "px";
+    el.style.animationDelay = (Math.random() * 0.25) + "s";
+    starLayer.appendChild(el);
+    el.addEventListener("animationend", () => el.remove());
+  }
+}
+
+// =============== 抽到的牌 → 填入卡片前面 ===============
+function fillCard(cardEl, data) {
+  const { card, reversed } = data;
+
+  cardEl.classList.toggle("is-reversed", reversed);
+
+  const nameEl = cardEl.querySelector(".card-name");
+  const tagEl = cardEl.querySelector(".card-tag");
+  const meaningEl = cardEl.querySelector(".card-meaning");
+  const iconEl = cardEl.querySelector(".card-icon");
+
+  nameEl.textContent = card.name + (reversed ? "（逆位）" : "（正位）");
+  tagEl.textContent = card.tag;
+  meaningEl.textContent = reversed ? card.reversed.meaning : card.upright.meaning;
+  iconEl.textContent = card.icon;
+}
+
+// =============== 組合熊熊訊息 ===============
+function buildBearMessage(r) {
+  function part(label, slot) {
+    const side = slot.reversed ? slot.card.reversed : slot.card.upright;
+    const pos = slot.reversed ? "（逆位）" : "（正位）";
+    return `${label}：${slot.card.name}${pos}\n牌的提醒：${side.meaning}\n${side.bear}\n`;
+  }
+
+  return (
+    part("過去", r.past) +
+    "\n" +
+    part("現在", r.present) +
+    "\n" +
+    part("未來", r.future) +
+    "\n🐻 村長熊熊小總結：\n牌只是提醒，不是命令。\n你可以照自己的步調慢慢前進，熊熊會一直在這裡陪你。"
+  );
+}
+
+// =============== 建立紀錄區內容 ===============
+function updateHistoryBox() {
+  if (historyList.length === 0) {
+    historyBox.innerHTML = `<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>`;
+    return;
+  }
+
+  historyBox.innerHTML = historyList
+    .map((h, i) => {
+      return `
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:700;color:#8a4d5c;">第 ${i + 1} 次占卜</div>
+          <pre style="white-space:pre-line;font-size:12px;">${h}</pre>
+        </div>`;
+    })
+    .join("");
+}
+
+// =============== 下載文字檔 ===============
+function downloadReading(text) {
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "今日熊熊占卜.txt";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+// =============== 開始占卜 ===============
+function startReading() {
+  const shuffled = shuffle(tarotCards);
+
+  reading = {
+    past: { card: shuffled[0], reversed: Math.random() < 0.5 },
+    present: { card: shuffled[1], reversed: Math.random() < 0.5 },
+    future: { card: shuffled[2], reversed: Math.random() < 0.5 }
+  };
+
+  flippedCount = 0;
+  resultPanel.style.display = "none";
+
+  // 初始化卡片
+  Object.entries(slots).forEach(([k, cardEl]) => {
+    cardEl.classList.remove("flipped", "is-reversed", "show");
+    cardEl.style.pointerEvents = "auto";
+    void cardEl.offsetWidth; // 重置動畫
+    fillCard(cardEl, reading[k]);
+    cardEl.classList.add("show");
+  });
+
+  const r = startBtn.getBoundingClientRect();
+  spawnStar(r.left + r.width / 2, r.top);
+
+  startBtn.disabled = true;
+  setTimeout(() => (startBtn.disabled = false), 800);
+}
+
+// =============== 綁定卡片點擊 ===============
+Object.entries(slots).forEach(([key, cardEl]) => {
+  cardEl.addEventListener("click", () => {
+    if (cardEl.classList.contains("flipped")) return;
+
+    cardEl.classList.add("flipped");
+    flippedCount++;
+
+    const r = cardEl.getBoundingClientRect();
+    spawnStar(r.left + r.width / 2, r.top + r.height / 2, 10);
+
+    if (flippedCount === 3) {
+      setTimeout(() => {
+        const msg = buildBearMessage(reading);
+
+        resultText.textContent = msg;
+        resultPanel.style.display = "block";
+
+        historyList.push(msg);
+        updateHistoryBox();
+      }, 600);
+    }
+  });
+});
+
+// =============== 按鈕功能 ===============
+startBtn.addEventListener("click", startReading);
+againBtn.addEventListener("click", startReading);
+
+toggleHistoryBtn.addEventListener("click", () => {
+  historyBox.style.display = historyBox.style.display === "none" ? "block" : "none";
+});
+
+downloadBtn.addEventListener("click", () => {
+  downloadReading(resultText.textContent);
+});
+</script>
 </body>
 </html>
