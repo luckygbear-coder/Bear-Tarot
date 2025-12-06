@@ -336,6 +336,51 @@ function updateHistoryBox() {
     })
     .join("");
 }
+// 抽牌紀錄（會存到 localStorage）
+const HISTORY_KEY = "bearTarotHistoryV1";
+let historyList = [];   // { time: "02/03 11:54", text: "..." }
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      historyList = parsed;
+    }
+  } catch (e) {
+    console.warn("讀取占卜紀錄失敗：", e);
+  }
+}
+
+function saveHistory() {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(historyList));
+  } catch (e) {
+    console.warn("儲存占卜紀錄失敗：", e);
+  }
+}
+
+function updateHistoryBox() {
+  if (!historyList.length) {
+    historyBox.innerHTML =
+      '<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>';
+    return;
+  }
+
+  historyBox.innerHTML = historyList
+    .map((item, index) => {
+      return `
+        <div style="margin-bottom:14px;">
+          <div class="history-title">
+            第 ${index + 1} 次占卜（${item.time}）
+          </div>
+          <pre>${item.text}</pre>
+        </div>
+      `;
+    })
+    .join("");
+}
   // 抽牌紀錄（會存到 localStorage）
 const HISTORY_KEY = "bearTarotHistoryV1";
 let historyList = [];   // 內容格式：[{ time: "02/03 11:54", text: "..." }, ...]
