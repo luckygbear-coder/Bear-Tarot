@@ -1,3 +1,33 @@
+if (flippedCount === 3) {
+  setTimeout(() => {
+    const msg = buildBearMessage(reading);
+
+    // 顯示到熊熊結果大卡片
+    resultText.textContent = msg;
+    resultPanel.style.display = "block";
+
+    // ➊ 產生時間標籤（含日期＋時間）
+    const now = new Date();
+    const timeLabel = now.toLocaleString("zh-TW", {
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    // ➋ 存入陣列開頭（最新的在最上面）
+    historyList.unshift({
+      time: timeLabel,
+      text: msg
+    });
+
+    // ➌ 存到 localStorage
+    saveHistory();
+
+    // ➍ 重新渲染畫面
+    updateHistoryBox();
+  }, 600);
+}
 const tarotCards = [
   {
     name: "愚者",
@@ -329,4 +359,7 @@ function saveHistory() {
   } catch (e) {
     console.warn("儲存占卜紀錄失敗：", e);
   }
+  // 先載入歷史紀錄，再渲染一次
+loadHistory();
+updateHistoryBox();
 }
