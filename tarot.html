@@ -149,25 +149,59 @@
       backface-visibility: hidden;
       box-shadow: 0 4px 9px rgba(0,0,0,0.25);
     }
-    .card-back {
-      background: radial-gradient(circle at 30% 20%, #ffeaa7, #f0932b, #e056fd);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      color: #fffdf0;
-      border: 2px solid rgba(255,255,255,0.85);
-      position: relative;
-      overflow: hidden;
-    }
-    .card-back::before {
-      content: "★";
-      position: absolute;
-      font-size: 48px;
-      opacity: 0.2;
-      top: -8px;
-      right: 8px;
-    }
+/* 🃏 熊熊塔羅專屬卡背設計 */
+.card-back {
+  position: relative;
+  inset: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 0; /* 隱藏原本內文的 ★ */
+  border: 2px solid rgba(255, 245, 230, 0.9);
+  box-shadow:
+    0 4px 9px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+  /* 背景：星空漸層 + 柔光雲 */
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.45) 0, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(255,240,210,0.5) 0, transparent 40%),
+    radial-gradient(circle at 15% 85%, rgba(255,255,255,0.35) 0, transparent 45%),
+    linear-gradient(145deg, #3b275f, #8b4fbf 45%, #ffb27a 100%);
+}
+
+/* 內框裝飾 */
+.card-back::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 246, 230, 0.8);
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.25) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+/* 中央熊熊徽章 */
+.card-back::before {
+  content: "🐻";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  /* 徽章漸層與光暈 */
+  background:
+    radial-gradient(circle at 30% 20%, #fff9e5, #ffd38a 60%, #f6a0c8 100%);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 0 16px rgba(255, 220, 170, 0.9),
+    0 6px 10px rgba(0, 0, 0, 0.35);
+}
     .card-front {
       transform: rotateY(180deg);
       background: #fff9ef;
