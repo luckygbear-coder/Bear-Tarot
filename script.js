@@ -286,3 +286,12 @@ const tarotCards = [
     }
   }
 ];
+historyBox.innerHTML = historyList
+  .map((h, i) => {
+    return `
+      <div style="margin-bottom:14px;">
+        <div class="history-title">第 ${i + 1} 次占卜</div>
+        <pre>${h}</pre>
+      </div>`;
+  })
+  .join("");
