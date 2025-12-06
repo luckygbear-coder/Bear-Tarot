@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>小勇者之旅大冒險 ｜ 主選單</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #2d254a, #6a4f9c, #f9e4c8);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 480px;
+      width: 100%;
+      padding: 20px 16px 40px;
+    }
+    .panel {
+      background: rgba(255, 247, 230, 0.96);
+      border-radius: 20px;
+      border: 2px solid #f7dba5;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      padding: 18px 16px 22px;
+      color: #4a3450;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      text-align: center;
+      letter-spacing: 0.12em;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #7c5c88;
+      margin-bottom: 16px;
+    }
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 2px solid #f7dba5;
+      background: #fff9ef;
+      text-decoration: none;
+      color: #5a3844;
+      font-size: 15px;
+      font-weight: 600;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+    .menu-btn span.small {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      color: #a57d8b;
+      margin-top: 2px;
+    }
+    .menu-btn .icon {
+      font-size: 22px;
+      margin-left: 8px;
+    }
+    .footer {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 11px;
+      color: #edd2f4;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h1>小勇者之旅大冒險</h1>
+      <div class="subtitle">選擇一個要前往的地方吧～</div>
+
+      <div class="menu">
+        <!-- 之後你可以把這個連到真正的遊戲地圖頁 -->
+        <a class="menu-btn" href="#">
+          <div>
+            🗺️ 小勇者冒險地圖
+            <span class="small">剪刀石頭布對戰、魔物與魔王的冒險旅程</span>
+          </div>
+          <div class="icon">➡️</div>
+        </a>
+
+        <!-- 熊熊塔羅占卜屋 -->
+        <a class="menu-btn" href="tarot.html">
+          <div>
+            🔮 熊熊塔羅占卜屋
+            <span class="small">22 張大秘儀＋熊熊溫暖語錄，三張牌的小小指引</span>
+          </div>
+          <div class="icon">🐻</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer">
+      村長熊熊 · Little Heroes Adventure
+    </div>
+  </div>
+</body>
+</html>
