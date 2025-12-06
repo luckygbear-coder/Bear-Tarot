@@ -632,7 +632,22 @@ body {
   font-size: 13px;
   padding: 8px 12px;
 }
+.result-btns button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 999px;
+}
 
+.btn-icon {
+  font-size: 15px;
+  display: inline-block;
+  transform: translateY(1px);
+}
 /* =========================
    標題 & Header
    ========================= */
