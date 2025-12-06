@@ -762,10 +762,51 @@ const slots = {
   future: document.querySelector('.card-slot[data-position="future"] .card')
 };
 
-// =============== 狀態 ===============
-let reading = null;
-let flippedCount = 0;
-let historyList = []; // 存每次占卜紀錄
+// =============== 抽牌紀錄（localStorage） ===============
+const HISTORY_KEY = "bearTarotHistoryV1";
+let historyList = [];   // { time: "02/03 11:54", text: "..." }
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      historyList = parsed;
+    }
+  } catch (e) {
+    console.warn("讀取占卜紀錄失敗：", e);
+  }
+}
+
+function saveHistory() {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(historyList));
+  } catch (e) {
+    console.warn("儲存占卜紀錄失敗：", e);
+  }
+}
+
+function updateHistoryBox() {
+  if (!historyList.length) {
+    historyBox.innerHTML =
+      '<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>';
+    return;
+  }
+
+  historyBox.innerHTML = historyList
+    .map((item, index) => {
+      return `
+        <div style="margin-bottom:14px;">
+          <div class="history-title">
+            第 ${index + 1} 次占卜（${item.time}）
+          </div>
+          <pre>${item.text}</pre>
+        </div>
+      `;
+    })
+    .join("");
+}
 
 // =============== 工具：洗牌 ===============
 function shuffle(arr) {
@@ -826,24 +867,6 @@ function buildBearMessage(r) {
   );
 }
 
-// =============== 建立紀錄區內容 ===============
-function updateHistoryBox() {
-  if (historyList.length === 0) {
-    historyBox.innerHTML = `<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>`;
-    return;
-  }
-
-  historyBox.innerHTML = historyList
-    .map((h, i) => {
-      return `
-        <div style="margin-bottom:12px;">
-          <div style="font-weight:700;color:#8a4d5c;">第 ${i + 1} 次占卜</div>
-          <pre style="white-space:pre-line;font-size:12px;">${h}</pre>
-        </div>`;
-    })
-    .join("");
-}
-
 // =============== 下載文字檔 ===============
 function downloadReading(text) {
   const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
@@ -858,6 +881,9 @@ function downloadReading(text) {
 }
 
 // =============== 開始占卜 ===============
+let reading = null;
+let flippedCount = 0;
+
 function startReading() {
   const shuffled = shuffle(tarotCards);
 
@@ -889,6 +915,7 @@ function startReading() {
 // =============== 綁定卡片點擊 ===============
 Object.entries(slots).forEach(([key, cardEl]) => {
   cardEl.addEventListener("click", () => {
+    if (!reading) return;
     if (cardEl.classList.contains("flipped")) return;
 
     cardEl.classList.add("flipped");
@@ -901,10 +928,29 @@ Object.entries(slots).forEach(([key, cardEl]) => {
       setTimeout(() => {
         const msg = buildBearMessage(reading);
 
+        // 顯示到熊熊結果大卡片
         resultText.textContent = msg;
         resultPanel.style.display = "block";
 
-        historyList.push(msg);
+        // ➊ 產生時間標籤（含日期＋時間）
+        const now = new Date();
+        const timeLabel = now.toLocaleString("zh-TW", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        // ➋ 存入陣列開頭（最新的在最上面）
+        historyList.unshift({
+          time: timeLabel,
+          text: msg
+        });
+
+        // ➌ 存到 localStorage
+        saveHistory();
+
+        // ➍ 重新渲染畫面
         updateHistoryBox();
       }, 600);
     }
@@ -916,12 +962,17 @@ startBtn.addEventListener("click", startReading);
 againBtn.addEventListener("click", startReading);
 
 toggleHistoryBtn.addEventListener("click", () => {
-  historyBox.style.display = historyBox.style.display === "none" ? "block" : "none";
+  historyBox.style.display =
+    historyBox.style.display === "none" ? "block" : "none";
 });
 
 downloadBtn.addEventListener("click", () => {
   downloadReading(resultText.textContent);
 });
+
+// ✅ 頁面載入時先把歷史紀錄抓回來
+loadHistory();
+updateHistoryBox();
 </script>
 </body>
 </html>
