@@ -1,127 +1,11 @@
-if (flippedCount === 3) {
-  setTimeout(() => {
-    const msg = buildBearMessage(reading);
+// ==================== 常數 & 全域變數 ====================
+const HISTORY_KEY = "bearTarotHistoryV1";
+let historyList = [];   // [{ time: "02/03 11:54", text: "..." }]
 
-    // 顯示到熊熊結果大卡片
-    resultText.textContent = msg;
-    resultPanel.style.display = "block";
-// ==================== 牌庫（僅示例，保持你原本的 tarotCards） ====================
-const tarotCards = [
-  { id: 0, name: "愚者" },
-  { id: 1, name: "魔術師" },
-  { id: 2, name: "女祭司" },
-  { id: 3, name: "皇后" },
-  { id: 4, name: "皇帝" },
-  { id: 5, name: "教皇" },
-  { id: 6, name: "戀人" },
-  { id: 7, name: "戰車" },
-  { id: 8, name: "力量" },
-  { id: 9, name: "隱者" },
-  { id:10, name: "命運之輪" },
-  { id:11, name: "正義" },
-  { id:12, name: "吊人" },
-  { id:13, name: "死神" },
-  { id:14, name: "節制" },
-  { id:15, name: "惡魔" },
-  { id:16, name: "高塔" },
-  { id:17, name: "星星" },
-  { id:18, name: "月亮" },
-  { id:19, name: "太陽" },
-  { id:20, name: "審判" },
-  { id:21, name: "世界" }
-];
-
-// ==================== 工具：洗牌 ====================
-function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
-
-// ==================== DOM 選取 ====================
-const slots = {
-  past: document.querySelector('.card-slot[data-position="past"] .card-inner'),
-  present: document.querySelector('.card-slot[data-position="present"] .card-inner'),
-  future: document.querySelector('.card-slot[data-position="future"] .card-inner')
-};
-
-// ==================== 生成牌背 ====================
-inner.innerHTML = `
-  <div class="card-face card-back">
-    <img src="images/back.png" />
-  </div>
-  <div class="card-face card-front">
-    <img src="images/${slotData.card.id}.png" />
-  </div>
-`;
-}
-
-// ==================== 抽牌後替換卡片正面圖片 ====================
-function setCardFront(cardInner, cardId) {
-  const front = cardInner.querySelector(".card-front");
-  front.innerHTML = `
-    <img src="images/${cardId}.png"
-         style="width:100%;height:100%;border-radius:12px;">
-  `;
-}
-
-// ==================== 抽牌邏輯 ====================
-let reading = null;
-let flippedCount = 0;
-
-function startReading() {
-  flippedCount = 0;
-
-  const shuffled = shuffle(tarotCards);
-  reading = {
-    past: shuffled[0],
-    present: shuffled[1],
-    future: shuffled[2]
-  };
-
-  // 初始化三張卡：全部放牌背
-  Object.values(slots).forEach(cardInner => {
-    cardInner.classList.remove("flipped");
-    setCardBack(cardInner);
-  });
-}
-
-// ==================== 點擊翻牌 ====================
-Object.entries(slots).forEach(([slotName, cardInner]) => {
-  cardInner.addEventListener("click", () => {
-    if (cardInner.classList.contains("flipped")) return;
-
-    cardInner.classList.add("flipped");
-
-    // 依照 slot 對應卡面圖片
-    const cardId = reading[slotName].id;
-    setCardFront(cardInner, cardId);
-
-    flippedCount++;
-  });
-});
-    // ➊ 產生時間標籤（含日期＋時間）
-    const now = new Date();
-    const timeLabel = now.toLocaleString("zh-TW", {
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    // ➋ 存入陣列開頭（最新的在最上面）
-    historyList.unshift({
-      time: timeLabel,
-      text: msg
-    });
-
-    // ➌ 存到 localStorage
-    saveHistory();
-
-    // ➍ 重新渲染畫面
-    updateHistoryBox();
-  }, 600);
-}
+// ==================== 大牌組（22 張） ====================
 const tarotCards = [
   {
+    id: 0,
     name: "愚者",
     tag: "新的開始・自由・旅程",
     icon: "🎒",
@@ -135,6 +19,7 @@ const tarotCards = [
     }
   },
   {
+    id: 1,
     name: "魔術師",
     tag: "行動・創造・專注",
     icon: "✨",
@@ -148,6 +33,7 @@ const tarotCards = [
     }
   },
   {
+    id: 2,
     name: "女祭司",
     tag: "直覺・內在・靜心",
     icon: "🌙",
@@ -161,6 +47,7 @@ const tarotCards = [
     }
   },
   {
+    id: 3,
     name: "皇后",
     tag: "滋養・美感・愛",
     icon: "👑",
@@ -174,6 +61,7 @@ const tarotCards = [
     }
   },
   {
+    id: 4,
     name: "皇帝",
     tag: "結構・責任・界線",
     icon: "🏛️",
@@ -187,6 +75,7 @@ const tarotCards = [
     }
   },
   {
+    id: 5,
     name: "教皇",
     tag: "學習・智慧・規範",
     icon: "📖",
@@ -200,6 +89,7 @@ const tarotCards = [
     }
   },
   {
+    id: 6,
     name: "戀人",
     tag: "關係・選擇・情感",
     icon: "💖",
@@ -213,6 +103,7 @@ const tarotCards = [
     }
   },
   {
+    id: 7,
     name: "戰車",
     tag: "行動・突破・控制力",
     icon: "🏇",
@@ -226,6 +117,7 @@ const tarotCards = [
     }
   },
   {
+    id: 8,
     name: "力量",
     tag: "內在勇氣・柔和力量",
     icon: "🦁",
@@ -239,6 +131,7 @@ const tarotCards = [
     }
   },
   {
+    id: 9,
     name: "隱者",
     tag: "內省・獨處・智慧",
     icon: "🕯️",
@@ -252,6 +145,7 @@ const tarotCards = [
     }
   },
   {
+    id: 10,
     name: "命運之輪",
     tag: "轉機・循環・變化",
     icon: "🎡",
@@ -265,6 +159,7 @@ const tarotCards = [
     }
   },
   {
+    id: 11,
     name: "正義",
     tag: "公正・誠實・平衡",
     icon: "⚖️",
@@ -278,6 +173,7 @@ const tarotCards = [
     }
   },
   {
+    id: 12,
     name: "吊人",
     tag: "等待・放下・新觀點",
     icon: "🪜",
@@ -291,6 +187,7 @@ const tarotCards = [
     }
   },
   {
+    id: 13,
     name: "死神",
     tag: "結束・轉化・重生",
     icon: "☠️",
@@ -304,6 +201,7 @@ const tarotCards = [
     }
   },
   {
+    id: 14,
     name: "節制",
     tag: "平衡・溫和・流動",
     icon: "💧",
@@ -317,6 +215,7 @@ const tarotCards = [
     }
   },
   {
+    id: 15,
     name: "惡魔",
     tag: "束縛・慾望・壓力",
     icon: "😈",
@@ -330,6 +229,7 @@ const tarotCards = [
     }
   },
   {
+    id: 16,
     name: "高塔",
     tag: "突變・打破・重建",
     icon: "🏰",
@@ -343,6 +243,7 @@ const tarotCards = [
     }
   },
   {
+    id: 17,
     name: "星星",
     tag: "希望・療癒・願望",
     icon: "⭐",
@@ -356,6 +257,7 @@ const tarotCards = [
     }
   },
   {
+    id: 18,
     name: "月亮",
     tag: "情緒・迷霧・直覺",
     icon: "🌙",
@@ -369,6 +271,7 @@ const tarotCards = [
     }
   },
   {
+    id: 19,
     name: "太陽",
     tag: "喜悅・成功・自信",
     icon: "☀️",
@@ -382,6 +285,7 @@ const tarotCards = [
     }
   },
   {
+    id: 20,
     name: "審判",
     tag: "復活・醒悟・召喚",
     icon: "📣",
@@ -395,6 +299,7 @@ const tarotCards = [
     }
   },
   {
+    id: 21,
     name: "世界",
     tag: "完成・整合・圓滿",
     icon: "🌍",
@@ -408,30 +313,91 @@ const tarotCards = [
     }
   }
 ];
-function updateHistoryBox() {
-  if (!historyList.length) {
-    historyBox.innerHTML =
-      '<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>';
-    return;
+
+// ==================== 工具函式 ====================
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function randomOrientation() {
+  return Math.random() < 0.5 ? "upright" : "reversed";
+}
+
+// 把三張牌整理成熊熊的大段訊息
+function buildBearMessage(reading) {
+  function section(key, label) {
+    const data = reading[key];
+    const card = data.card;
+    const pos = data.position; // "upright" or "reversed"
+    const posText = pos === "upright" ? "正位" : "逆位";
+    const block = card[pos];
+    return `【${label}】${card.icon} ${card.name}（${posText}）\n${block.meaning}\n${block.bear}\n`;
   }
 
-  historyBox.innerHTML = historyList
-    .map((item, index) => {
-      return `
-        <div style="margin-bottom:14px;">
-          <div class="history-title">
-            第 ${index + 1} 次占卜（${item.time}）
-          </div>
-          <pre>${item.text}</pre>
-        </div>
-      `;
-    })
-    .join("");
+  return [
+    "✨ 熊熊為你抽到的三張牌：",
+    section("past", "過去／背景"),
+    section("present", "現在／此刻"),
+    section("future", "未來／走向"),
+    "🧸 小提醒：以上是溫柔的小建議，真正最重要的，永遠是你自己的感受喔。"
+  ].join("\n\n");
 }
-// 抽牌紀錄（會存到 localStorage）
-const HISTORY_KEY = "bearTarotHistoryV1";
-let historyList = [];   // { time: "02/03 11:54", text: "..." }
 
+// ==================== DOM 選取 ====================
+const slots = {
+  past: document.querySelector('.card-slot[data-position="past"] .card-inner'),
+  present: document.querySelector('.card-slot[data-position="present"] .card-inner'),
+  future: document.querySelector('.card-slot[data-position="future"] .card-inner')
+};
+
+const resultPanel = document.querySelector(".result-panel");
+const resultText = document.querySelector(".result-panel-content");
+const historyBox = document.getElementById("history-box");
+const resetBtn = document.getElementById("reset-btn"); // 若沒有按鈕可以忽略
+
+// ==================== 卡片畫面處理 ====================
+function setCardBack(cardInner) {
+  cardInner.innerHTML = `
+    <div class="card-face card-back">
+      <img src="images/back.png"
+           style="width:100%;height:100%;border-radius:12px;">
+    </div>
+    <div class="card-face card-front"></div>
+  `;
+}
+
+function setCardFront(cardInner, cardId, isReversed) {
+  const front = cardInner.querySelector(".card-front");
+  const rotate = isReversed ? "transform: rotate(180deg);" : "";
+  front.innerHTML = `
+    <img src="images/${cardId}.png"
+         style="width:100%;height:100%;border-radius:12px;${rotate}">
+  `;
+}
+
+// ==================== 抽牌邏輯 ====================
+let reading = null;
+let flippedCount = 0;
+
+function startReading() {
+  flippedCount = 0;
+  resultPanel.style.display = "none";
+
+  const shuffled = shuffle(tarotCards);
+  reading = {
+    past: { card: shuffled[0], position: randomOrientation() },
+    present: { card: shuffled[1], position: randomOrientation() },
+    future: { card: shuffled[2], position: randomOrientation() }
+  };
+
+  Object.entries(slots).forEach(([slotName, cardInner]) => {
+    if (!cardInner) return;
+    cardInner.classList.remove("flipped");
+    setCardBack(cardInner);
+  });
+}
+
+// ==================== 歷史紀錄 ====================
 function loadHistory() {
   try {
     const raw = localStorage.getItem(HISTORY_KEY);
@@ -454,6 +420,8 @@ function saveHistory() {
 }
 
 function updateHistoryBox() {
+  if (!historyBox) return;
+
   if (!historyList.length) {
     historyBox.innerHTML =
       '<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>';
@@ -473,30 +441,62 @@ function updateHistoryBox() {
     })
     .join("");
 }
-  // 抽牌紀錄（會存到 localStorage）
-const HISTORY_KEY = "bearTarotHistoryV1";
-let historyList = [];   // 內容格式：[{ time: "02/03 11:54", text: "..." }, ...]
 
-function loadHistory() {
-  try {
-    const raw = localStorage.getItem(HISTORY_KEY);
-    if (!raw) return;
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      historyList = parsed;
+// ==================== 點擊翻牌事件 ====================
+Object.entries(slots).forEach(([slotName, cardInner]) => {
+  if (!cardInner) return;
+
+  cardInner.addEventListener("click", () => {
+    if (!reading) return;
+    if (cardInner.classList.contains("flipped")) return;
+
+    const data = reading[slotName];
+
+    cardInner.classList.add("flipped");
+    setCardFront(cardInner, data.card.id, data.position === "reversed");
+
+    flippedCount++;
+
+    // 三張都翻完
+    if (flippedCount === 3) {
+      setTimeout(() => {
+        const msg = buildBearMessage(reading);
+
+        // 顯示熊熊結果大卡片
+        if (resultText && resultPanel) {
+          resultText.textContent = msg;
+          resultPanel.style.display = "block";
+        }
+
+        // 時間標籤
+        const now = new Date();
+        const timeLabel = now.toLocaleString("zh-TW", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        // 存入歷史（最新放最前面）
+        historyList.unshift({
+          time: timeLabel,
+          text: msg
+        });
+
+        saveHistory();
+        updateHistoryBox();
+      }, 600); // 等翻牌動畫結束再出現結果
     }
-  } catch (e) {
-    console.warn("讀取占卜紀錄失敗：", e);
-  }
-}
+  });
+});
 
-function saveHistory() {
-  try {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(historyList));
-  } catch (e) {
-    console.warn("儲存占卜紀錄失敗：", e);
-  }
-  // 先載入歷史紀錄，再渲染一次
+// ==================== 初始執行 ====================
 loadHistory();
 updateHistoryBox();
+startReading();
+
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    startReading();
+  });
 }
