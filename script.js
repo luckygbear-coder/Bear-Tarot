@@ -44,13 +44,14 @@ const slots = {
 };
 
 // ==================== 生成牌背 ====================
-function setCardBack(cardInner) {
-  cardInner.innerHTML = `
-    <div class="card-face card-back">
-      <img src="images/back.png" style="width:100%;height:100%;border-radius:12px;">
-    </div>
-    <div class="card-face card-front"></div>
-  `;
+inner.innerHTML = `
+  <div class="card-face card-back">
+    <img src="images/back.png" />
+  </div>
+  <div class="card-face card-front">
+    <img src="images/${slotData.card.id}.png" />
+  </div>
+`;
 }
 
 // ==================== 抽牌後替換卡片正面圖片 ====================
