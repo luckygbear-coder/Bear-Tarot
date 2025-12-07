@@ -206,31 +206,27 @@
       }
     }
 
-    /* 🐻 右上角：熊熊回家按鈕 */
+    /* 🐻 熊熊回家按鈕（右上角） */
     .back-home-btn {
       position: fixed;
-      top: 14px;
-      right: 14px;
-
+      top: 12px;
+      right: 12px;
+      z-index: 50;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-
       padding: 6px 10px;
       border-radius: 999px;
-
-      background: rgba(255, 247, 230, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(6px);
-
-      color: #fff7f0;
+      background: rgba(255, 247, 230, 0.9);
+      border: 1px solid rgba(247, 219, 165, 0.95);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      color: #5a3844;
       font-size: 11px;
       font-weight: 600;
+      letter-spacing: 0.08em;
       text-decoration: none;
-
-      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-      z-index: 20;
-      transition: background .2s ease, transform .1s ease, box-shadow .1s ease;
+      white-space: nowrap;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
     }
 
     .back-home-btn img {
@@ -241,14 +237,10 @@
       display: block;
     }
 
-    .back-home-btn span {
-      letter-spacing: .08em;
-    }
-
     .back-home-btn:hover {
-      background: rgba(255, 247, 230, 0.3);
+      background: rgba(255, 247, 230, 1);
       transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
 
     @media (max-width: 480px) {
@@ -263,12 +255,65 @@
         height: 20px;
       }
     }
+
+    /* 🔍 牌面放大 Modal */
+    .card-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .card-modal.show {
+      display: flex;
+    }
+
+    .card-modal-inner {
+      background: #fff7e6;
+      border-radius: 18px;
+      border: 2px solid #f7dba5;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      padding: 12px 12px 14px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      color: #4a3450;
+    }
+
+    .card-modal-inner img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    .card-modal-caption {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #7c4f5e;
+    }
+
+    .card-modal-close {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 13px;
+      background: linear-gradient(135deg,#ffcf5f,#ff9f7b);
+      color: #4a2a18;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    }
   </style>
 </head>
 
 <body>
-  <!-- 🏡 熊熊回家按鈕 -->
-  <a href="https://luckygbear-coder.github.io/HeroApp/index.html" class="back-home-btn">
+  <!-- 🏡 熊熊村長回家按鈕 -->
+  <a href="https://luckygbear-coder.github.io/" class="back-home-btn">
     <img src="icons/bear-tarot-192.png" alt="熊熊村長">
     <span>回家</span>
   </a>
@@ -319,7 +364,21 @@
         <button id="downloadBtn">下載文字</button>
       </div>
 
+      <!-- 🔍 新增：放大提示 -->
+      <div id="zoomHint" style="margin-top:8px;font-size:11px;color:#a26a5c;display:none;">
+        📌 小提醒：占卜完成後，可以再點一下上面的牌面放大看圖案喔！
+      </div>
+
       <div id="historyBox"></div>
+    </div>
+  </div>
+
+  <!-- 🔍 牌面放大視窗 -->
+  <div id="cardModal" class="card-modal">
+    <div class="card-modal-inner">
+      <img id="cardModalImg" src="" alt="塔羅牌放大圖">
+      <div id="cardModalCaption" class="card-modal-caption"></div>
+      <button id="cardModalClose" class="card-modal-close">關閉</button>
     </div>
   </div>
 
@@ -460,6 +519,7 @@
       }
     ];
 
+    /* -------- 工具 -------- */
     function shuffle(arr){
       return [...arr].sort(()=>Math.random()-0.5);
     }
@@ -467,6 +527,7 @@
     const HISTORY_KEY = "bearTarotHistoryV1";
     let historyList = [];
 
+    /* -------- DOM -------- */
     const startBtn         = document.getElementById("startBtn");
     const againBtn         = document.getElementById("againBtn");
     const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
@@ -474,6 +535,7 @@
     const resultPanel      = document.getElementById("resultPanel");
     const resultText       = document.getElementById("resultText");
     const historyBox       = document.getElementById("historyBox");
+    const zoomHint         = document.getElementById("zoomHint");
 
     const cardSlots = {
       past   : document.querySelector('.card-slot[data-position="past"] .card'),
@@ -481,6 +543,13 @@
       future : document.querySelector('.card-slot[data-position="future"] .card')
     };
 
+    // 放大用 modal
+    const cardModal        = document.getElementById("cardModal");
+    const cardModalImg     = document.getElementById("cardModalImg");
+    const cardModalCaption = document.getElementById("cardModalCaption");
+    const cardModalClose   = document.getElementById("cardModalClose");
+
+    /* -------- 歷史紀錄 -------- */
     function loadHistory(){
       try{
         const raw = localStorage.getItem(HISTORY_KEY);
@@ -511,6 +580,7 @@
       `).join("");
     }
 
+    /* -------- 畫牌面 -------- */
     function setupCardImage(key,data){
       const card  = cardSlots[key];
       const inner = card.querySelector(".card-inner");
@@ -542,13 +612,17 @@
       ].join("\n\n");
     }
 
-    let reading = null;
-    let flippedCount = 0;
+    /* -------- 抽牌流程 -------- */
+    let reading        = null;
+    let flippedCount   = 0;
+    let readingFinished = false;  // ⭐ 占卜是否已完成（用來控制放大）
 
     function startReading(){
-      flippedCount = 0;
+      flippedCount    = 0;
+      readingFinished = false;
       resultPanel.style.display = "none";
-      historyBox.style.display = "none";
+      historyBox.style.display  = "none";
+      if (zoomHint) zoomHint.style.display = "none";
 
       const arr = shuffle(tarotCards);
       reading = {
@@ -562,33 +636,71 @@
       setupCardImage("future", reading.future);
     }
 
+    /* -------- 點擊翻牌 + 放大 -------- */
     Object.entries(cardSlots).forEach(([key,card])=>{
       card.addEventListener("click",()=>{
         if(!reading) return;
-        if(card.classList.contains("flipped")) return;
 
-        card.classList.add("flipped");
-        flippedCount++;
+        // 1️⃣ 還沒翻開 → 先做翻牌流程
+        if(!card.classList.contains("flipped")){
+          card.classList.add("flipped");
+          flippedCount++;
 
-        if(flippedCount === 3){
-          setTimeout(()=>{
-            const msg = buildBearMessage(reading);
-            resultText.textContent = msg;
-            resultPanel.style.display = "block";
+          if(flippedCount === 3){
+            setTimeout(()=>{
+              const msg = buildBearMessage(reading);
+              resultText.textContent   = msg;
+              resultPanel.style.display = "block";
 
-            const now = new Date();
-            const timeLabel = now.toLocaleString("zh-TW",{
-              month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit"
-            });
+              const now = new Date();
+              const timeLabel = now.toLocaleString("zh-TW",{
+                month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit"
+              });
 
-            historyList.unshift({time:timeLabel,text:msg});
-            saveHistory();
-            updateHistoryBox();
-          },600);
+              historyList.unshift({time:timeLabel,text:msg});
+              saveHistory();
+              updateHistoryBox();
+
+              // ⭐ 告訴使用者可以點牌放大
+              readingFinished = true;
+              if (zoomHint) zoomHint.style.display = "block";
+            },600);
+          }
+          return;
         }
+
+        // 2️⃣ 已翻開的牌：若占卜已完成 → 放大顯示
+        if(!readingFinished || !cardModal) return;
+
+        const data = reading[key];
+        if(!data) return;
+
+        const imgSrc = `images/${data.card.id}.png`;
+        const posLabel = data.reversed ? "逆位" : "正位";
+
+        cardModalImg.src = imgSrc;
+        cardModalImg.alt = data.card.name;
+        cardModalCaption.textContent = `${data.card.icon} ${data.card.name}（${posLabel}）`;
+
+        cardModal.classList.add("show");
       });
     });
 
+    /* -------- Modal 關閉 -------- */
+    if(cardModalClose){
+      cardModalClose.addEventListener("click",()=>{
+        cardModal.classList.remove("show");
+      });
+    }
+    if(cardModal){
+      cardModal.addEventListener("click",(e)=>{
+        if(e.target === cardModal){
+          cardModal.classList.remove("show");
+        }
+      });
+    }
+
+    /* -------- 按鈕 -------- */
     startBtn.addEventListener("click", startReading);
     againBtn.addEventListener("click", startReading);
 
@@ -609,6 +721,7 @@
       URL.revokeObjectURL(url);
     });
 
+    /* -------- 初始化 -------- */
     loadHistory();
     updateHistoryBox();
   </script>
