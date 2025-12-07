@@ -1,207 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <title>熊熊塔羅占卜</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- ICON（之後你可以自己放） -->
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/bear-tarot-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/bear-tarot-512.png">
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg, #2d254a, #6a4f9c, #f9e4c8);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-
-    .game-wrap {
-      max-width: 480px;
-      width: 100%;
-      padding: 16px;
-      margin-top: 16px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-panel {
-      background: rgba(255, 247, 230, 0.95);
-      border-radius: 18px;
-      border: 2px solid #f7dba5;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-      padding: 18px 14px 20px;
-      color: #4a3450;
-    }
-
-    h1 {
-      text-align: center;
-      margin: 0 0 6px;
-      font-size: 22px;
-      letter-spacing: .15em;
-    }
-
-    .btn-bar {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 22px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, #ffcf5f, #ff9f7b);
-      color: #4a2a18;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-      transition: transform .1s ease;
-    }
-
-    button:active {
-      transform: translateY(1px) scale(.97);
-    }
-
-    .table {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .card-slot { flex:1; text-align:center; }
-
-    .card {
-      width: 90px; height: 140px;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(20px) scale(.9);
-      pointer-events: none;
-      transition: .3s ease;
-      margin: 0 auto;
-    }
-
-    .card.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
-
-    .card-inner { width: 100%; height:100%; position: relative; }
-
-    .card-face {
-      position: absolute; inset:0;
-      border-radius:12px;
-      overflow:hidden;
-      box-shadow:0 4px 9px rgba(0,0,0,.25);
-    }
-
-    .card-face img {
-      width:100%; height:100%; display:block;
-      object-fit:cover; border-radius:12px;
-    }
-
-    .card.flipped .card-back { opacity:0; }
-    .card.flipped .card-front { opacity:1; }
-
-    /* 結果面板 */
-    #resultPanel {
-      display:none;
-      margin-top:14px;
-      background:#fff7e6;
-      border:2px solid #f5d3a6;
-      border-radius:18px;
-      box-shadow:0 6px 18px rgba(0,0,0,.35);
-      padding:12px 14px 14px;
-    }
-
-    #historyBox {
-      margin-top:10px;
-      border-top:1px dashed #e4c8aa;
-      padding-top:6px;
-      max-height:160px;
-      overflow-y:auto;
-      font-size:12px;
-      display:none;
-      color:#3e2420;
-    }
-
-    #historyBox pre {
-      white-space:pre-line;
-      padding:4px 0;
-    }
-
-    .history-title {
-      font-weight:700;
-      margin-bottom:4px;
-      color:#7b3430;
-    }
-  </style>
-</head>
-
-<body>
-<div class="game-wrap">
-
-  <div class="card-panel">
-    <h1>熊熊塔羅占卜</h1>
-
-    <div class="btn-bar">
-      <button id="startBtn">🔮 開始占卜</button>
-    </div>
-
-    <div class="table">
-      <div class="card-slot" data-position="past">
-        <div class="slot-title">過去</div>
-        <div class="card"><div class="card-inner"></div></div>
-      </div>
-
-      <div class="card-slot" data-position="present">
-        <div class="slot-title">現在</div>
-        <div class="card"><div class="card-inner"></div></div>
-      </div>
-
-      <div class="card-slot" data-position="future">
-        <div class="slot-title">未來</div>
-        <div class="card"><div class="card-inner"></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 結果區 -->
-  <div id="resultPanel">
-    <div style="font-weight:700; color:#8a4d5c; margin-bottom:6px;">
-      🐻 村長熊熊的小提醒
-    </div>
-
-    <div id="resultText" style="color:#4b3044; white-space:pre-line;">
-      今天的能量正在準備中...
-    </div>
-
-    <div style="display:flex; gap:8px; margin-top:10px;">
-      <button id="againBtn">再占一次</button>
-      <button id="toggleHistoryBtn">抽牌紀錄</button>
-      <button id="downloadBtn">下載文字</button>
-    </div>
-
-    <div id="historyBox"></div>
-  </div>
-
-</div>
-
-
 <script>
-/* ==============================
-   Tarot 資料（已完整 22 張）
-================================ */
+// ==================== Tarot 全部 22 張 ====================
 const tarotCards = [
   {
     id: 0,
@@ -512,33 +310,38 @@ const tarotCards = [
     }
   }
 ];
-/* ==============================
-   DOM
-================================ */
-const startBtn = document.getElementById("startBtn");
-const againBtn = document.getElementById("againBtn");
+
+// ============ 工具 =============
+function shuffle(arr){
+  return [...arr].sort(()=>Math.random()-0.5);
+}
+
+// ============ DOM ============
+const startBtn         = document.getElementById("startBtn");
+const againBtn         = document.getElementById("againBtn");
 const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const resultPanel = document.getElementById("resultPanel");
-const resultText = document.getElementById("resultText");
-const historyBox = document.getElementById("historyBox");
+const downloadBtn      = document.getElementById("downloadBtn");
+const resultPanel      = document.getElementById("resultPanel");
+const resultText       = document.getElementById("resultText");
+const historyBox       = document.getElementById("historyBox");
 
 const cardSlots = {
-  past: document.querySelector('.card-slot[data-position="past"] .card'),
+  past   : document.querySelector('.card-slot[data-position="past"] .card'),
   present: document.querySelector('.card-slot[data-position="present"] .card'),
-  future: document.querySelector('.card-slot[data-position="future"] .card')
+  future : document.querySelector('.card-slot[data-position="future"] .card')
 };
 
-/* ==============================
-   抽牌紀錄
-================================ */
+// ============ 歷史紀錄 ============
 const HISTORY_KEY = "bearTarotHistoryV1";
 let historyList = [];
 
 function loadHistory(){
   try{
     const raw = localStorage.getItem(HISTORY_KEY);
-    if(raw) historyList = JSON.parse(raw);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)) historyList = parsed;
+    }
   }catch(e){}
 }
 
@@ -548,30 +351,20 @@ function saveHistory(){
 
 function updateHistoryBox(){
   if(!historyList.length){
-    historyBox.innerHTML = `<div style="color:#a88c93;">目前還沒有紀錄喔～</div>`;
+    historyBox.innerHTML = '<div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>';
     return;
   }
-
   historyBox.innerHTML = historyList.map((item,idx)=>`
     <div style="margin-bottom:14px;">
       <div class="history-title">
-        第 ${idx+1} 次（${item.time}）
+        第 ${idx+1} 次占卜（${item.time}）
       </div>
-      <pre>${item.text}</pre>
+      <pre style="white-space:pre-line;">${item.text}</pre>
     </div>
   `).join("");
 }
 
-/* ==============================
-   抽牌流程
-================================ */
-let reading = null;
-let flippedCount = 0;
-
-function shuffle(arr){
-  return [...arr].sort(()=>Math.random()-0.5);
-}
-
+// ============ 畫牌面 ============
 function setupCardImage(key,data){
   const card = cardSlots[key];
   const inner = card.querySelector(".card-inner");
@@ -585,17 +378,27 @@ function setupCardImage(key,data){
       <img src="images/${data.card.id}.png">
     </div>
   `;
-  requestAnimationFrame(()=> card.classList.add("show"));
+  requestAnimationFrame(()=>card.classList.add("show"));
 }
 
 function buildBearMessage(r){
   function part(label, obj){
-    const side = obj.reversed ? obj.card.reversed : obj.card.upright;
     const pos = obj.reversed ? "（逆位）" : "（正位）";
-    return `${label}：${obj.card.name}${pos}\n${side.meaning}\n${side.bear}\n`;
+    const side = obj.reversed ? obj.card.reversed : obj.card.upright;
+    return `【${label}】${obj.card.icon} ${obj.card.name}${pos}\n${side.meaning}\n${side.bear}\n`;
   }
-  return part("過去",r.past) + "\n" + part("現在",r.present) + "\n" + part("未來",r.future);
+  return [
+    "✨ 熊熊為你抽到的三張牌：",
+    part("過去／背景", r.past),
+    part("現在／此刻", r.present),
+    part("未來／走向", r.future),
+    "🧸 小提醒：以上是溫柔的小建議，真正最重要的，永遠是你自己的感受喔。"
+  ].join("\n\n");
 }
+
+// ============ 抽牌流程 ============
+let reading = null;
+let flippedCount = 0;
 
 function startReading(){
   flippedCount = 0;
@@ -604,19 +407,17 @@ function startReading(){
 
   const arr = shuffle(tarotCards);
   reading = {
-    past:{card:arr[0],reversed:Math.random()<0.5},
-    present:{card:arr[1],reversed:Math.random()<0.5},
-    future:{card:arr[2],reversed:Math.random()<0.5}
+    past   : { card: arr[0], reversed: Math.random()<0.5 },
+    present: { card: arr[1], reversed: Math.random()<0.5 },
+    future : { card: arr[2], reversed: Math.random()<0.5 }
   };
 
-  setupCardImage("past",reading.past);
-  setupCardImage("present",reading.present);
-  setupCardImage("future",reading.future);
+  setupCardImage("past", reading.past);
+  setupCardImage("present", reading.present);
+  setupCardImage("future", reading.future);
 }
 
-/* ==============================
-   點擊翻牌
-================================ */
+// ============ 點擊翻牌 ============
 Object.entries(cardSlots).forEach(([key,card])=>{
   card.addEventListener("click",()=>{
     if(!reading) return;
@@ -633,7 +434,10 @@ Object.entries(cardSlots).forEach(([key,card])=>{
 
         const now = new Date();
         const timeLabel = now.toLocaleString("zh-TW",{
-          month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"
+          month:"2-digit",
+          day  :"2-digit",
+          hour :"2-digit",
+          minute:"2-digit"
         });
 
         historyList.unshift({time:timeLabel,text:msg});
@@ -644,31 +448,26 @@ Object.entries(cardSlots).forEach(([key,card])=>{
   });
 });
 
-/* ==============================
-   按鈕（已防呆）
-================================ */
+// ============ 按鈕 ============
 if(startBtn) startBtn.addEventListener("click", startReading);
 if(againBtn) againBtn.addEventListener("click", startReading);
 
 if(toggleHistoryBtn) toggleHistoryBtn.addEventListener("click",()=>{
-  historyBox.style.display = historyBox.style.display==="none" ? "block":"none";
+  historyBox.style.display = historyBox.style.display==="none" ? "block" : "none";
 });
 
 if(downloadBtn) downloadBtn.addEventListener("click",()=>{
-  const text = resultText.textContent;
-  const blob = new Blob([text],{type:"text/plain"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href=url; a.download="熊熊占卜.txt"; a.click();
+  const text = resultText.textContent || "";
+  const blob = new Blob([text],{type:"text/plain;charset=utf-8"});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url;
+  a.download = "今日熊熊占卜.txt";
+  a.click();
   URL.revokeObjectURL(url);
 });
 
-/* ==============================
-   初始化
-================================ */
+// ============ 初始化 ============
 loadHistory();
 updateHistoryBox();
 </script>
-
-</body>
-</html>
