@@ -150,23 +150,20 @@
       backface-visibility: hidden;
       box-shadow: 0 4px 9px rgba(0,0,0,0.25);
     }
-/* 🃏 熊熊塔羅專屬卡背設計 */
+/* 牌背：只顯示背景圖片，不顯示任何文字 */
 .card-back {
-  position: relative;
-  inset: 0;
-  border-radius: 12px;
+  background: none;       /* 不用背景漸層，交給圖片 */
+  border: none;
+  font-size: 0;           /* 就算裡面有文字也隱形 */
   overflow: hidden;
-  font-size: 0; /* 隱藏原本內文的 ★ */
-  border: 2px solid rgba(255, 245, 230, 0.9);
-  box-shadow:
-    0 4px 9px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.3) inset;
-  /* 背景：星空漸層 + 柔光雲 */
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.45) 0, transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(255,240,210,0.5) 0, transparent 40%),
-    radial-gradient(circle at 15% 85%, rgba(255,255,255,0.35) 0, transparent 45%),
-    linear-gradient(145deg, #3b275f, #8b4fbf 45%, #ffb27a 100%);
+}
+
+/* 如果你用 <img> 當牌背圖片（JS 裡有塞） */
+.card-back img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
 }
 
 /* 內框裝飾 */
