@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<head>
   <meta charset="UTF-8" />
   <title>熊熊塔羅占卜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,15 +8,13 @@
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.webmanifest">
 
-  <!-- iOS主畫面 icon（最重要的是這行 👇） -->
+  <!-- iOS 主畫面 icon -->
   <link rel="apple-touch-icon" href="icons/bear-tarot-192.png">
 
-  <!-- 一般瀏覽器 favicon（可留） -->
+  <!-- 一般瀏覽器 favicon -->
   <link rel="icon" type="image/png" sizes="192x192" href="icons/bear-tarot-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icons/bear-tarot-512.png">
-  
-  <style>
-    <!-- 下面的 CSS 保持不動 -->
+
   <style>
     * { box-sizing: border-box; }
 
@@ -150,7 +147,7 @@
       border-radius: 12px;
     }
 
-    /* ⭐ 重點：用 CSS 控制背面 / 正面透明度 */
+    /* ⭐ 背面 / 正面切換 */
     .card-back {
       opacity: 1;
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -208,10 +205,74 @@
         height: 124px;
       }
     }
+
+    /* 🐻 右上角：熊熊回家按鈕 */
+    .back-home-btn {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      padding: 6px 10px;
+      border-radius: 999px;
+
+      background: rgba(255, 247, 230, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(6px);
+
+      color: #fff7f0;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+
+      box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+      z-index: 20;
+      transition: background .2s ease, transform .1s ease, box-shadow .1s ease;
+    }
+
+    .back-home-btn img {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .back-home-btn span {
+      letter-spacing: .08em;
+    }
+
+    .back-home-btn:hover {
+      background: rgba(255, 247, 230, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 480px) {
+      .back-home-btn {
+        top: 10px;
+        right: 10px;
+        padding: 5px 9px;
+        font-size: 10px;
+      }
+      .back-home-btn img {
+        width: 20px;
+        height: 20px;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- 🏡 熊熊回家按鈕 -->
+  <a href="https://luckygbear-coder.github.io/" class="back-home-btn">
+    <img src="icons/bear-tarot-192.png" alt="熊熊村長">
+    <span>回家</span>
+  </a>
+
   <div class="game-wrap">
     <div class="card-panel">
       <h1>熊熊塔羅占卜</h1>
@@ -399,7 +460,6 @@
       }
     ];
 
-    /* -------- 工具 -------- */
     function shuffle(arr){
       return [...arr].sort(()=>Math.random()-0.5);
     }
@@ -407,7 +467,6 @@
     const HISTORY_KEY = "bearTarotHistoryV1";
     let historyList = [];
 
-    /* -------- DOM -------- */
     const startBtn         = document.getElementById("startBtn");
     const againBtn         = document.getElementById("againBtn");
     const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
@@ -422,7 +481,6 @@
       future : document.querySelector('.card-slot[data-position="future"] .card')
     };
 
-    /* -------- 歷史紀錄 -------- */
     function loadHistory(){
       try{
         const raw = localStorage.getItem(HISTORY_KEY);
@@ -453,7 +511,6 @@
       `).join("");
     }
 
-    /* -------- 畫牌面 -------- */
     function setupCardImage(key,data){
       const card  = cardSlots[key];
       const inner = card.querySelector(".card-inner");
@@ -485,7 +542,6 @@
       ].join("\n\n");
     }
 
-    /* -------- 抽牌流程 -------- */
     let reading = null;
     let flippedCount = 0;
 
@@ -506,7 +562,6 @@
       setupCardImage("future", reading.future);
     }
 
-    /* -------- 點擊翻牌 -------- */
     Object.entries(cardSlots).forEach(([key,card])=>{
       card.addEventListener("click",()=>{
         if(!reading) return;
@@ -534,7 +589,6 @@
       });
     });
 
-    /* -------- 按鈕 -------- */
     startBtn.addEventListener("click", startReading);
     againBtn.addEventListener("click", startReading);
 
@@ -555,10 +609,8 @@
       URL.revokeObjectURL(url);
     });
 
-    /* -------- 初始化 -------- */
     loadHistory();
     updateHistoryBox();
   </script>
-  <a href="https://luckygbear-coder.github.io/" class="back-home-btn">🏡 回熊熊村長的家</a>
 </body>
 </html>
