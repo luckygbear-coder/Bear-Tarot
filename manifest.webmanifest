@@ -1,7 +1,7 @@
 {
   "name": "熊熊塔羅占卜",
   "short_name": "熊熊塔羅",
-  "start_url": "./tarot.html",
+  "start_url": "tarot.html",
   "display": "standalone",
   "background_color": "#2d254a",
   "theme_color": "#2d254a",
