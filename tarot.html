@@ -16,7 +16,6 @@
     display: none; /* 一開始先隱藏 */
   }
 
-  /* 熊熊文字：顏色加深、行距加大、保留換行 */
   .result-panel-content {
     font-size: 13px;
     line-height: 1.6;
@@ -115,135 +114,72 @@
     align-items: center;
   }
 
-  /* 卡片本體 */
+  /* 卡片本體（不再用 3D 翻轉，只做淡入淡出） */
   .card {
     width: 90px;
     height: 140px;
-    perspective: 900px;
     cursor: pointer;
-    opacity: 0;                   /* 一開始看不到 */
+    opacity: 0;
     transform: translateY(20px) scale(0.9);
-    pointer-events: none;         /* 一開始不能點 */
-    transition: transform 0.2s ease;
+    pointer-events: none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
   }
   .card.show {
-    animation: cardEnter 0.45s forwards;
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
   .card-inner {
     width: 100%;
     height: 100%;
     position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease;
   }
-  /* 正位：往一邊翻 */
-  .card.flipped .card-inner {
-    transform: rotateY(180deg);
-  }
-  /* 逆位：往另一邊翻（反方向旋轉） */
-  .card.is-reversed.flipped .card-inner {
-    transform: rotateY(-180deg);
-  }
+
   .card-face {
     position: absolute;
     inset: 0;
     border-radius: 12px;
-    backface-visibility: hidden;
     box-shadow: 0 4px 9px rgba(0,0,0,0.25);
-  }
-
-  /* 牌背：只顯示圖片，不顯示任何文字 */
-  .card-back {
-    background: none;
-    border: none;
-    font-size: 0;
     overflow: hidden;
   }
-  .card-back img {
+
+  /* 牌背 / 牌面圖片 */
+  .card-face img {
     width: 100%;
     height: 100%;
     display: block;
     border-radius: 12px;
+    object-fit: cover;
+    object-position: center;
   }
 
-  /* 牌面：一開始轉 180 度，翻牌後才會看到 */
+  /* 一開始只顯示牌背 */
+  .card-back {
+    opacity: 1;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
   .card-front {
-    transform: rotateY(180deg);
-    background: #fff9ef;
-    border: 2px solid #f3c79b;
-    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
   }
 
-  /* 逆位：邊框顏色略有不同＋微微歪斜感 */
-  .card.is-reversed .card-front {
-    border-color: #b895f5;
+  /* 翻牌後：牌背淡出、牌面淡入 */
+  .card.flipped .card-back {
+    opacity: 0;
+    transform: scale(0.96);
   }
+  .card.flipped .card-front {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  /* 逆位：整張牌微微歪斜 */
   .card.is-reversed {
     transform: translateY(20px) scale(0.9) rotateZ(-2deg);
   }
   .card.show.is-reversed {
-    animation: cardEnterReversed 0.45s forwards;
+    transform: translateY(0) scale(1) rotateZ(-2deg);
   }
 
-  @keyframes cardEnter {
-    from { opacity: 0; transform: translateY(20px) scale(0.9); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  @keyframes cardEnterReversed {
-    from { opacity: 0; transform: translateY(20px) scale(0.9) rotateZ(-5deg); }
-    to   { opacity: 1; transform: translateY(0) scale(1) rotateZ(-2deg); }
-  }
-
-  /* 熊熊對話框（目前沒用到但保留） */
-  .bear-dialog {
-    position: fixed;
-    left: 50%;
-    bottom: 8%;
-    transform: translateX(-50%);
-    max-width: 460px;
-    width: calc(100% - 32px);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: rgba(255, 247, 230, 0.98);
-    border-radius: 18px;
-    border: 2px solid #f5d3a6;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-    padding: 10px 12px 12px;
-    color: #4b3044;
-    z-index: 30;
-    animation: bearPop 0.4s ease-out;
-  }
-  .bear-dialog.hidden { display: none; }
-  .bear-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 20%, #ffeaa7, #ff9f7b);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    flex-shrink: 0;
-  }
-  .bear-text { flex: 1; font-size: 13px; }
-  .bear-title {
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: #8a4d5c;
-  }
-  .bear-message {
-    font-size: 13px;
-    line-height: 1.5;
-    white-space: pre-line;
-    margin-bottom: 6px;
-  }
-  .bear-actions { text-align: right; }
-  .bear-actions button {
-    font-size: 12px;
-    padding: 6px 14px;
-    box-shadow: none;
-  }
   @keyframes bearPop {
     from { transform: translate(-50%, 40px) scale(0.9); opacity: 0; }
     to   { transform: translate(-50%, 0) scale(1); opacity: 1; }
@@ -346,9 +282,7 @@
         <div class="card-slot" data-position="past">
           <div class="slot-title">過去</div>
           <div class="card">
-            <div class="card-inner">
-              <!-- 一開始先留空，由 JS 塞入牌背＆牌面圖片 -->
-            </div>
+            <div class="card-inner"></div>
           </div>
         </div>
 
@@ -726,7 +660,7 @@ const tarotCards = [
   }
 ];
 
-/* =============== 工具 =============== */
+/* ===== 工具 ===== */
 function shuffle(arr) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -736,7 +670,7 @@ function shuffle(arr) {
   return a;
 }
 
-/* DOM 取得 */
+/* DOM */
 const startBtn = document.getElementById("startBtn");
 const againBtn = document.getElementById("againBtn");
 const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
@@ -783,12 +717,10 @@ function setupCardImage(slotKey, slotData) {
 
   inner.innerHTML = `
     <div class="card-face card-back">
-      <img src="images/back.png"
-           alt="card back" />
+      <img src="images/back.png" alt="card back" />
     </div>
     <div class="card-face card-front">
-      <img src="images/${slotData.card.id}.png"
-           alt="${slotData.card.name}" />
+      <img src="images/${slotData.card.id}.png" alt="${slotData.card.name}" />
     </div>
   `;
 
@@ -797,7 +729,7 @@ function setupCardImage(slotKey, slotData) {
   cardEl.classList.add("show");
 }
 
-/* 組合熊熊訊息 */
+/* 熊熊訊息 */
 function buildBearMessage(r) {
   function part(label, slot) {
     const side = slot.reversed ? slot.card.reversed : slot.card.upright;
