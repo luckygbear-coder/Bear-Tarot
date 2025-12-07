@@ -371,32 +371,13 @@ function setupCardImage(key,data){
 
   card.classList.remove("flipped","show");
   inner.innerHTML = `
-    <div class="card-face card-back">
-      <img src="images/back.png">
-    </div>
-    <div class="card-face card-front" style="opacity:0;">
-      <img src="images/${data.card.id}.png">
-    </div>
-    .card-back {
-  opacity: 1;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.card-front {
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-/* 已有的這兩條保留 */
-.card.flipped .card-back {
-  opacity: 0;
-  transform: scale(0.96);
-}
-.card.flipped .card-front {
-  opacity: 1;
-  transform: scale(1.02);
-}
-  `;
+  <div class="card-face card-back">
+    <img src="images/back.png">
+  </div>
+  <div class="card-face card-front">
+    <img src="images/${data.card.id}.png">
+  </div>
+`;
   requestAnimationFrame(()=>card.classList.add("show"));
 }
 
