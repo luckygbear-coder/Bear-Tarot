@@ -5,7 +5,98 @@ if (flippedCount === 3) {
     // 顯示到熊熊結果大卡片
     resultText.textContent = msg;
     resultPanel.style.display = "block";
+// ==================== 牌庫（僅示例，保持你原本的 tarotCards） ====================
+const tarotCards = [
+  { id: 0, name: "愚者" },
+  { id: 1, name: "魔術師" },
+  { id: 2, name: "女祭司" },
+  { id: 3, name: "皇后" },
+  { id: 4, name: "皇帝" },
+  { id: 5, name: "教皇" },
+  { id: 6, name: "戀人" },
+  { id: 7, name: "戰車" },
+  { id: 8, name: "力量" },
+  { id: 9, name: "隱者" },
+  { id:10, name: "命運之輪" },
+  { id:11, name: "正義" },
+  { id:12, name: "吊人" },
+  { id:13, name: "死神" },
+  { id:14, name: "節制" },
+  { id:15, name: "惡魔" },
+  { id:16, name: "高塔" },
+  { id:17, name: "星星" },
+  { id:18, name: "月亮" },
+  { id:19, name: "太陽" },
+  { id:20, name: "審判" },
+  { id:21, name: "世界" }
+];
 
+// ==================== 工具：洗牌 ====================
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+// ==================== DOM 選取 ====================
+const slots = {
+  past: document.querySelector('.card-slot[data-position="past"] .card-inner'),
+  present: document.querySelector('.card-slot[data-position="present"] .card-inner'),
+  future: document.querySelector('.card-slot[data-position="future"] .card-inner')
+};
+
+// ==================== 生成牌背 ====================
+function setCardBack(cardInner) {
+  cardInner.innerHTML = `
+    <div class="card-face card-back">
+      <img src="images/back.png" style="width:100%;height:100%;border-radius:12px;">
+    </div>
+    <div class="card-face card-front"></div>
+  `;
+}
+
+// ==================== 抽牌後替換卡片正面圖片 ====================
+function setCardFront(cardInner, cardId) {
+  const front = cardInner.querySelector(".card-front");
+  front.innerHTML = `
+    <img src="images/${cardId}.png"
+         style="width:100%;height:100%;border-radius:12px;">
+  `;
+}
+
+// ==================== 抽牌邏輯 ====================
+let reading = null;
+let flippedCount = 0;
+
+function startReading() {
+  flippedCount = 0;
+
+  const shuffled = shuffle(tarotCards);
+  reading = {
+    past: shuffled[0],
+    present: shuffled[1],
+    future: shuffled[2]
+  };
+
+  // 初始化三張卡：全部放牌背
+  Object.values(slots).forEach(cardInner => {
+    cardInner.classList.remove("flipped");
+    setCardBack(cardInner);
+  });
+}
+
+// ==================== 點擊翻牌 ====================
+Object.entries(slots).forEach(([slotName, cardInner]) => {
+  cardInner.addEventListener("click", () => {
+    if (cardInner.classList.contains("flipped")) return;
+
+    cardInner.classList.add("flipped");
+
+    // 依照 slot 對應卡面圖片
+    const cardId = reading[slotName].id;
+    setCardFront(cardInner, cardId);
+
+    flippedCount++;
+  });
+});
     // ➊ 產生時間標籤（含日期＋時間）
     const now = new Date();
     const timeLabel = now.toLocaleString("zh-TW", {
