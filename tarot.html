@@ -208,23 +208,36 @@
   }
 
   @media (max-width: 400px) {
-    #historyBox {
-      color: #4b3044;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    #historyBox pre {
-      color: #4b3044;
-      font-size: 13px;
-      line-height: 1.6;
-      white-space: pre-line;
-      margin-top: 4px;
-    }
-    .history-title {
-      color: #8a4d5c;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
+/* =========================
+   抽牌紀錄（加深色）
+   ========================= */
+#historyBox {
+  color: #4b2f3a !important;      /* 深梅紫，提高可讀性 */
+  font-size: 14px !important;
+  line-height: 1.7;
+  background: rgba(255, 250, 240, 0.95); /* 微奶油底 */
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #e3c6a5;
+  box-shadow: 0 2px 6px rgba(120, 80, 90, 0.18);
+}
+
+/* 每一筆紀錄 */
+#historyBox pre {
+  color: #4b2f3a !important;      /* 深色字 */
+  font-size: 14px !important;
+  line-height: 1.7;
+  white-space: pre-line;
+  margin-top: 4px;
+}
+
+/* 標題：加粗＋加深 */
+.history-title {
+  color: #8a4d5c !important;
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
     .card {
       width: 80px;
       height: 124px;
