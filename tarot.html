@@ -1,338 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <link rel="manifest" href="manifest.webmanifest">
-
-<link rel="apple-touch-icon" href="icons/bear-tarot-180.png">
-
-<link rel="icon" type="image/png" sizes="192x192" href="icons/bear-tarot-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icons/bear-tarot-512.png">
-  <meta charset="UTF-8" />
-  <title>熊熊塔羅占卜</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-  .result-panel {
-    margin-top: 14px;
-    background: #fff7e6;
-    border-radius: 18px;
-    border: 2px solid #f5d3a6;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-    padding: 12px 14px 14px;
-    display: none; 
-  }
-  .result-panel-content {
-    font-size: 13px;
-    line-height: 1.6;
-    color: #4b3044;
-    white-space: pre-line;
-  }
-
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-    background: linear-gradient(180deg, #2d254a, #6a4f9c, #f9e4c8);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-  }
-  .game-wrap {
-    max-width: 480px;
-    width: 100%;
-    padding: 16px;
-    margin-top: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-  .card-panel {
-    background: rgba(255, 247, 230, 0.95);
-    border-radius: 18px;
-    border: 2px solid #f7dba5;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-    padding: 18px 14px 20px;
-    color: #4a3450;
-  }
-  h1 {
-    margin: 0 0 4px;
-    font-size: 22px;
-    text-align: center;
-    letter-spacing: 0.15em;
-  }
-  .subtitle {
-    text-align: center;
-    font-size: 13px;
-    color: #7c5c88;
-    margin-bottom: 12px;
-  }
-  .star-divider {
-    text-align: center;
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  .btn-bar {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  button {
-    border: none;
-    border-radius: 999px;
-    padding: 10px 22px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    background: linear-gradient(135deg, #ffcf5f, #ff9f7b);
-    color: #4a2a18;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
-  }
-  button:active {
-    transform: translateY(1px) scale(0.98);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  }
-  button:disabled {
-    opacity: 0.6;
-    cursor: default;
-    box-shadow: none;
-  }
-
-  .table {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
-  }
-  .slot-title {
-    text-align: center;
-    font-size: 12px;
-    color: #8f6c9b;
-    margin-bottom: 4px;
-  }
-  .card-slot {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .card {
-    width: 90px;
-    height: 140px;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
-    pointer-events: none;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-  .card.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  .card-inner {
-    width: 100%;
-    height: 100%;
-    position: relative;
-  }
-
-  .card-face {
-    position: absolute;
-    inset: 0;
-    border-radius: 12px;
-    box-shadow: 0 4px 9px rgba(0,0,0,0.25);
-    overflow: hidden;
-  }
-  .card-face img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    border-radius: 12px;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .card-back {
-    opacity: 1;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .card-front {
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-
-  .card.flipped .card-back {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  .card.flipped .card-front {
-    opacity: 1;
-    transform: scale(1.02);
-  }
-
-  .card.is-reversed {
-    transform: translateY(20px) scale(0.9) rotateZ(-2deg);
-  }
-  .card.show.is-reversed {
-    transform: translateY(0) scale(1) rotateZ(-2deg);
-  }
-
-  .star-layer {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    z-index: -1;
-  }
-  .star {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 6px rgba(255,255,255,0.9);
-    animation: starFloat 1.4s ease-out forwards;
-    opacity: 0;
-  }
-  @keyframes starFloat {
-    0% {
-      transform: translate3d(0, 10px, 0) scale(0.3);
-      opacity: 0;
-    }
-    20% { opacity: 1; }
-    100% {
-      transform: translate3d(0, -40px, 0) scale(1);
-      opacity: 0;
-    }
-  }
-
-  .hint {
-    text-align: center;
-    font-size: 11px;
-    color: #edd2f4;
-    margin-top: 6px;
-  }
-
-  @media (max-width: 400px) {
-/* =========================
-   抽牌紀錄（加深色）
-   ========================= */
-#historyBox {
-  color: #3e2420;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-#historyBox pre {
-  color: #3e2420;
-  font-size: 13px;
-  line-height: 1.6;
-  white-space: pre-line;
-  margin-top: 4px;
-}
-
-.history-title {
-  color: #7b3430;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-    .card {
-      width: 80px;
-      height: 124px;
-    }
-  }
-  </style>
-</head>
-<body>
-  <div class="game-wrap">
-    <div class="star-layer" id="starLayer"></div>
-
-    <div style="margin-bottom: 8px;">
-      <a href="index.html"
-         style="display:inline-flex;align-items:center;gap:4px;
-                padding:6px 10px;border-radius:999px;
-                background:rgba(0,0,0,0.15);color:#f9e4c8;
-                font-size:12px;text-decoration:none;">
-        🏠 回到小勇者主頁
-      </a>
-    </div>
-
-    <div class="card-panel">
-      <h1>熊熊塔羅占卜</h1>
-      <div class="subtitle">深呼吸 3 秒，心裡默念問題，然後點下按鈕。</div>
-      <div class="star-divider">✦ ✦ ✦</div>
-
-      <div class="btn-bar">
-        <button id="startBtn">
-          <span class="btn-icon">🔮</span>
-          <span>開始占卜</span>
-        </button>
-      </div>
-
-      <div class="table">
-        <div class="card-slot" data-position="past">
-          <div class="slot-title">過去</div>
-          <div class="card">
-            <div class="card-inner"></div>
-          </div>
-        </div>
-
-        <div class="card-slot" data-position="present">
-          <div class="slot-title">現在</div>
-          <div class="card">
-            <div class="card-inner"></div>
-          </div>
-        </div>
-
-        <div class="card-slot" data-position="future">
-          <div class="slot-title">未來</div>
-          <div class="card">
-            <div class="card-inner"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="resultPanel" class="result-panel">
-      <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">
-        <div style="font-size:26px;flex-shrink:0;">🐻</div>
-        <div style="flex:1;">
-          <div style="font-weight:700;margin-bottom:4px;color:#8a4d5c;">
-            村長熊熊的小提醒
-          </div>
-          <div id="resultText" class="result-panel-content">
-            今天的能量正在準備中…
-          </div>
-        </div>
-      </div>
-
-      <div class="result-btns" style="display:flex;gap:10px;">
-        <button id="againBtn">
-          <span class="btn-icon icon-repeat"></span>
-          <span>再占一次</span>
-        </button>
-        <button id="toggleHistoryBtn">
-          <span class="btn-icon icon-scroll"></span>
-          <span>抽牌紀錄</span>
-        </button>
-        <button id="downloadBtn">
-          <span class="btn-icon icon-download"></span>
-          <span>下載文字</span>
-        </button>
-      </div>
-
-      <div id="historyBox"
-           style="margin-top:10px;border-top:1px dashed #e4c8aa;
-                  padding-top:6px;font-size:12px;max-height:160px;
-                  overflow-y:auto;display:none;">
-        <div style="color:#a88c93;">目前還沒有紀錄喔～先完成一次占卜看看。</div>
-      </div>
-    </div>
-
-    <div class="hint">提示：按「開始占卜」後，依序點三張牌翻開唷 ✨</div>
-  </div>
-
 <script>
+// ==================== 22 張大牌資料 ====================
 const tarotCards = [
   { id:0, name:"愚者", tag:"新的開始・自由・旅程", icon:"🎒",
     upright:{ meaning:"新的旅程、勇敢嘗試、帶著好奇心往前走，允許自己當新手。",
@@ -468,6 +135,7 @@ const tarotCards = [
   }
 ];
 
+// ==================== 工具：洗牌 ====================
 function shuffle(arr) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -477,6 +145,7 @@ function shuffle(arr) {
   return a;
 }
 
+// ==================== DOM 取得 ====================
 const startBtn = document.getElementById("startBtn");
 const againBtn = document.getElementById("againBtn");
 const toggleHistoryBtn = document.getElementById("toggleHistoryBtn");
@@ -492,6 +161,7 @@ const cardSlots = {
   future: document.querySelector('.card-slot[data-position="future"] .card')
 };
 
+// ==================== 星星動畫 ====================
 function spawnStar(x, y, count = 8) {
   if (!starLayer) return;
   const rect = starLayer.getBoundingClientRect();
@@ -506,6 +176,7 @@ function spawnStar(x, y, count = 8) {
   }
 }
 
+// ==================== 設定每張牌的前後面 ====================
 function setupCardImage(slotKey, slotData) {
   const cardEl = cardSlots[slotKey];
   const inner = cardEl.querySelector(".card-inner");
@@ -528,10 +199,12 @@ function setupCardImage(slotKey, slotData) {
     </div>
   `;
 
+  // 觸發動畫
   void cardEl.offsetWidth;
   cardEl.classList.add("show");
 }
 
+// ==================== 組熊熊解說訊息 ====================
 function buildBearMessage(r) {
   function part(label, slot) {
     const side = slot.reversed ? slot.card.reversed : slot.card.upright;
@@ -549,6 +222,7 @@ function buildBearMessage(r) {
   );
 }
 
+// ==================== 抽牌紀錄 ====================
 const HISTORY_KEY = "bearTarotHistoryV1";
 let historyList = [];
 
@@ -589,6 +263,7 @@ function updateHistoryBox() {
     .join("");
 }
 
+// 下載文字檔
 function downloadReading(text) {
   const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -599,6 +274,7 @@ function downloadReading(text) {
   URL.revokeObjectURL(url);
 }
 
+// ==================== 抽牌流程 ====================
 let reading = null;
 let flippedCount = 0;
 
@@ -625,6 +301,7 @@ function startReading() {
   setTimeout(() => (startBtn.disabled = false), 800);
 }
 
+// ==================== 點擊翻牌 ====================
 Object.entries(cardSlots).forEach(([key, cardEl]) => {
   cardEl.addEventListener("click", () => {
     if (!reading) return;
@@ -659,6 +336,7 @@ Object.entries(cardSlots).forEach(([key, cardEl]) => {
   });
 });
 
+// ==================== 按鈕事件 ====================
 startBtn.addEventListener("click", startReading);
 againBtn.addEventListener("click", startReading);
 
@@ -672,8 +350,7 @@ downloadBtn.addEventListener("click", () => {
   downloadReading(resultText.textContent);
 });
 
+// ==================== 初始化 ====================
 loadHistory();
 updateHistoryBox();
 </script>
-</body>
-</html>
