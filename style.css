@@ -603,7 +603,25 @@ textarea:focus {
   .page-wrap {
     padding: 24px;
   }
+#historyBox {
+  color: #3e2420;
+  font-size: 13px;
+  line-height: 1.6;
+}
 
+#historyBox pre {
+  color: #3e2420;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-line;
+  margin-top: 4px;
+}
+
+.history-title {
+  color: #7b3430;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
   .card {
     padding: 20px 22px 24px;
   }
