@@ -1,0 +1,92 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圓：紫色星空漸層 -->
+  <defs>
+    <radialGradient id="bg" cx="30%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#ffe7c9"/>
+      <stop offset="40%" stop-color="#c27bff"/>
+      <stop offset="100%" stop-color="#402060"/>
+    </radialGradient>
+
+    <!-- 水晶球漸層 -->
+    <radialGradient id="ball" cx="30%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#fff7e7"/>
+      <stop offset="45%" stop-color="#ffcf7a"/>
+      <stop offset="100%" stop-color="#ff8f6a"/>
+    </radialGradient>
+
+    <!-- 熊熊臉漸層 -->
+    <linearGradient id="bearFace" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffcf8a"/>
+      <stop offset="100%" stop-color="#d9894a"/>
+    </linearGradient>
+
+    <!-- 小星星形狀 -->
+    <symbol id="star" viewBox="0 0 24 24">
+      <polygon fill="#ffecc5" points="12,2 14.8,8.5 22,9.2 16.7,13.7 18.2,20.8 12,17.2 5.8,20.8 7.3,13.7 2,9.2 9.2,8.5" />
+    </symbol>
+  </defs>
+
+  <!-- 背景圓 -->
+  <circle cx="256" cy="256" r="240" fill="url(#bg)"/>
+
+  <!-- 漸層邊框光暈 -->
+  <circle cx="256" cy="256" r="228"
+          fill="none"
+          stroke="rgba(255,255,255,0.7)"
+          stroke-width="8"/>
+
+  <!-- 上方三顆小星星 -->
+  <use href="#star" x="130" y="80" width="34" height="34" opacity="0.9"/>
+  <use href="#star" x="238" y="60" width="40" height="40" opacity="0.95"/>
+  <use href="#star" x="332" y="80" width="30" height="30" opacity="0.8"/>
+
+  <!-- 水晶球底座 -->
+  <rect x="176" y="328" width="160" height="56" rx="18"
+        fill="#b45b3b"/>
+  <rect x="186" y="336" width="140" height="40" rx="14"
+        fill="#f7cfa0"/>
+
+  <!-- 水晶球 -->
+  <circle cx="256" cy="250" r="110" fill="url(#ball)"/>
+  <!-- 水晶球上方高光 -->
+  <ellipse cx="228" cy="216" rx="40" ry="26" fill="rgba(255,255,255,0.55)"/>
+
+  <!-- 熊熊耳朵 -->
+  <circle cx="206" cy="198" r="30" fill="#b96a35"/>
+  <circle cx="306" cy="198" r="30" fill="#b96a35"/>
+  <circle cx="206" cy="200" r="18" fill="#f4b37a"/>
+  <circle cx="306" cy="200" r="18" fill="#f4b37a"/>
+
+  <!-- 熊熊臉 -->
+  <circle cx="256" cy="238" r="70" fill="url(#bearFace)"/>
+
+  <!-- 熊熊眼睛 -->
+  <circle cx="236" cy="232" r="6.5" fill="#4a2b37"/>
+  <circle cx="276" cy="232" r="6.5" fill="#4a2b37"/>
+  <!-- 微笑 -->
+  <path d="M232 255 Q256 272 280 255"
+        fill="none"
+        stroke="#4a2b37"
+        stroke-width="5"
+        stroke-linecap="round"/>
+
+  <!-- 鼻子 -->
+  <ellipse cx="256" cy="244" rx="10" ry="7" fill="#4a2b37"/>
+
+  <!-- 小頰紅 -->
+  <circle cx="222" cy="244" r="7" fill="#f79aa5" opacity="0.8"/>
+  <circle cx="290" cy="244" r="7" fill="#f79aa5" opacity="0.8"/>
+
+  <!-- 「Tarot」感覺的小小字母：SWP -->
+  <rect x="198" y="340" width="116" height="26" rx="10"
+        fill="rgba(255,255,255,0.9)"/>
+  <text x="256" y="358"
+        text-anchor="middle"
+        font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Noto Sans TC', sans-serif"
+        font-size="18"
+        fill="#b45b3b"
+        font-weight="700"
+        letter-spacing="3">
+    SWP
+  </text>
+</svg>
