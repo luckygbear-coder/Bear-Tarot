@@ -13,7 +13,7 @@
     border: 2px solid #f5d3a6;
     box-shadow: 0 6px 18px rgba(0,0,0,0.35);
     padding: 12px 14px 14px;
-    display: none;              /* 一開始先隱藏 */
+    display: none; /* 一開始先隱藏 */
   }
 
   /* 熊熊文字：顏色加深、行距加大、保留換行 */
@@ -121,9 +121,9 @@
     height: 140px;
     perspective: 900px;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0;                   /* 一開始看不到 */
     transform: translateY(20px) scale(0.9);
-    pointer-events: none;
+    pointer-events: none;         /* 一開始不能點 */
     transition: transform 0.2s ease;
   }
   .card.show {
@@ -166,15 +166,14 @@
     border-radius: 12px;
   }
 
+  /* 牌面：一開始轉 180 度，翻牌後才會看到 */
   .card-front {
-    transform: rotateY(180deg);   /* 一開始正面朝內，看不到 */
+    transform: rotateY(180deg);
     background: #fff9ef;
     border: 2px solid #f3c79b;
-    padding: 10px 7px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    overflow: hidden;
   }
+
   /* 逆位：邊框顏色略有不同＋微微歪斜感 */
   .card.is-reversed .card-front {
     border-color: #b895f5;
@@ -186,31 +185,6 @@
     animation: cardEnterReversed 0.45s forwards;
   }
 
-  .card-name {
-    font-size: 13px;
-    font-weight: 700;
-    text-align: center;
-    color: #7a3f5f;
-    margin-bottom: 4px;
-  }
-  .card-tag {
-    font-size: 11px;
-    text-align: center;
-    color: #c77a68;
-    margin-bottom: 6px;
-  }
-  .card-meaning {
-    font-size: 11px;
-    line-height: 1.4;
-    color: #5c3b4c;
-    flex: 1;
-  }
-  .card-icon {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 4px;
-  }
-
   @keyframes cardEnter {
     from { opacity: 0; transform: translateY(20px) scale(0.9); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -220,7 +194,7 @@
     to   { opacity: 1; transform: translateY(0) scale(1) rotateZ(-2deg); }
   }
 
-  /* 熊熊對話框（目前沒用到，但先保留） */
+  /* 熊熊對話框（目前沒用到但保留） */
   .bear-dialog {
     position: fixed;
     left: 50%;
@@ -339,10 +313,10 @@
 </head>
 <body>
   <div class="game-wrap">
-    <!-- 星星粒子層（保留原本動畫用） -->
+    <!-- 星星粒子層 -->
     <div class="star-layer" id="starLayer"></div>
 
-    <!-- 上方簡單返回鍵 -->
+    <!-- 上方返回鍵 -->
     <div style="margin-bottom: 8px;">
       <a href="index.html"
          style="display:inline-flex;align-items:center;gap:4px;
@@ -373,13 +347,7 @@
           <div class="slot-title">過去</div>
           <div class="card">
             <div class="card-inner">
-              <div class="card-face card-back"></div>
-              <div class="card-face card-front">
-                <div class="card-name"></div>
-                <div class="card-tag"></div>
-                <div class="card-meaning"></div>
-                <div class="card-icon"></div>
-              </div>
+              <!-- 一開始先留空，由 JS 塞入牌背＆牌面圖片 -->
             </div>
           </div>
         </div>
@@ -388,15 +356,7 @@
         <div class="card-slot" data-position="present">
           <div class="slot-title">現在</div>
           <div class="card">
-            <div class="card-inner">
-              <div class="card-face card-back"></div>
-              <div class="card-face card-front">
-                <div class="card-name"></div>
-                <div class="card-tag"></div>
-                <div class="card-meaning"></div>
-                <div class="card-icon"></div>
-              </div>
-            </div>
+            <div class="card-inner"></div>
           </div>
         </div>
 
@@ -404,15 +364,7 @@
         <div class="card-slot" data-position="future">
           <div class="slot-title">未來</div>
           <div class="card">
-            <div class="card-inner">
-              <div class="card-face card-back"></div>
-              <div class="card-face card-front">
-                <div class="card-name"></div>
-                <div class="card-tag"></div>
-                <div class="card-meaning"></div>
-                <div class="card-icon"></div>
-              </div>
-            </div>
+            <div class="card-inner"></div>
           </div>
         </div>
       </div><!-- .table -->
@@ -462,17 +414,317 @@
   </div><!-- .game-wrap -->
 
 <script>
-/* =============== 22 大秘儀資料（略：與你原本相同） =============== */
-const tarotCards = [/* 這裡放你原本的 0~21 卡片物件，不動 */ 
-  /* 為了節省篇幅，直接用你上面那份 tarotCards 陣列 */
-  {"id":0,"name":"愚者","tag":"新的開始・自由・旅程","icon":"🎒",
-   upright:{meaning:"新的旅程、勇敢嘗試、帶著好奇心往前走，允許自己當新手。",
-            bear:"🐻 熊熊說：就算不知道會發生什麼也沒關係。你願意踏出去的那一步，就是最厲害的勇氣！"},
-   reversed:{meaning:"衝動或逃避，提醒你在冒險前先做好基本準備。",
-             bear:"🐻 熊熊說：停一下沒關係，我在這裡陪你。準備好了再走，也是一種很棒的勇敢喔。"}},
-  /* ……其餘 1~21 按你原本的內容貼回來 …… */
+/* =============== 22 大秘儀 + 圖片 ID（0.png ~ 21.png） =============== */
+const tarotCards = [
+  {
+    id: 0,
+    name: "愚者",
+    tag: "新的開始・自由・旅程",
+    icon: "🎒",
+    upright: {
+      meaning: "新的旅程、勇敢嘗試、帶著好奇心往前走，允許自己當新手。",
+      bear: "🐻 熊熊說：就算不知道會發生什麼也沒關係。你願意踏出去的那一步，就是最厲害的勇氣！"
+    },
+    reversed: {
+      meaning: "衝動或逃避，提醒你在冒險前先做好基本準備。",
+      bear: "🐻 熊熊說：停一下沒關係，我在這裡陪你。準備好了再走，也是一種很棒的勇敢喔。"
+    }
+  },
+  {
+    id: 1,
+    name: "魔術師",
+    tag: "行動・創造・專注",
+    icon: "✨",
+    upright: {
+      meaning: "你已經有足夠能力，可以開始實現想法。",
+      bear: "🐻 熊熊說：你的點子真的很棒！現在就是最適合開始行動的時間～"
+    },
+    reversed: {
+      meaning: "心思散亂、專注力不足，需要回到核心目標。",
+      bear: "🐻 熊熊說：先把腦袋的小雜音關起來吧。專注一件事，你會更輕鬆，也更有力量。"
+    }
+  },
+  {
+    id: 2,
+    name: "女祭司",
+    tag: "直覺・內在・靜心",
+    icon: "🌙",
+    upright: {
+      meaning: "安靜下來，直覺會給你答案。",
+      bear: "🐻 熊熊說：你心裡其實早就知道答案了。我會陪你一起聽聽那個柔軟的聲音。"
+    },
+    reversed: {
+      meaning: "情緒混亂、思緒重疊，需要休息。",
+      bear: "🐻 熊熊說：沒關係，我們先停一下。你值得一個安靜的空間，讓心慢慢平靜下來。"
+    }
+  },
+  {
+    id: 3,
+    name: "皇后",
+    tag: "滋養・美感・愛",
+    icon: "👑",
+    upright: {
+      meaning: "適合照顧自己、享受生活、創造美。",
+      bear: "🐻 熊熊說：你值得被好好呵護。偶爾對自己溫柔一點，是很重要的喔。"
+    },
+    reversed: {
+      meaning: "過度付出、忽略自己。",
+      bear: "🐻 熊熊說：你已經很努力了，換你休息一下吧。我會提醒你，把愛分一些給自己。"
+    }
+  },
+  {
+    id: 4,
+    name: "皇帝",
+    tag: "結構・責任・界線",
+    icon: "🏛️",
+    upright: {
+      meaning: "需要制定界線、建立秩序。",
+      bear: "🐻 熊熊說：站直、抬頭，你其實比自己想像得更能掌控局面。"
+    },
+    reversed: {
+      meaning: "太僵硬或太控制。",
+      bear: "🐻 熊熊說：柔軟一點點，不會讓你變弱。反而能讓你呼吸得更輕鬆。"
+    }
+  },
+  {
+    id: 5,
+    name: "教皇",
+    tag: "學習・智慧・規範",
+    icon: "📖",
+    upright: {
+      meaning: "適合請教專業、按部就班。",
+      bear: "🐻 熊熊說：你不是一個人，有可信任的人願意教你、陪你。"
+    },
+    reversed: {
+      meaning: "不想被規則綁住，渴望自由。",
+      bear: "🐻 熊熊說：你可以創造自己的方式。只要對自己誠實，就能走出一條新的路。"
+    }
+  },
+  {
+    id: 6,
+    name: "戀人",
+    tag: "關係・選擇・情感",
+    icon: "💖",
+    upright: {
+      meaning: "真誠連結、重要選擇來臨。",
+      bear: "🐻 熊熊說：把你的心說出來吧。真正重要的連結，都來自真誠。"
+    },
+    reversed: {
+      meaning: "誤解、猶豫、關係不平衡。",
+      bear: "🐻 熊熊說：別急著做決定。先聽聽自己心裡真正的感受。"
+    }
+  },
+  {
+    id: 7,
+    name: "戰車",
+    tag: "行動・突破・控制力",
+    icon: "🏇",
+    upright: {
+      meaning: "前進、戰勝困難、掌控方向。",
+      bear: "🐻 熊熊說：我看到你很努力！繼續往前，你真的做得到！"
+    },
+    reversed: {
+      meaning: "方向不明、太急躁。",
+      bear: "🐻 熊熊說：先慢一點，不是退步，而是讓你更清楚要往哪裡去。"
+    }
+  },
+  {
+    id: 8,
+    name: "力量",
+    tag: "內在勇氣・柔和力量",
+    icon: "🦁",
+    upright: {
+      meaning: "溫柔也能很有力量。",
+      bear: "🐻 熊熊說：你不需要強裝堅強，你本來就已經很勇敢了。"
+    },
+    reversed: {
+      meaning: "疲累、自我懷疑。",
+      bear: "🐻 熊熊說：休息不是失敗。你值得被抱一抱、好好充電。"
+    }
+  },
+  {
+    id: 9,
+    name: "隱者",
+    tag: "內省・獨處・智慧",
+    icon: "🕯️",
+    upright: {
+      meaning: "一個人的時間能帶來答案。",
+      bear: "🐻 熊熊說：你不用急著回答世界，先陪陪自己也很好。"
+    },
+    reversed: {
+      meaning: "孤單、封閉太久。",
+      bear: "🐻 熊熊說：如果願意，我在這裡，可以陪你慢慢走出去。"
+    }
+  },
+  {
+    id: 10,
+    name: "命運之輪",
+    tag: "轉機・循環・變化",
+    icon: "🎡",
+    upright: {
+      meaning: "好運轉動、新機會即將來臨。",
+      bear: "🐻 熊熊說：推一下你的命運之輪吧！機會正在靠近你～"
+    },
+    reversed: {
+      meaning: "事情停滯、時機未到。",
+      bear: "🐻 熊熊說：別心急，你要的東西沒有消失，只是正在準備更好的版本給你。"
+    }
+  },
+  {
+    id: 11,
+    name: "正義",
+    tag: "公正・誠實・平衡",
+    icon: "⚖️",
+    upright: {
+      meaning: "需要理性、面對真相。",
+      bear: "🐻 熊熊說：說真話需要勇氣，而你辦得到。"
+    },
+    reversed: {
+      meaning: "感到不公平、誤會。",
+      bear: "🐻 熊熊說：先把心安撫好，再來談什麼是公平。你值得被理解。"
+    }
+  },
+  {
+    id: 12,
+    name: "吊人",
+    tag: "等待・放下・新觀點",
+    icon: "🪜",
+    upright: {
+      meaning: "停下腳步才能看見新方向。",
+      bear: "🐻 熊熊說：有時候慢下來，不是落後，而是讓奇蹟追上你。"
+    },
+    reversed: {
+      meaning: "停滯太久、抗拒改變。",
+      bear: "🐻 熊熊說：你不需要一次改變全部，從小地方開始就很好。"
+    }
+  },
+  {
+    id: 13,
+    name: "死神",
+    tag: "結束・轉化・重生",
+    icon: "☠️",
+    upright: {
+      meaning: "一段關係或階段結束，迎向重生。",
+      bear: "🐻 熊熊說：把舊的放下，你的手才能接住新的禮物。"
+    },
+    reversed: {
+      meaning: "害怕改變、停滯。",
+      bear: "🐻 熊熊說：慢慢來，你不必一次放手，我會陪著你。"
+    }
+  },
+  {
+    id: 14,
+    name: "節制",
+    tag: "平衡・溫和・流動",
+    icon: "💧",
+    upright: {
+      meaning: "找到最適合自己的節奏。",
+      bear: "🐻 熊熊說：不用急、不用衝，只要穩穩地、舒服地往前就很好。"
+    },
+    reversed: {
+      meaning: "失衡、過度忙碌或放縱。",
+      bear: "🐻 熊熊說：休息不是浪費，是讓你更順利的秘密武器。"
+    }
+  },
+  {
+    id: 15,
+    name: "惡魔",
+    tag: "束縛・慾望・壓力",
+    icon: "😈",
+    upright: {
+      meaning: "看見自己被什麼綁住，是解脫的第一步。",
+      bear: "🐻 熊熊說：沒關係，我陪你一起看看那些讓你不舒服的地方。你比它們強大。"
+    },
+    reversed: {
+      meaning: "有機會脫離負面習慣。",
+      bear: "🐻 熊熊說：太好了！你已經開始鬆開繩子了，再一步一步就能自由了。"
+    }
+  },
+  {
+    id: 16,
+    name: "高塔",
+    tag: "突變・打破・重建",
+    icon: "🏰",
+    upright: {
+      meaning: "舊的結構崩解，迎來重建機會。",
+      bear: "🐻 熊熊說：雖然看起來可怕，但這一步能讓你得到真正適合自己的生活。"
+    },
+    reversed: {
+      meaning: "害怕崩壞、拒絕面對。",
+      bear: "🐻 熊熊說：沒關係，你可以慢慢來。只要願意跨出一小步，就是進步。"
+    }
+  },
+  {
+    id: 17,
+    name: "星星",
+    tag: "希望・療癒・願望",
+    icon: "⭐",
+    upright: {
+      meaning: "希望、靈感、美好的能量流動。",
+      bear: "🐻 熊熊說：你值得溫柔，也值得被光照亮。未來正在變好。"
+    },
+    reversed: {
+      meaning: "暫時失去方向、疲累。",
+      bear: "🐻 熊熊說：沒關係，先休息一下，星星會在夜裡等你。"
+    }
+  },
+  {
+    id: 18,
+    name: "月亮",
+    tag: "情緒・迷霧・直覺",
+    icon: "🌙",
+    upright: {
+      meaning: "情緒起伏、敏感、潛意識訊息。",
+      bear: "🐻 熊熊說：你的感受很重要，請不要忽略它們。"
+    },
+    reversed: {
+      meaning: "害怕、想像與現實混雜。",
+      bear: "🐻 熊熊說：試著做一件很小很簡單的事，你會慢慢找回穩定。"
+    }
+  },
+  {
+    id: 19,
+    name: "太陽",
+    tag: "喜悅・成功・自信",
+    icon: "☀️",
+    upright: {
+      meaning: "能量充足、喜悅、成功。",
+      bear: "🐻 熊熊說：你真的很棒！世界正在為你拍手喔～"
+    },
+    reversed: {
+      meaning: "疲累、內在光變弱。",
+      bear: "🐻 熊熊說：你不需要一直發光。累了就來熊熊這裡充電。"
+    }
+  },
+  {
+    id: 20,
+    name: "審判",
+    tag: "復活・醒悟・召喚",
+    icon: "📣",
+    upright: {
+      meaning: "新的呼喚、第二次機會。",
+      bear: "🐻 熊熊說：你比以前更成熟了，這一次你會做得更好。"
+    },
+    reversed: {
+      meaning: "糾結、無法放下過去。",
+      bear: "🐻 熊熊說：你已經盡力了，可以溫柔地放過自己。"
+    }
+  },
+  {
+    id: 21,
+    name: "世界",
+    tag: "完成・整合・圓滿",
+    icon: "🌍",
+    upright: {
+      meaning: "一個階段即將完成，迎向下一旅程。",
+      bear: "🐻 熊熊說：恭喜你！你做得很棒，新的篇章正在等你。"
+    },
+    reversed: {
+      meaning: "快完成但差最後一步。",
+      bear: "🐻 熊熊說：再多一點點努力，你就會看到很美的結果。"
+    }
+  }
 ];
-/* 上面記得整個用你原本的 tarotCards 陣列取代，我這裡只是示意。 */
 
 /* =============== 工具 =============== */
 function shuffle(arr) {
@@ -532,11 +784,11 @@ function setupCardImage(slotKey, slotData) {
   inner.innerHTML = `
     <div class="card-face card-back">
       <img src="images/back.png"
-           style="width:100%;height:100%;border-radius:12px;" />
+           alt="card back" />
     </div>
     <div class="card-face card-front">
       <img src="images/${slotData.card.id}.png"
-           style="width:100%;height:100%;border-radius:12px;" />
+           alt="${slotData.card.name}" />
     </div>
   `;
 
