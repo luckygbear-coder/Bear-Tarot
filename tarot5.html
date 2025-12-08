@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>熊熊塔羅占卜 ｜ 五張牌深入占卜</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      background: #fde9d2;
+      font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #5a3844;
+    }
+
+    .page-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .back-link {
+      text-decoration: none;
+      font-size: 14px;
+      color: #7b4a7a;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid #e4c2e4;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .back-link span {
+      font-size: 16px;
+    }
+
+    .title {
+      text-align: center;
+      margin: 8px 0 4px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: #6b3430;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #a0745a;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .card-panel,
+    .result-panel {
+      background: #fff7ec;
+      border-radius: 18px;
+      border: 2px solid #f4d5aa;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 16px 14px;
+      margin-bottom: 16px;
+    }
+
+    .card-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: #7b4a7a;
+      text-align: center;
+    }
+
+    /* 五張牌卡片區 */
+    .tarot-multi {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .tarot-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 30%;
+      min-width: 90px;
+    }
+
+    .tarot-frame {
+      width: 100%;
+      aspect-ratio: 3/5;
+      border-radius: 14px;
+      padding: 5px;
+      background: radial-gradient(circle at top, #fffdf7 0%, #f8dcc0 55%, #f0c8a0 100%);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .tarot-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .tarot-img.reversed {
+      transform: rotate(180deg);
+    }
+
+    .slot-label {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #8b6a52;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .slot-orient {
+      margin-top: 2px;
+      font-size: 11px;
+      color: #6b3430;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #fff1df;
+      border: 1px solid #f3c39c;
+      display: none;
+    }
+
+    .draw-btn {
+      margin-top: 8px;
+      padding: 10px 0;
+      width: 100%;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #f7b9a7, #f4d5aa);
+      color: #5a3844;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .draw-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    }
+
+    .tip-text {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #b0886a;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .result-title {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #7b4a7a;
+    }
+
+    .result-subtitle-main {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #a0745a;
+      line-height: 1.5;
+    }
+
+    .result-block {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #f0c8a0;
+    }
+
+    .result-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 4px;
+      color: #7b4a7a;
+    }
+
+    .result-subtitle {
+      margin: 0 0 4px;
+      font-size: 12px;
+      color: #a0745a;
+    }
+
+    .result-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0 6px;
+    }
+
+    .result-chip {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #fef1df;
+      border: 1px solid #f3c39c;
+      color: #8b6a52;
+    }
+
+    .result-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #5a3844;
+      white-space: pre-line;
+      margin: 0 0 4px;
+    }
+
+    .bear-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #4b3044;
+      background: #fff1df;
+      border-radius: 12px;
+      padding: 6px 8px;
+      border: 1px solid #f3c39c;
+      margin: 0 0 4px;
+    }
+
+    .small-note {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #b0886a;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 400px) {
+      .tarot-slot {
+        width: 31%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <!-- 上方返回 -->
+    <div class="top-bar">
+      <a href="index.html" class="back-link">
+        <span>←</span> 回塔羅首頁
+      </a>
+    </div>
+
+    <h1 class="title">熊熊塔羅｜五張牌深入占卜</h1>
+    <p class="subtitle">
+      想更認真看看一個主題時，可以用五張牌：<br>
+      ① 現況　② 阻礙　③ 可以依靠的資源　④ 行動建議　⑤ 可能走向
+    </p>
+
+    <!-- 抽牌區 -->
+    <div class="card-panel">
+      <p class="card-panel-title">1. 一次抽出五張牌</p>
+
+      <div class="tarot-multi">
+        <div class="tarot-slot" data-pos="pos1">
+          <div class="tarot-frame">
+            <img src="images/back.png" alt="塔羅牌 1" id="img-pos1" class="tarot-img" />
+          </div>
+          <div class="slot-label">① 現況</div>
+          <div id="orient-pos1" class="slot-orient">正位</div>
+        </div>
+
+        <div class="tarot-slot" data-pos="pos2">
+          <div class="tarot-frame">
+            <img src="images/back.png" alt="塔羅牌 2" id="img-pos2" class="tarot-img" />
+          </div>
+          <div class="slot-label">② 阻礙／卡關點</div>
+          <div id="orient-pos2" class="slot-orient">正位</div>
+        </div>
+
+        <div class="tarot-slot" data-pos="pos3">
+          <div class="tarot-frame">
+            <img src="images/back.png" alt="塔羅牌 3" id="img-pos3" class="tarot-img" />
+          </div>
+          <div class="slot-label">③ 可以依靠的資源</div>
+          <div id="orient-pos3" class="slot-orient">正位</div>
+        </div>
+
+        <div class="tarot-slot" data-pos="pos4">
+          <div class="tarot-frame">
+            <img src="images/back.png" alt="塔羅牌 4" id="img-pos4" class="tarot-img" />
+          </div>
+          <div class="slot-label">④ 行動建議</div>
+          <div id="orient-pos4" class="slot-orient">正位</div>
+        </div>
+
+        <div class="tarot-slot" data-pos="pos5">
+          <div class="tarot-frame">
+            <img src="images/back.png" alt="塔羅牌 5" id="img-pos5" class="tarot-img" />
+          </div>
+          <div class="slot-label">⑤ 可能走向／整體氛圍</div>
+          <div id="orient-pos5" class="slot-orient">正位</div>
+        </div>
+      </div>
+
+      <button id="drawBtn" class="draw-btn">
+        ✨ 抽出五張牌，看看整體故事
+      </button>
+
+      <p class="tip-text">
+        抽牌前，可以先在心裡說出今天想看的主題，<br>
+        例如：「關於最近的工作」、「關於一段關係」、「關於我的自信」。
+      </p>
+    </div>
+
+    <!-- 結果區 -->
+    <div class="result-panel">
+      <h2 class="result-title">2. 解析五張牌的故事</h2>
+      <p class="result-subtitle-main">
+        每一張牌代表故事中的一個位置：<br>
+        ① 現在　② 卡住的地方　③ 你其實有的力量　④ 可以試試看的做法　⑤ 可能發展與氣氛。
+      </p>
+
+      <!-- ① 現況 -->
+      <div class="result-block" id="block-pos1">
+        <h3 class="result-section-title" id="title-pos1">① 現況（等待抽牌）</h3>
+        <p class="result-subtitle" id="subtitle-pos1">抽完牌後，這裡會顯示牌名與關鍵字。</p>
+        <div class="result-chip-row" id="chips-pos1"></div>
+        <p class="result-text" id="meaning-pos1"></p>
+        <p class="bear-text" id="bear-pos1"></p>
+      </div>
+
+      <!-- ② 阻礙 -->
+      <div class="result-block" id="block-pos2">
+        <h3 class="result-section-title" id="title-pos2">② 阻礙／卡關點（等待抽牌）</h3>
+        <p class="result-subtitle" id="subtitle-pos2">這張牌會說明目前比較卡住的地方。</p>
+        <div class="result-chip-row" id="chips-pos2"></div>
+        <p class="result-text" id="meaning-pos2"></p>
+        <p class="bear-text" id="bear-pos2"></p>
+      </div>
+
+      <!-- ③ 資源 -->
+      <div class="result-block" id="block-pos3">
+        <h3 class="result-section-title" id="title-pos3">③ 可以依靠的資源（等待抽牌）</h3>
+        <p class="result-subtitle" id="subtitle-pos3">你其實有的優點、朋友、機會或內在力量。</p>
+        <div class="result-chip-row" id="chips-pos3"></div>
+        <p class="result-text" id="meaning-pos3"></p>
+        <p class="bear-text" id="bear-pos3"></p>
+      </div>
+
+      <!-- ④ 行動建議 -->
+      <div class="result-block" id="block-pos4">
+        <h3 class="result-section-title" id="title-pos4">④ 行動建議（等待抽牌）</h3>
+        <p class="result-subtitle" id="subtitle-pos4">可以試試看的方向與態度。</p>
+        <div class="result-chip-row" id="chips-pos4"></div>
+        <p class="result-text" id="meaning-pos4"></p>
+        <p class="bear-text" id="bear-pos4"></p>
+      </div>
+
+      <!-- ⑤ 可能走向 -->
+      <div class="result-block" id="block-pos5">
+        <h3 class="result-section-title" id="title-pos5">⑤ 可能走向／整體氛圍（等待抽牌）</h3>
+        <p class="result-subtitle" id="subtitle-pos5">如果照現在的方向前進，可能會走向的氣氛。</p>
+        <div class="result-chip-row" id="chips-pos5"></div>
+        <p class="result-text" id="meaning-pos5"></p>
+        <p class="bear-text" id="bear-pos5"></p>
+      </div>
+
+      <p class="small-note">
+        小提醒：占卜不是要你照做，而是給你多一種看事情的角度。<br>
+        覺得哪一句話讓你特別有感，就先把那一句帶在身上就好。
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // 22 張大秘儀資料：0～21 對應 images/0.png ～ images/21.png
+    const TAROT_CARDS = [
+      {
+        id: 0,
+        name: "愚者",
+        tag: "新的開始・自由・旅程",
+        keywords: ["新的開始", "勇氣", "相信自己"],
+        upright: {
+          title: "正位：帶著好奇出發",
+          meaning: "此刻的你，正站在一個新的起點。也許你還不確定前方會是什麼樣子，但是你願意踏出去，就是非常珍貴的勇氣。允許自己當新手，慢慢摸索，不需要一開始就完美。"
+        },
+        reversed: {
+          title: "逆位：先顧好安全感",
+          meaning: "你可能對改變感到害怕，或是有一點衝動、想逃離現況。此時更重要的不是「一定要出發」，而是先讓自己感到踏實，再決定要不要走下一步。"
+        },
+        bear: "🐻 熊熊說：你可以慢慢來，不是每一個人都要衝在最前面。願意誠實面對自己的不安，本身就很勇敢。"
+      },
+      {
+        id: 1,
+        name: "魔術師",
+        tag: "行動・創造・專注",
+        keywords: ["行動力", "資源在手", "專注"],
+        upright: {
+          title: "正位：你其實準備好了",
+          meaning: "魔術師代表：你已經擁有很多資源與能力，只是可能還沒有完全運用出來。只要選定一件事開始做，專注在當下，你就能慢慢看到成果。"
+        },
+        reversed: {
+          title: "逆位：先釐清真正的想要",
+          meaning: "現在的你可能三心二意、或是因為沒有自信而裹足不前。也有可能是太想要一次做太多事，而感到分心。先問問自己：我現在最在意的一件事是什麼？"
+        },
+        bear: "🐻 熊熊說：你不是不夠好，只是還沒找到最想用心的方向。從一個小小的行動開始就很棒。"
+      },
+      {
+        id: 2,
+        name: "女祭司",
+        tag: "直覺・安靜・觀察",
+        keywords: ["直覺", "內在聲音", "暫時按下暫停"],
+        upright: {
+          title: "正位：聽聽內心的聲音",
+          meaning: "這張牌提醒你，比起衝動行動，先靜下心、觀察與感受是更重要的。你的直覺其實很敏銳，只是需要一點安靜的空間被聽見。"
+        },
+        reversed: {
+          title: "逆位：不需要一直壓抑自己",
+          meaning: "你可能習慣把感受藏起來，或是太依賴別人的意見，而忽略自己真正的感覺。也許是時候停下來，問問自己：我真正覺得舒服的是什麼？"
+        },
+        bear: "🐻 熊熊說：你心裡那個小聲音，其實一直都在，只是你最近有點太忙。今晚可以多留一點安靜給自己。"
+      },
+      {
+        id: 3,
+        name: "女皇",
+        tag: "照顧・豐盛・滋養",
+        keywords: ["自我照顧", "享受", "溫柔"],
+        upright: {
+          title: "正位：好好被照顧一下",
+          meaning: "女皇象徵溫柔、滋養與豐盛。這張牌鼓勵你多照顧自己的身體與心，允許自己被愛、被幫忙，也允許自己享受一些生活的小美好。"
+        },
+        reversed: {
+          title: "逆位：你也值得被好好對待",
+          meaning: "你可能太努力照顧別人，而忘了自己。或是覺得只有『有表現』才值得被愛。其實，你就算什麼都沒做，也值得好好休息與被擁抱。"
+        },
+        bear: "🐻 熊熊說：你不是提供照顧的機器，你本來就值得被溫柔對待。今天也給自己一點點好東西。"
+      },
+      {
+        id: 4,
+        name: "皇帝",
+        tag: "結構・責任・界線",
+        keywords: ["界線", "安全感", "穩定"],
+        upright: {
+          title: "正位：建立自己的王國",
+          meaning: "皇帝代表穩定與責任，也代表你正在努力建立屬於自己的規則與生活節奏。你有能力把事情一點點整理得更清楚，讓自己更有安全感。"
+        },
+        reversed: {
+          title: "逆位：不需要把所有事都扛起來",
+          meaning: "你可能感到壓力太大、責任太重，甚至有點嚴格地對待自己或身邊的人。試著分清楚什麼是真的『你的責任』，什麼其實可以放手或求助。"
+        },
+        bear: "🐻 熊熊說：你已經很努力了，不用每一件事都做到完美。有些重擔，可以慢慢學著放下一點點。"
+      },
+      {
+        id: 5,
+        name: "教皇",
+        tag: "學習・傳承・信念",
+        keywords: ["學習", "老師", "價值觀"],
+        upright: {
+          title: "正位：從經驗中學習",
+          meaning: "教皇象徵學習、制度與信念。也許你正處在一個需要吸收知識、向他人請教的階段。你會從傳統或前輩的經驗中得到幫助。"
+        },
+        reversed: {
+          title: "逆位：不一定要照別人的劇本走",
+          meaning: "你可能被『應該』與規則壓得有點喘不過氣，或懷疑：一定要照這個模式生活嗎？這張牌鼓勵你在尊重規則的同時，也保留一點自己。"
+        },
+        bear: "🐻 熊熊說：可以聽進不同的建議，但最後的選擇權，還是在你自己手上。你可以寫自己的故事。"
+      },
+      {
+        id: 6,
+        name: "戀人",
+        tag: "選擇・關係・真心",
+        keywords: ["關係", "選擇", "誠實"],
+        upright: {
+          title: "正位：真心的連結",
+          meaning: "戀人不只代表愛情，也代表任何重要的關係與選擇。現在適合誠實面對自己的心，並練習好好表達：我要什麼、我在意什麼。"
+        },
+        reversed: {
+          title: "逆位：先愛自己一點點",
+          meaning: "你可能在關係中迷失自己，或為了害怕失去而不敢說真話。這張牌提醒你：先成為自己的夥伴，再來談怎麼陪別人。"
+        },
+        bear: "🐻 熊熊說：真正喜歡你的人，不需要你變成別的樣子。先練習陪自己站在同一邊。"
+      },
+      {
+        id: 7,
+        name: "戰車",
+        tag: "前進・突破・意志力",
+        keywords: ["行動", "突破", "掌握方向"],
+        upright: {
+          title: "正位：往你相信的方向前進",
+          meaning: "戰車代表行動與推進力。你正準備跨出重要的一步，或努力突破卡住的狀態。只要方向是你真心認同的，就值得為自己奮力一試。"
+        },
+        reversed: {
+          title: "逆位：不是一定要一直向前衝",
+          meaning: "你可能太急著看到成果，或者感覺整個人失去方向、動力。先停下來調整方向，而不是勉強自己硬衝。"
+        },
+        bear: "🐻 熊熊說：慢下來不代表你失敗了，而是你在幫自己找更適合的路。"
+      },
+      {
+        id: 8,
+        name: "力量",
+        tag: "溫柔的勇氣・面對自己",
+        keywords: ["溫柔的力量", "自我接納", "勇敢"],
+        upright: {
+          title: "正位：溫柔也是一種力量",
+          meaning: "力量牌不是要你逞強，而是帶著耐心與溫柔，面對自己的情緒與不安。你正在學習一種不必兇自己的勇敢。"
+        },
+        reversed: {
+          title: "逆位：不用再責怪自己了",
+          meaning: "你可能對自己太嚴厲，覺得不夠好、不夠勇敢。這張牌提醒你：就算現在有點害怕，你仍然值得被理解與接住。"
+        },
+        bear: "🐻 熊熊說：真正的勇敢，是承認『我也會怕』，但我還是願意慢慢往前。"
+      },
+      {
+        id: 9,
+        name: "隱者",
+        tag: "獨處・思考・尋找答案",
+        keywords: ["獨處時間", "內省", "尋找方向"],
+        upright: {
+          title: "正位：給自己一段安靜的旅程",
+          meaning: "隱者代表需要一段屬於自己的時間。關掉一些外界的聲音，你會更清楚知道：我真正想要的是什麼。"
+        },
+        reversed: {
+          title: "逆位：孤單感值得被看見",
+          meaning: "你可能覺得自己被孤立，或習慣把心鎖起來。這張牌提醒你：獨處是為了更了解自己，而不是把自己關起來。也可以主動伸手去連結可靠的人。"
+        },
+        bear: "🐻 熊熊說：有時候一個人走一小段路，會讓你更知道要和誰一起走更長的路。"
+      },
+      {
+        id: 10,
+        name: "命運之輪",
+        tag: "變化・循環・轉機",
+        keywords: ["轉機", "變化", "新的循環"],
+        upright: {
+          title: "正位：一個新的輪子開始轉動",
+          meaning: "命運之輪象徵變化與循環。有些事情正默默改變，你可能要迎接新的階段。順著變化走，你會發現一些意想不到的機會。"
+        },
+        reversed: {
+          title: "逆位：卡住感是一種暫停",
+          meaning: "你可能覺得自己一直在原地打轉，或對變化感到不安。這張牌鼓勵你從小地方開始改變，不需要一次翻轉整個人生。"
+        },
+        bear: "🐻 熊熊說：就算現在覺得在原地，其實你已經和昨天不一樣了。每一天的小選擇，都在慢慢轉動你的輪子。"
+      },
+      {
+        id: 11,
+        name: "正義",
+        tag: "平衡・誠實・選擇",
+        keywords: ["公平", "平衡", "誠實面對"],
+        upright: {
+          title: "正位：誠實地做選擇",
+          meaning: "正義牌提醒你在做選擇時，既看重感受，也看重現實。你有能力評估事情的利弊，為自己做一個相對公平的決定。"
+        },
+        reversed: {
+          title: "逆位：別只怪自己或只怪別人",
+          meaning: "你可能在某件事上覺得不公平，或一直責怪自己。試著從更多角度看事情，而不是只站在『我錯了』或『都是他們的錯』的一端。"
+        },
+        bear: "🐻 熊熊說：你可以同時照顧自己的感受，和事情的現實狀況。不是非黑即白，允許自己慢慢衡量。"
+      },
+      {
+        id: 12,
+        name: "吊人",
+        tag: "停下來・換個角度",
+        keywords: ["暫停", "不同視角", "等待"],
+        upright: {
+          title: "正位：先暫停一下沒關係",
+          meaning: "吊人代表一種『被迫的暫停』，但這個停下來的時間，會讓你看到不同角度。事情不是沒有進展，而是在醞釀新的理解。"
+        },
+        reversed: {
+          title: "逆位：太勉強自己就不值得了",
+          meaning: "你可能一直在為別人犧牲，而忽略自己的需要。這張牌提醒你：放下不是失敗，而是為了不再讓自己被吊在同一個痛苦的位置。"
+        },
+        bear: "🐻 熊熊說：如果一段等待讓你太辛苦，那就允許自己重新評估，這件事情值不值得你繼續這樣撐著。"
+      },
+      {
+        id: 13,
+        name: "死神",
+        tag: "結束・轉化・新生",
+        keywords: ["結束", "放下", "重啟"],
+        upright: {
+          title: "正位：某個階段走到句點",
+          meaning: "死神不代表壞事，而是代表『真正的結束』。有些事情走到尾聲，是為了空出空間，讓新的東西進來。允許自己好好說再見。"
+        },
+        reversed: {
+          title: "逆位：害怕放手很正常",
+          meaning: "你可能抓著已經不適合的關係、習慣或身份，因為放手好可怕。接受自己還需要一點時間，不必急著成熟，也是一種溫柔。"
+        },
+        bear: "🐻 熊熊說：你可以慢慢放下，不用一次丟掉全部。每放下一點點，就為未來留出一點點位置。"
+      },
+      {
+        id: 14,
+        name: "節制",
+        tag: "平衡・調和・適量",
+        keywords: ["中庸", "調整步伐", "適量"],
+        upright: {
+          title: "正位：找到剛剛好的步調",
+          meaning: "節制提醒你，不需要做到極端，小小地調整就足夠。在生活、情緒、工作之間找到可持續的平衡，是現在重要的課題。"
+        },
+        reversed: {
+          title: "逆位：最近可能有點過頭了",
+          meaning: "你可能太勉強自己，或用某些方式過度安慰自己（例如過度滑手機、熬夜、購物）。這張牌邀請你回到『適量』的狀態，對自己好一點。"
+        },
+        bear: "🐻 熊熊說：你不需要成為超人，只要找到讓自己活得下去、喘得過氣的節奏就很好。"
+      },
+      {
+        id: 15,
+        name: "惡魔",
+        tag: "執著・誘惑・被綁住的感覺",
+        keywords: ["慣性", "依賴", "困住感"],
+        upright: {
+          title: "正位：看見自己被什麼綁住",
+          meaning: "惡魔象徵那些讓你一時舒服，但長期會消耗你的依賴或習慣。這張牌不是在罵你，而是讓你更清楚：哪些東西其實不太健康。"
+        },
+        reversed: {
+          title: "逆位：你已經開始鬆開繩子",
+          meaning: "你可能已經意識到某些關係或習慣讓你不快樂，正在慢慢找出口。這是一個很重要的進步，不用小看自己。"
+        },
+        bear: "🐻 熊熊說：你有權利說『這樣不行』，也有權利離開讓你痛苦的地方。你不是被關在籠子裡的小動物。"
+      },
+      {
+        id: 16,
+        name: "高塔",
+        tag: "突然的改變・舊結構崩壞",
+        keywords: ["震撼", "意外", "重建"],
+        upright: {
+          title: "正位：舊的東西正在被拆掉",
+          meaning: "高塔代表突如其來的變化，可能讓你很不安。但同時，它也在拆掉那些早就不穩固的部分，好讓你有機會重新建立更真實的生活。"
+        },
+        reversed: {
+          title: "逆位：你可能早就感覺到不對勁",
+          meaning: "你可能一直撐在一個快撐不住的狀態裡，這張牌提醒你：與其等到整座塔倒塌，不如主動開始調整。"
+        },
+        bear: "🐻 熊熊說：改變一定會不舒服，但你不需要一個人面對。可以找信任的人一起陪你收拾、一起重建。"
+      },
+      {
+        id: 17,
+        name: "星星",
+        tag: "希望・療癒・溫柔的光",
+        keywords: ["希望", "療癒", "慢慢好起來"],
+        upright: {
+          title: "正位：慢慢好起來的過程",
+          meaning: "星星是一張非常溫柔的牌。它代表雖然過去可能有傷，但你正在慢慢好起來。你不需要馬上變得很強，只要保持一點點希望就足夠。"
+        },
+        reversed: {
+          title: "逆位：暫時看不到希望也沒關係",
+          meaning: "你可能覺得很累，看不到未來會變好。這張牌邀請你先照顧好今天的小小生活，讓身體與心慢慢恢復力氣。希望可以晚點再來。"
+        },
+        bear: "🐻 熊熊說：就算現在看不到星星，它也沒有消失，只是被雲遮住。你可以先睡一覺，明天再抬頭看看。"
+      },
+      {
+        id: 18,
+        name: "月亮",
+        tag: "情緒・不安・想像",
+        keywords: ["情緒波動", "迷惘", "不安全感"],
+        upright: {
+          title: "正位：情緒正在說話",
+          meaning: "月亮代表情緒與想像。你可能特別敏感、容易多想。這張牌提醒你：情緒不是敵人，而是提醒你哪裡需要被看見與照顧。"
+        },
+        reversed: {
+          title: "逆位：不要一個人嚇自己",
+          meaning: "你可能被自己的想像嚇到，把還沒發生的事幻想得很可怕。試著把擔心說出來，或寫下來，你會發現事情沒有腦海中那麼巨大。"
+        },
+        bear: "🐻 熊熊說：當你覺得很怕的時候，先對自己說：「我知道你在擔心，我在這裡陪你。」"
+      },
+      {
+        id: 19,
+        name: "太陽",
+        tag: "喜悅・自信・展現自己",
+        keywords: ["快樂", "自信", "童心"],
+        upright: {
+          title: "正位：允許自己開心一下",
+          meaning: "太陽象徵快樂與真實。你可以放心展現自己的光，不必一直壓低亮度來配合別人。這是一張鼓勵你享受當下的牌。"
+        },
+        reversed: {
+          title: "逆位：你的光沒有不見，只是暫時被遮住",
+          meaning: "你可能最近比較沮喪，覺得自己沒什麼好。其實，你仍然有很多可愛的地方，只是暫時忘記了。"
+        },
+        bear: "🐻 熊熊說：你不用每天都陽光到閃耀，偶爾陰天、下雨也沒關係。太陽不會因此討厭你。"
+      },
+      {
+        id: 20,
+        name: "審判",
+        tag: "覺醒・復活・聽見召喚",
+        keywords: ["覺醒", "整理過去", "新的呼喚"],
+        upright: {
+          title: "正位：你正在看見新的自己",
+          meaning: "審判代表整理過去，並對自己的人生做一個新的決定。你可能開始看清一些模式，準備做出不同的選擇，迎接下一個階段。"
+        },
+        reversed: {
+          title: "逆位：不要只用過去的錯誤定義自己",
+          meaning: "你可能被過去的失敗或別人的評價綁住。這張牌提醒你：你已經不是當時的你了，不需要一直拿那時候的自己出來受罰。"
+        },
+        bear: "🐻 熊熊說：你可以溫柔地對過去的自己說：「謝謝你撐過那些事，接下來換我來照顧你。」"
+      },
+      {
+        id: 21,
+        name: "世界",
+        tag: "完成・整合・新的旅程起點",
+        keywords: ["完成一個階段", "整合", "新旅程"],
+        upright: {
+          title: "正位：一段旅程的圓滿",
+          meaning: "世界象徵一個階段的完成。你走過了一段不簡單的路，比以前更完整、更了解自己了。現在可以好好給自己一個擁抱，然後慢慢想下一段旅程。"
+        },
+        reversed: {
+          title: "逆位：不需要急著『完美收尾』",
+          meaning: "你可能覺得還不夠好、還不夠圓滿，所以不敢承認自己已經做得很多。這張牌提醒你：人生本來就不可能百分之百完美，夠用就很好。"
+        },
+        bear: "🐻 熊熊說：你已經走很遠了，不要只盯著還沒做到的那一塊。也看看自己已經完成的部分吧。"
+      }
+    ];
+
+    const POSITIONS = [
+      { id: "pos1", label: "① 現況" },
+      { id: "pos2", label: "② 阻礙／卡關點" },
+      { id: "pos3", label: "③ 可以依靠的資源" },
+      { id: "pos4", label: "④ 行動建議" },
+      { id: "pos5", label: "⑤ 可能走向／整體氛圍" }
+    ];
+
+    const imageBasePath = "images/"; // 所有牌圖都在 images 資料夾
+
+    const drawBtn = document.getElementById("drawBtn");
+
+    function getElement(id) {
+      return document.getElementById(id);
+    }
+
+    function drawFiveCards() {
+      // 建立不重複的五張牌
+      const indices = [];
+      for (let i = 0; i < TAROT_CARDS.length; i++) {
+        indices.push(i);
+      }
+
+      const selected = [];
+      for (let i = 0; i < 5; i++) {
+        const r = Math.floor(Math.random() * indices.length);
+        const cardIndex = indices.splice(r, 1)[0];
+        selected.push(TAROT_CARDS[cardIndex]);
+      }
+
+      // 對每一張牌設定正／逆位並更新畫面
+      selected.forEach((card, idx) => {
+        const posId = POSITIONS[idx].id;
+        const isUpright = Math.random() < 0.5;
+
+        // 更新圖片
+        const imgEl = getElement("img-" + posId);
+        imgEl.src = imageBasePath + card.id + ".png";
+        imgEl.alt = card.name;
+
+        if (isUpright) {
+          imgEl.classList.remove("reversed");
+        } else {
+          imgEl.classList.add("reversed");
+        }
+
+        // 正逆位標籤
+        const orientEl = getElement("orient-" + posId);
+        orientEl.style.display = "inline-block";
+        orientEl.textContent = isUpright ? "正位" : "逆位";
+
+        // 文本區更新
+        const titleEl = getElement("title-" + posId);
+        const subtitleEl = getElement("subtitle-" + posId);
+        const chipsEl = getElement("chips-" + posId);
+        const meaningEl = getElement("meaning-" + posId);
+        const bearEl = getElement("bear-" + posId);
+
+        titleEl.textContent = POSITIONS[idx].label + " — " + card.name + (isUpright ? "（正位）" : "（逆位）");
+        subtitleEl.textContent = card.tag;
+
+        // 關鍵字 chips
+        chipsEl.innerHTML = "";
+        if (Array.isArray(card.keywords)) {
+          card.keywords.forEach(k => {
+            const chip = document.createElement("div");
+            chip.className = "result-chip";
+            chip.textContent = "＃" + k;
+            chipsEl.appendChild(chip);
+          });
+        }
+
+        const detail = isUpright ? card.upright : card.reversed;
+        meaningEl.textContent = detail.title + "：\n" + detail.meaning;
+        bearEl.textContent = card.bear;
+      });
+
+      drawBtn.textContent = "再抽一次新的五張牌 ✨";
+    }
+
+    drawBtn.addEventListener("click", drawFiveCards);
+  </script>
+</body>
+</html>
