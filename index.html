@@ -5,15 +5,15 @@
   <title>熊熊塔羅占卜 ｜ 冒險者天堂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 共用樣式：如果你也有 style.css 就沿用 -->
+  <!-- 共用樣式：如果你也有 style.css 就沿用，沒有就先拿掉這行 -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- PWA（如果你有設定就保留；沒有可以先註解掉） -->
+  <!-- PWA：這裡改成你的 icon 檔名 icons/bear-tarot-192.png -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#2d254a" />
   <link rel="apple-touch-icon" href="icons/bear-tarot-192.png" />
 
-  <!-- 首頁專用小樣式：直接沿用 HeroApp 的樣式 -->
+  <!-- 首頁專用小樣式（沿用 HeroApp） -->
   <style>
     body.page-wrap {
       margin: 0;
@@ -78,6 +78,7 @@
       align-items: center;
     }
 
+    /* 這裡也改成用 icons/bear-tarot-192.png 那張圖 */
     #quoteBearAvatar {
       width: 120px;
       height: 120px;
@@ -264,7 +265,7 @@
       }
     }
 
-    /* Splash 改奶油色 */
+    /* Splash 改奶油色，圖片也用 icons/bear-tarot-192.png */
     #splash {
       position: fixed;
       inset: 0;
@@ -313,6 +314,7 @@
   <!-- 🔆 啟動畫面 -->
   <div id="splash">
     <div class="splash-inner">
+      <!-- Splash 也改用 icons/bear-tarot-192.png -->
       <img src="icons/bear-tarot-192.png" alt="熊熊村長" class="hero-bear">
       <p>熊熊村長正在洗牌、喚醒塔羅小宇宙…</p>
     </div>
@@ -334,7 +336,7 @@
           </div>
         </div>
         <div class="intro-main-right">
-          <!-- 點這顆熊熊頭像可以刷新小語 & 顯示對話框 -->
+          <!-- 這裡也用 icons/bear-tarot-192.png -->
           <img src="icons/bear-tarot-192.png" alt="村長熊熊" id="quoteBearAvatar">
         </div>
       </div>
@@ -366,7 +368,7 @@
       </p>
     </div>
 
-    <!-- ✨ 四格入口選單（改成塔羅相關功能） -->
+    <!-- ✨ 四格入口選單（塔羅功能） -->
     <div class="card">
       <h3 class="section-title">從這裡選一種方式，和牌聊聊天：</h3>
 
@@ -378,21 +380,21 @@
           <div class="icon-desc">適合想看今天心情、能量、提醒</div>
         </a>
 
-        <!-- ② 三張牌：過去現在未來（檔名請依你實際頁面調整） -->
+        <!-- ② 三張牌：過去現在未來 -->
         <a class="icon-btn" href="tarot-3cards.html">
           <div class="icon-emoji">🔮</div>
           <div class="icon-title">三張牌：過去｜現在｜未來</div>
           <div class="icon-desc">幫你看看一段旅程的走向</div>
         </a>
 
-        <!-- ③ 主題占卜：感情＆關係（檔名請自己換） -->
+        <!-- ③ 感情主題 -->
         <a class="icon-btn" href="tarot-love.html">
           <div class="icon-emoji">💖</div>
           <div class="icon-title">感情＆關係主題</div>
           <div class="icon-desc">關於喜歡、在意、放不下的人</div>
         </a>
 
-        <!-- ④ 回到冒險者天堂（連回 HeroApp 首頁） -->
+        <!-- ④ 回到冒險者天堂 -->
         <a class="icon-btn" href="https://luckygbear-coder.github.io/HeroApp/">
           <div class="icon-emoji">🏡</div>
           <div class="icon-title">回到冒險者天堂</div>
@@ -406,7 +408,7 @@
   <!-- 📋 複製成功提示 -->
   <div id="copyToast" class="toast-copy">已複製到剪貼簿</div>
 
-  <!-- 如果你有共用 script.js，可以照舊引入；沒有就拿掉這行 -->
+  <!-- 如果你有共用 script.js，可以照舊引入；沒有就暫時拿掉這行 -->
   <script src="script.js"></script>
 
   <!-- Splash + Service Worker -->
@@ -429,7 +431,7 @@
     });
   </script>
 
-  <!-- 隨機 30 句村長小語 + 點頭像刷新 & 對話框 + 長按複製（在氣泡文字上） -->
+  <!-- 村長塔羅小語 + 點頭像刷新 & 長按複製 -->
   <script>
     const BEAR_QUOTES = [
       "抽到什麼牌，都只是今天剛剛好的提醒。",
