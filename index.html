@@ -2,27 +2,24 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>熊熊塔羅占卜 ｜ 冒險者天堂</title>
+  <title>熊熊塔羅占卜 ｜ 首頁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 共用樣式：如果你也有 style.css 就沿用，沒有就先拿掉這行 -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- PWA：這裡改成你的 icon 檔名 icons/bear-tarot-192.png -->
-  <link rel="manifest" href="manifest.json" />
+  <!-- 如果你有 manifest 可以打開這行 -->
+  <!-- <link rel="manifest" href="manifest.json" /> -->
   <meta name="theme-color" content="#2d254a" />
+  <!-- 熊熊塔羅 App Icon -->
   <link rel="apple-touch-icon" href="icons/bear-tarot-192.png" />
 
-  <!-- 首頁專用小樣式（沿用 HeroApp） -->
   <style>
-    body.page-wrap {
+    body {
       margin: 0;
       background: #fde9d2;
       font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
       color: #5a3844;
     }
 
-    .game-wrap {
+    .page-wrap {
       max-width: 480px;
       margin: 0 auto;
       padding: 16px;
@@ -38,7 +35,7 @@
     }
 
     .home-title {
-      margin: 4px 0 4px;
+      margin: 6px 0 4px;
       font-size: 22px;
       font-weight: 800;
       letter-spacing: .08em;
@@ -50,150 +47,52 @@
       text-align: center;
       font-size: 13px;
       color: #a0745a;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
-    /* 🐻 最上面的村長介紹卡片 */
-    .intro-card {
-      position: relative;
-    }
-
-    /* 村長頭像＋對話框橫排：左氣泡、右熊熊 */
-    .intro-main {
+    /* 上方熊熊 + 簡介 */
+    .intro-top {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 8px;
     }
 
-    .intro-main-left {
+    .intro-text-wrap {
       flex: 1;
-      display: flex;
-      justify-content: flex-start;
     }
 
-    .intro-main-right {
+    .intro-text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #8b6a52;
+      margin: 0;
+    }
+
+    .intro-avatar-wrap {
+      flex-shrink: 0;
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
     }
 
-    /* 這裡也改成用 icons/bear-tarot-192.png 那張圖 */
-    #quoteBearAvatar {
-      width: 120px;
-      height: 120px;
+    .intro-avatar {
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       border: 3px solid #f3d4a0;
       object-fit: cover;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      cursor: pointer;
-      transition: transform .15s ease;
-    }
-
-    #quoteBearAvatar:hover {
-      transform: translateY(-2px);
-    }
-
-    /* 🗨️ 熊熊對話框（在左邊） */
-    .bear-speech {
-      max-width: 260px;
-      padding: 8px 10px;
-      background: #fffdf7;
-      border-radius: 12px;
-      border: 1px solid #f3d4a0;
-      font-size: 13px;
-      line-height: 1.5;
-      color: #6b4630;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-      opacity: 0;
-      transform: translateY(4px);
-      pointer-events: none;
-      transition: opacity .18s ease, transform .18s ease;
-      position: relative;
-    }
-
-    .bear-speech::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: -7px;
-      transform: translateY(-50%);
-      border-width: 7px 0 7px 7px;
-      border-style: solid;
-      border-color: transparent transparent transparent #f3d4a0;
-    }
-
-    .bear-speech::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      right: -6px;
-      transform: translateY(-50%);
-      border-width: 6px 0 6px 6px;
-      border-style: solid;
-      border-color: transparent transparent transparent #fffdf7;
-    }
-
-    .bear-speech.show {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .intro-text {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #8b6a52;
-      margin: 6px 0 12px;
-      text-align: left;
-    }
-
-    .intro-btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
-
-    .intro-btn {
-      flex: 1 1 calc(50% - 8px);
-      padding: 9px 0;
-      border-radius: 999px;
-      border: 1px solid #f0cfa4;
-      background: #ffffff;
-      font-size: 13px;
-      font-weight: 700;
-      color: #864f3a;
-      text-decoration: none;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .intro-btn.mail {
-      background: #ffe3dd;
-      border-color: #f7b9a7;
-    }
-
-    .intro-btn.story {
-      background: #ffeecd;
-      border-color: #f7cfa0;
-    }
-
-    .intro-btn.ig {
-      background: #e9e5ff;
-      border-color: #c4b9ff;
     }
 
     .intro-tip {
+      margin-top: 10px;
       font-size: 11px;
       color: #b0886a;
-      margin: 4px 0 0;
+      text-align: center;
+      line-height: 1.5;
     }
 
-    /* 四格入口選單 */
+    /* 四格入口 */
     .section-title {
       margin: 0 0 8px;
       font-size: 16px;
@@ -222,7 +121,7 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      min-height: 90px;
+      min-height: 96px;
     }
 
     .icon-btn:hover {
@@ -231,7 +130,7 @@
     }
 
     .icon-emoji {
-      font-size: 28px;
+      font-size: 26px;
     }
 
     .icon-title {
@@ -241,335 +140,94 @@
 
     .icon-desc {
       font-size: 11px;
-      opacity: 0.7;
+      opacity: 0.8;
       line-height: 1.3;
     }
 
-    /* 點頭像時的可愛晃動 */
-    .shake {
-      animation: bear-shake 0.3s ease;
-    }
-
-    @keyframes bear-shake {
-      0%   { transform: translateX(0); }
-      25%  { transform: translateX(-2px); }
-      50%  { transform: translateX(2px); }
-      75%  { transform: translateX(-1px); }
-      100% { transform: translateX(0); }
-    }
-
     @media (max-width: 400px) {
-      #quoteBearAvatar {
-        width: 100px;
-        height: 100px;
+      .intro-top {
+        flex-direction: column-reverse;
+        align-items: flex-start;
       }
-    }
-
-    /* Splash 改奶油色，圖片也用 icons/bear-tarot-192.png */
-    #splash {
-      position: fixed;
-      inset: 0;
-      background: #fde9d2;
-      color: #5a3844;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-    .splash-inner {
-      text-align: center;
-    }
-    .splash-inner .hero-bear {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      margin-bottom: 8px;
-    }
-
-    /* 📋 長按複製提示 Toast */
-    .toast-copy {
-      position: fixed;
-      left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(65, 48, 40, 0.95);
-      color: #fff7ec;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s ease, transform 0.18s ease;
-      z-index: 1000;
-    }
-    .toast-copy.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      .intro-avatar {
+        width: 88px;
+        height: 88px;
+      }
     }
   </style>
 </head>
 
-<body class="page-wrap" data-page="tarot-home">
-  <!-- 🔆 啟動畫面 -->
-  <div id="splash">
-    <div class="splash-inner">
-      <!-- Splash 也改用 icons/bear-tarot-192.png -->
-      <img src="icons/bear-tarot-192.png" alt="熊熊村長" class="hero-bear">
-      <p>熊熊村長正在洗牌、喚醒塔羅小宇宙…</p>
-    </div>
-  </div>
+<body>
+  <div class="page-wrap">
 
-  <div class="game-wrap">
+    <!-- 🐻 熊熊塔羅介紹卡 -->
+    <div class="card">
+      <div class="intro-top">
+        <div class="intro-text-wrap">
+          <h1 class="home-title">熊熊塔羅占卜</h1>
+          <p class="subtitle">讓一張小小的牌，陪你聊聊今天的心事。</p>
 
-    <!-- 🐻 村長熊熊介紹 + 信箱 + 故事屋 + IG -->
-    <div class="card intro-card">
-
-      <!-- 上半部：左邊對話框，右邊村長頭像 -->
-      <div class="intro-main">
-        <div class="intro-main-left">
-          <!-- 🗨️ 熊熊說話的小對話框（顯示小語） -->
-          <div id="bearSpeech" class="bear-speech">
-            <div id="bearSpeechText">
-              今天的熊熊小語在這裡出現～先點點右邊的村長熊熊吧！
-            </div>
-          </div>
+          <p class="intro-text">
+            在熊熊村莊的安靜角落裡，有一張會發光的塔羅桌。<br>
+            無論是感情、工作、人際，還是單純覺得有點累，都可以在這裡坐下來，
+            抽一張牌，聽聽它溫柔的故事。
+          </p>
         </div>
-        <div class="intro-main-right">
-          <!-- 這裡也用 icons/bear-tarot-192.png -->
-          <img src="icons/bear-tarot-192.png" alt="村長熊熊" id="quoteBearAvatar">
+        <div class="intro-avatar-wrap">
+          <!-- 這裡用你做好的塔羅 icon，檔案放在 icons 資料夾 -->
+          <img src="icons/bear-tarot-192.png" alt="熊熊塔羅" class="intro-avatar" />
         </div>
-      </div>
-
-      <h1 class="home-title">熊熊塔羅占卜</h1>
-      <p class="subtitle">需要一點點指引的時候，就來這裡抽一張牌吧。</p>
-
-      <p class="intro-text">
-        在星星會掉下來的山谷裡，村長熊熊把一副塔羅牌當成「宇宙寫給你的悄悄話」。<br><br>
-        抽到的每一張牌，都不是要評分你有多好，而是陪你看看：<br>
-        現在的你，正在經歷什麼？可以怎麼更溫柔地對待自己？
-      </p>
-
-      <div class="intro-btn-row">
-        <a href="mailto:luckygbear@gmail.com" class="intro-btn mail">
-          ✉️ 跟村長熊熊分享占卜心情
-        </a>
-        <a href="stories.html" class="intro-btn story">
-          📖 熊熊故事屋
-        </a>
-        <a href="https://instagram.com/luckygbear" target="_blank" class="intro-btn ig">
-          📷 看熊熊日常 & 抽牌小短文
-        </a>
       </div>
 
       <p class="intro-tip">
-        小秘密：點一下右邊的村長熊熊，會出現一則陪你一起抽牌的小語。<br/>
-        長按對話框裡的小語，可以複製起來當今天的提醒或傳給朋友喔！
+        小提醒：抽牌前，先深呼吸三次，默念：<br>
+        「請給我此刻最需要的提醒。」不需要完美的問題，只要真心就好。
       </p>
     </div>
 
-    <!-- ✨ 四格入口選單（塔羅功能） -->
+    <!-- ✨ 四種占卜方式入口 -->
     <div class="card">
-      <h3 class="section-title">從這裡選一種方式，和牌聊聊天：</h3>
+      <h2 class="section-title">從這裡選一種方式開始占卜：</h2>
 
       <div class="icon-grid">
-        <!-- ① 今日一張牌 -->
-        <a class="icon-btn" href="tarot.html">
+        <!-- ① 單張牌 -->
+        <a class="icon-btn" href="tarot1.html">
           <div class="icon-emoji">🌟</div>
-          <div class="icon-title">今日一張小指引</div>
-          <div class="icon-desc">適合想看今天心情、能量、提醒</div>
+          <div class="icon-title">單張牌｜今日小指引</div>
+          <div class="icon-desc">
+            適合每天抽一張，看看今天的能量與溫柔提醒。
+          </div>
         </a>
 
         <!-- ② 三張牌：過去現在未來 -->
-        <a class="icon-btn" href="tarot-3cards.html">
+        <a class="icon-btn" href="tarot.html">
           <div class="icon-emoji">🔮</div>
-          <div class="icon-title">三張牌：過去｜現在｜未來</div>
-          <div class="icon-desc">幫你看看一段旅程的走向</div>
+          <div class="icon-title">三張牌｜過去・現在・未來</div>
+          <div class="icon-desc">
+            想看一件事情的整體故事，就請三張牌一起說說話。
+          </div>
         </a>
 
-        <!-- ③ 感情主題 -->
-        <a class="icon-btn" href="tarot-love.html">
-          <div class="icon-emoji">💖</div>
-          <div class="icon-title">感情＆關係主題</div>
-          <div class="icon-desc">關於喜歡、在意、放不下的人</div>
+        <!-- ③ 五張牌：深入一個問題 -->
+        <a class="icon-btn" href="tarot5.html">
+          <div class="icon-emoji">✨</div>
+          <div class="icon-title">五張牌｜深入一個主題</div>
+          <div class="icon-desc">
+            解析現況、阻礙、資源、建議與可能走向。
+          </div>
         </a>
 
-        <!-- ④ 回到冒險者天堂 -->
-        <a class="icon-btn" href="https://luckygbear-coder.github.io/HeroApp/">
-          <div class="icon-emoji">🏡</div>
-          <div class="icon-title">回到冒險者天堂</div>
-          <div class="icon-desc">去找小勇者們一起玩剪刀石頭布</div>
+        <!-- ④ 先選主題再抽牌 -->
+        <a class="icon-btn" href="tarot-themes.html">
+          <div class="icon-emoji">💌</div>
+          <div class="icon-title">主題占卜｜感情・工作・人際</div>
+          <div class="icon-desc">
+            先選主題，再讓牌用一句話陪你整理心情。
+          </div>
         </a>
       </div>
     </div>
 
   </div>
-
-  <!-- 📋 複製成功提示 -->
-  <div id="copyToast" class="toast-copy">已複製到剪貼簿</div>
-
-  <!-- 如果你有共用 script.js，可以照舊引入；沒有就暫時拿掉這行 -->
-  <script src="script.js"></script>
-
-  <!-- Splash + Service Worker -->
-  <script>
-    window.addEventListener('load', () => {
-      const splash = document.getElementById('splash');
-      if (splash) {
-        setTimeout(() => {
-          splash.style.transition = 'opacity 0.4s ease';
-          splash.style.opacity = '0';
-          setTimeout(() => splash.remove(), 400);
-        }, 800);
-      }
-
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => {
-          console.log('SW 註冊失敗：', err);
-        });
-      }
-    });
-  </script>
-
-  <!-- 村長塔羅小語 + 點頭像刷新 & 長按複製 -->
-  <script>
-    const BEAR_QUOTES = [
-      "抽到什麼牌，都只是今天剛剛好的提醒。",
-      "牌不會決定你的人生，只會陪你一起看看現在。",
-      "覺得迷路的時候，抽一張牌，也是在跟自己說說話。",
-      "就算是塔羅牌，也不會比你更了解你自己。",
-      "你願意停下來抽牌的那一刻，本身就是一種勇敢。",
-      "牌面上的故事，只是幫你看到心裡早就知道的事。",
-      "沒有『好』或『壞』的牌，只有『適不適合現在的你』。",
-      "如果看不懂牌的意思，那就先問問自己在擔心什麼。",
-      "你可以先說出問題，再讓牌來回應你。",
-      "抽到不喜歡的牌，也是一種誠實的提醒。",
-      "就算是同一張牌，每一次出現的意思也會不太一樣。",
-      "你怎麼看這張牌，比我怎麼解釋更重要。",
-      "今天抽不到答案也沒關係，先好好照顧自己就好。",
-      "有時候，牌只是要你先好好休息。",
-      "願意面對心裡的問題，本身就是很大的魔法。",
-      "你不一定要相信塔羅，但可以相信現在的感受。",
-      "把抽牌當成一封寫給自己的信，會比較溫柔。",
-      "害怕結果的時候，可以先問：我現在最需要什麼？",
-      "塔羅不是要你照著做，而是給你更多選擇。",
-      "你可以一次只看一小句最打動你的解讀就好。",
-      "當你願意停下來抽牌時，宇宙也在安靜聽你說話。",
-      "今天，就讓牌成為陪你聊天的小朋友。",
-      "你不需要會解牌，只需要誠實看見自己的心。",
-      "不確定的時候，就先抽一張「給我的溫柔建議」。",
-      "想哭的時候抽到的牌，常常是最溫柔的。",
-      "你可以只記住一句讓你安心的話，帶著它過一天。",
-      "就算現在的牌看起來有點辛苦，你還是可以慢慢走。",
-      "不管抽到什麼，村長熊熊都會站在你這邊。",
-      "有問題時抽牌，很正常；沒有問題也可以抽，只是陪自己玩。",
-      "你可以慢慢來，熊熊和牌都會在這裡等你。"
-    ];
-
-    function pickRandomQuote() {
-      const speechEl = document.getElementById('bearSpeechText');
-      if (!speechEl) return;
-
-      const idx = Math.floor(Math.random() * BEAR_QUOTES.length);
-      const text = BEAR_QUOTES[idx];
-
-      speechEl.textContent = text;
-    }
-
-    function showCopyToast() {
-      const toast = document.getElementById('copyToast');
-      if (!toast) return;
-      toast.classList.add('show');
-      clearTimeout(window._copyToastTimer);
-      window._copyToastTimer = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 1300);
-    }
-
-    function copyCurrentQuote() {
-      const speechEl = document.getElementById('bearSpeechText');
-      if (!speechEl) return;
-      const text = (speechEl.textContent || "").trim();
-      if (!text) return;
-
-      function fallbackCopy() {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.left = '-9999px';
-        document.body.appendChild(ta);
-        ta.select();
-        try {
-          document.execCommand('copy');
-          showCopyToast();
-        } catch (e) {
-          console.log('複製失敗', e);
-        }
-        document.body.removeChild(ta);
-      }
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text)
-          .then(showCopyToast)
-          .catch(() => fallbackCopy());
-      } else {
-        fallbackCopy();
-      }
-    }
-
-    function setupLongPressCopy() {
-      const target = document.getElementById('bearSpeechText');
-      if (!target) return;
-
-      let pressTimer = null;
-
-      const start = () => {
-        if (pressTimer !== null) return;
-        pressTimer = setTimeout(() => {
-          copyCurrentQuote();
-          pressTimer = null;
-        }, 650); // 長按 0.65 秒觸發
-      };
-
-      const cancel = () => {
-        if (pressTimer !== null) {
-          clearTimeout(pressTimer);
-          pressTimer = null;
-        }
-      };
-
-      ['mousedown', 'touchstart'].forEach(ev =>
-        target.addEventListener(ev, start)
-      );
-      ['mouseup', 'mouseleave', 'touchend', 'touchcancel', 'touchmove'].forEach(ev =>
-        target.addEventListener(ev, cancel)
-      );
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const avatar = document.getElementById('quoteBearAvatar');
-      const bubble = document.getElementById('bearSpeech');
-
-      if (avatar) {
-        avatar.addEventListener('click', () => {
-          // 每次點頭像換一句
-          pickRandomQuote();
-
-          // 顯示對話框
-          if (bubble) {
-            bubble.classList.add('show');
-          }
-
-          // 小晃動動畫
-          avatar.classList.remove('shake');
-          void avatar.offsetWidth;
-          avatar.classList.add('shake');
-        });
-      }
-
-      // 設定長按複製小語（對話框文字）
-      setupLongPressCopy();
-    });
-  </script>
 </body>
 </html>
