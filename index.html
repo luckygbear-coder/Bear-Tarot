@@ -2,18 +2,18 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>冒險者天堂 ｜ 熊熊村莊</title>
+  <title>熊熊塔羅占卜 ｜ 冒險者天堂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 共用樣式 -->
+  <!-- 共用樣式：如果你也有 style.css 就沿用 -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- PWA -->
+  <!-- PWA（如果你有設定就保留；沒有可以先註解掉） -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#2d254a" />
   <link rel="apple-touch-icon" href="icons/bear-192.png" />
 
-  <!-- 首頁專用小樣式 -->
+  <!-- 首頁專用小樣式：直接沿用 HeroApp 的樣式 -->
   <style>
     body.page-wrap {
       margin: 0;
@@ -309,12 +309,12 @@
   </style>
 </head>
 
-<body class="page-wrap" data-page="home">
+<body class="page-wrap" data-page="tarot-home">
   <!-- 🔆 啟動畫面 -->
   <div id="splash">
     <div class="splash-inner">
       <img src="icons/bear-192.png" alt="熊熊村長" class="hero-bear">
-      <p>熊熊村長正在準備冒險道具…</p>
+      <p>熊熊村長正在洗牌、喚醒塔羅小宇宙…</p>
     </div>
   </div>
 
@@ -339,64 +339,64 @@
         </div>
       </div>
 
-      <h1 class="home-title">熊熊村莊</h1>
-      <p class="subtitle">小勇者，開始今天的小小冒險吧！</p>
+      <h1 class="home-title">熊熊塔羅占卜</h1>
+      <p class="subtitle">需要一點點指引的時候，就來這裡抽一張牌吧。</p>
 
       <p class="intro-text">
-        在星星會掉下來的山谷裡，有一隻毛茸茸的小熊，默默陪著每一個需要休息的人。  
-        
-        他把這裡取名為「冒險者天堂」，希望每個來到這裡的人，都能帶著一點點更溫柔的勇氣回家。
+        在星星會掉下來的山谷裡，村長熊熊把一副塔羅牌當成「宇宙寫給你的悄悄話」。<br><br>
+        抽到的每一張牌，都不是要評分你有多好，而是陪你看看：<br>
+        現在的你，正在經歷什麼？可以怎麼更溫柔地對待自己？
       </p>
 
       <div class="intro-btn-row">
         <a href="mailto:luckygbear@gmail.com" class="intro-btn mail">
-          ✉️ 寫信給村長熊熊
+          ✉️ 跟村長熊熊分享占卜心情
         </a>
         <a href="stories.html" class="intro-btn story">
           📖 熊熊故事屋
         </a>
         <a href="https://instagram.com/luckygbear" target="_blank" class="intro-btn ig">
-          📷 追蹤 IG 看熊熊日常
+          📷 看熊熊日常 & 抽牌小短文
         </a>
       </div>
 
       <p class="intro-tip">
-        小秘密：點一下右邊的村長熊熊，熊熊村長會和你對話唷！<br/>
-        長按對話框裡的小語，可以複製起來傳給朋友或貼在社群喔！
+        小秘密：點一下右邊的村長熊熊，會出現一則陪你一起抽牌的小語。<br/>
+        長按對話框裡的小語，可以複製起來當今天的提醒或傳給朋友喔！
       </p>
     </div>
 
-    <!-- ✨ 四格入口選單 -->
+    <!-- ✨ 四格入口選單（改成塔羅相關功能） -->
     <div class="card">
-      <h3 class="section-title">從這裡選一個入口開始冒險：</h3>
+      <h3 class="section-title">從這裡選一種方式，和牌聊聊天：</h3>
 
       <div class="icon-grid">
-        <!-- 🔮 熊熊塔羅占卜 -->
-        <a class="icon-btn" href="https://luckygbear-coder.github.io/Bear-Tarot/tarot.html">
+        <!-- ① 今日一張牌 -->
+        <a class="icon-btn" href="tarot.html">
+          <div class="icon-emoji">🌟</div>
+          <div class="icon-title">今日一張小指引</div>
+          <div class="icon-desc">適合想看今天心情、能量、提醒</div>
+        </a>
+
+        <!-- ② 三張牌：過去現在未來（檔名請依你實際頁面調整） -->
+        <a class="icon-btn" href="tarot-3cards.html">
           <div class="icon-emoji">🔮</div>
-          <div class="icon-title">熊熊塔羅占卜</div>
-          <div class="icon-desc">大秘儀｜小指引</div>
+          <div class="icon-title">三張牌：過去｜現在｜未來</div>
+          <div class="icon-desc">幫你看看一段旅程的走向</div>
         </a>
 
-        <!-- 🧿 熊熊易經卜卦 -->
-        <a class="icon-btn" href="https://luckygbear-coder.github.io/Bear8/">
-          <div class="icon-emoji">🧿</div>
-          <div class="icon-title">熊熊易經卜卦</div>
-          <div class="icon-desc">六十四卦｜大道自然</div>
+        <!-- ③ 主題占卜：感情＆關係（檔名請自己換） -->
+        <a class="icon-btn" href="tarot-love.html">
+          <div class="icon-emoji">💖</div>
+          <div class="icon-title">感情＆關係主題</div>
+          <div class="icon-desc">關於喜歡、在意、放不下的人</div>
         </a>
 
-        <!-- 🗺️ 小勇者大冒險 -->
-        <a class="icon-btn" href="https://luckygbear-coder.github.io/HeroApp/choose-hero.html">
-          <div class="icon-emoji">🗺️</div>
-          <div class="icon-title">小勇者大冒險</div>
-          <div class="icon-desc">剪刀石頭布｜安撫魔物</div>
-        </a>
-
-        <!-- 📔 勇者日記（原語錄小屋） -->
-        <a class="icon-btn" href="quotes.html">
-          <div class="icon-emoji">📔</div>
-          <div class="icon-title">小勇者日記&熊熊語錄</div>
-          <div class="icon-desc">一句剛剛好的勇氣</div>
+        <!-- ④ 回到冒險者天堂（連回 HeroApp 首頁） -->
+        <a class="icon-btn" href="https://luckygbear-coder.github.io/HeroApp/">
+          <div class="icon-emoji">🏡</div>
+          <div class="icon-title">回到冒險者天堂</div>
+          <div class="icon-desc">去找小勇者們一起玩剪刀石頭布</div>
         </a>
       </div>
     </div>
@@ -406,7 +406,7 @@
   <!-- 📋 複製成功提示 -->
   <div id="copyToast" class="toast-copy">已複製到剪貼簿</div>
 
-  <!-- 共用 script -->
+  <!-- 如果你有共用 script.js，可以照舊引入；沒有就拿掉這行 -->
   <script src="script.js"></script>
 
   <!-- Splash + Service Worker -->
@@ -432,36 +432,36 @@
   <!-- 隨機 30 句村長小語 + 點頭像刷新 & 對話框 + 長按複製（在氣泡文字上） -->
   <script>
     const BEAR_QUOTES = [
-      "溫柔是一種力量，而你也擁有它。",
-      "走得慢沒關係，重要的是你還在往前。",
-      "不知道怎麼辦的日子，就先好好睡一覺。",
-      "你不需要完美，已經很值得被喜歡。",
-      "難過的時候，可以先讓自己當一下小朋友。",
-      "今天有好好吃飯，就是一種勇氣任務完成。",
-      "心裡亂糟糟時，先把房間的一角整理好就好。",
-      "拒絕別人也是在好好照顧自己。",
-      "你可以說「我也會怕」，這句話一點都不丟臉。",
-      "別急著對自己失望，你還在學習而已。",
-      "有情緒，不代表你不夠好，只代表你是人。",
-      "你願意求助時，世界也會伸出一點手。",
-      "小小的開心，可以疊成很大的力量。",
-      "今天如果只做到一件小事，也值得被稱讚。",
-      "放過自己的那一刻，才是真的長大。",
-      "你不一定要當第一名，只要當自己的夥伴。",
-      "不舒服的關係，可以慢慢遠離沒關係。",
-      "別忘了，你也值得被溫柔對待。",
-      "想哭就先哭，再來想要怎麼走下去。",
-      "害怕改變很正常，但你已經在思考就是進步。",
-      "有人懂很好，沒有人懂時，我懂你。",
-      "當你覺得撐不住時，來這裡坐一下就好。",
-      "你現在的樣子，已經比昨天更勇敢一點點。",
-      "不必把所有人都照顧好，先從自己開始。",
-      "世界不一定很溫柔，但我們可以對自己溫柔。",
-      "別把心裡所有聲音都當成真實，可以挑著聽。",
-      "迷路的時候，也是在收集地圖的一部分。",
-      "如果只剩一格電，就留給讓你心安的事情。",
-      "疲累的時候，休息不是懶惰，是在修補翅膀。",
-      "你可以慢慢來，熊熊會在這裡等你。"
+      "抽到什麼牌，都只是今天剛剛好的提醒。",
+      "牌不會決定你的人生，只會陪你一起看看現在。",
+      "覺得迷路的時候，抽一張牌，也是在跟自己說說話。",
+      "就算是塔羅牌，也不會比你更了解你自己。",
+      "你願意停下來抽牌的那一刻，本身就是一種勇敢。",
+      "牌面上的故事，只是幫你看到心裡早就知道的事。",
+      "沒有『好』或『壞』的牌，只有『適不適合現在的你』。",
+      "如果看不懂牌的意思，那就先問問自己在擔心什麼。",
+      "你可以先說出問題，再讓牌來回應你。",
+      "抽到不喜歡的牌，也是一種誠實的提醒。",
+      "就算是同一張牌，每一次出現的意思也會不太一樣。",
+      "你怎麼看這張牌，比我怎麼解釋更重要。",
+      "今天抽不到答案也沒關係，先好好照顧自己就好。",
+      "有時候，牌只是要你先好好休息。",
+      "願意面對心裡的問題，本身就是很大的魔法。",
+      "你不一定要相信塔羅，但可以相信現在的感受。",
+      "把抽牌當成一封寫給自己的信，會比較溫柔。",
+      "害怕結果的時候，可以先問：我現在最需要什麼？",
+      "塔羅不是要你照著做，而是給你更多選擇。",
+      "你可以一次只看一小句最打動你的解讀就好。",
+      "當你願意停下來抽牌時，宇宙也在安靜聽你說話。",
+      "今天，就讓牌成為陪你聊天的小朋友。",
+      "你不需要會解牌，只需要誠實看見自己的心。",
+      "不確定的時候，就先抽一張「給我的溫柔建議」。",
+      "想哭的時候抽到的牌，常常是最溫柔的。",
+      "你可以只記住一句讓你安心的話，帶著它過一天。",
+      "就算現在的牌看起來有點辛苦，你還是可以慢慢走。",
+      "不管抽到什麼，村長熊熊都會站在你這邊。",
+      "有問題時抽牌，很正常；沒有問題也可以抽，只是陪自己玩。",
+      "你可以慢慢來，熊熊和牌都會在這裡等你。"
     ];
 
     function pickRandomQuote() {
