@@ -5,21 +5,21 @@
   <title>熊熊塔羅占卜 ｜ 首頁</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- 如果你有 manifest 可以打開這行 -->
+  <!-- 如果你有 manifest，可以打開這行 -->
   <!-- <link rel="manifest" href="manifest.json" /> -->
   <meta name="theme-color" content="#2d254a" />
-  <!-- 熊熊塔羅 App Icon -->
+  <!-- 塔羅 App Icon -->
   <link rel="apple-touch-icon" href="icons/bear-tarot-192.png" />
 
   <style>
-    body {
+    body.page-wrap {
       margin: 0;
       background: #fde9d2;
       font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
       color: #5a3844;
     }
 
-    .page-wrap {
+    .page-inner {
       max-width: 480px;
       margin: 0 auto;
       padding: 16px;
@@ -47,41 +47,97 @@
       text-align: center;
       font-size: 13px;
       color: #a0745a;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    /* 上方熊熊 + 簡介 */
-    .intro-top {
+    /* 🐻 上半部：左邊對話框，右邊熊熊塔羅頭像 */
+    .intro-main {
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 8px;
     }
 
-    .intro-text-wrap {
+    .intro-main-left {
       flex: 1;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .intro-main-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    /* 熊熊塔羅頭像（可以點） */
+    #tarotBearAvatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid #f3d4a0;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: transform .15s ease;
+    }
+
+    #tarotBearAvatar:hover {
+      transform: translateY(-2px);
+    }
+
+    /* 🗨️ 對話氣泡在左邊 */
+    .bear-speech {
+      max-width: 260px;
+      padding: 8px 10px;
+      background: #fffdf7;
+      border-radius: 12px;
+      border: 1px solid #f3d4a0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #6b4630;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      opacity: 0;
+      transform: translateY(4px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      position: relative;
+    }
+
+    .bear-speech::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -7px;
+      transform: translateY(-50%);
+      border-width: 7px 0 7px 7px;
+      border-style: solid;
+      border-color: transparent transparent transparent #f3d4a0;
+    }
+
+    .bear-speech::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -6px;
+      transform: translateY(-50%);
+      border-width: 6px 0 6px 6px;
+      border-style: solid;
+      border-color: transparent transparent transparent #fffdf7;
+    }
+
+    .bear-speech.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
 
     .intro-text {
       font-size: 13px;
       line-height: 1.6;
       color: #8b6a52;
-      margin: 0;
-    }
-
-    .intro-avatar-wrap {
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .intro-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid #f3d4a0;
-      object-fit: cover;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin: 8px 0 0;
+      text-align: left;
     }
 
     .intro-tip {
@@ -90,6 +146,19 @@
       color: #b0886a;
       text-align: center;
       line-height: 1.5;
+    }
+
+    /* 點頭像時的可愛晃動 */
+    .shake {
+      animation: bear-shake 0.3s ease;
+    }
+
+    @keyframes bear-shake {
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(-2px); }
+      50%  { transform: translateX(2px); }
+      75%  { transform: translateX(-1px); }
+      100% { transform: translateX(0); }
     }
 
     /* 四格入口 */
@@ -136,52 +205,88 @@
     .icon-title {
       font-size: 14px;
       font-weight: 700;
+      text-align: center;
     }
 
     .icon-desc {
       font-size: 11px;
       opacity: 0.8;
       line-height: 1.3;
+      text-align: center;
+    }
+
+    /* 📋 長按複製提示 Toast */
+    .toast-copy {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(65, 48, 40, 0.95);
+      color: #fff7ec;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 1000;
+    }
+
+    .toast-copy.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     @media (max-width: 400px) {
-      .intro-top {
-        flex-direction: column-reverse;
-        align-items: flex-start;
+      #tarotBearAvatar {
+        width: 96px;
+        height: 96px;
       }
-      .intro-avatar {
-        width: 88px;
-        height: 88px;
+      .intro-main {
+        gap: 8px;
       }
     }
   </style>
 </head>
 
-<body>
-  <div class="page-wrap">
+<body class="page-wrap">
+  <div class="page-inner">
 
-    <!-- 🐻 熊熊塔羅介紹卡 -->
+    <!-- 🐻 熊熊塔羅介紹 + 氣泡小語 -->
     <div class="card">
-      <div class="intro-top">
-        <div class="intro-text-wrap">
-          <h1 class="home-title">熊熊塔羅占卜</h1>
-          <p class="subtitle">讓一張小小的牌，陪你聊聊今天的心事。</p>
-
-          <p class="intro-text">
-            在熊熊村莊的安靜角落裡，有一張會發光的塔羅桌。<br>
-            無論是感情、工作、人際，還是單純覺得有點累，都可以在這裡坐下來，
-            抽一張牌，聽聽它溫柔的故事。
-          </p>
+      <div class="intro-main">
+        <!-- 左：塔羅小語對話框 -->
+        <div class="intro-main-left">
+          <div id="bearSpeech" class="bear-speech">
+            <div id="bearSpeechText">
+              點右邊的熊熊塔羅，讓今天的占卜小語先幫你暖暖心。
+            </div>
+          </div>
         </div>
-        <div class="intro-avatar-wrap">
-          <!-- 這裡用你做好的塔羅 icon，檔案放在 icons 資料夾 -->
-          <img src="icons/bear-tarot-192.png" alt="熊熊塔羅" class="intro-avatar" />
+
+        <!-- 右：熊熊塔羅頭像（點一下換句話） -->
+        <div class="intro-main-right">
+          <img
+            src="icons/bear-tarot-192.png"
+            alt="熊熊塔羅"
+            id="tarotBearAvatar"
+          />
         </div>
       </div>
 
+      <h1 class="home-title">熊熊塔羅占卜</h1>
+      <p class="subtitle">讓一張小小的牌，陪你聊聊今天的心事。</p>
+
+      <p class="intro-text">
+        在熊熊村莊的安靜角落裡，有一張會發光的塔羅桌。<br>
+        無論是感情、工作、人際，還是只是有點累，都可以在這裡坐下來，
+        抽一張牌，聽聽它溫柔的故事。
+      </p>
+
       <p class="intro-tip">
-        小提醒：抽牌前，先深呼吸三次，默念：<br>
-        「請給我此刻最需要的提醒。」不需要完美的問題，只要真心就好。
+        ✅ 點右邊的熊熊塔羅 → 會出現一則「今日占卜小語」。<br>
+        ✅ 長按小語文字 → 可以複製起來，傳給朋友或貼在社群。
       </p>
     </div>
 
@@ -195,7 +300,7 @@
           <div class="icon-emoji">🌟</div>
           <div class="icon-title">單張牌｜今日小指引</div>
           <div class="icon-desc">
-            適合每天抽一張，看看今天的能量與溫柔提醒。
+            一張牌，給你今天最需要的溫柔提醒。
           </div>
         </a>
 
@@ -204,7 +309,7 @@
           <div class="icon-emoji">🔮</div>
           <div class="icon-title">三張牌｜過去・現在・未來</div>
           <div class="icon-desc">
-            想看一件事情的整體故事，就請三張牌一起說說話。
+            想看一件事的故事線，就請三張牌一起說說話。
           </div>
         </a>
 
@@ -213,7 +318,7 @@
           <div class="icon-emoji">✨</div>
           <div class="icon-title">五張牌｜深入一個主題</div>
           <div class="icon-desc">
-            解析現況、阻礙、資源、建議與可能走向。
+            看現況、阻礙、資源、建議與可能走向。
           </div>
         </a>
 
@@ -227,7 +332,143 @@
         </a>
       </div>
     </div>
-
   </div>
+
+  <!-- 📋 複製成功提示 -->
+  <div id="copyToast" class="toast-copy">已複製到剪貼簿</div>
+
+  <script>
+    // 🌙 跟塔羅＆抽牌有關的熊熊小語
+    const TAROT_QUOTES = [
+      "抽牌不是在幫你決定，而是陪你一起思考下一步。",
+      "同一張牌，在不同的日子會說不一樣的故事，因為你也在慢慢改變。",
+      "如果覺得牌面有點可怕，先問問自己：最近是不是太兇待自己了？",
+      "你可以把每一次占卜，都當成和自己好好聊天的一小段時間。",
+      "牌不會預言永遠，只會照亮此刻可以多留意的方向。",
+      "當你不知道問什麼，就先問：「我現在最需要看見的是什麼？」",
+      "看到喜歡的牌是禮物，看到不喜歡的牌是提醒，兩種都很重要。",
+      "每一張牌都有陰影和光，你也是。",
+      "抽完牌後，最重要的不是結果，而是你心裡浮現的第一個直覺。",
+      "如果不同占卜師說出不一樣的解釋，那恭喜你，多了好多種看事情的角度。",
+      "你不用懂全部的塔羅，只要懂得哪一句話，讓你今天比較放心就好。",
+      "所謂準不準，比較像是：這個解讀，有沒有對你的心事說到話。",
+      "當你很焦慮地一直想抽牌，先把牌收起來，喝一口水，讓身體先回來。",
+      "你可以對牌說：「請溫柔一點對我說真話。」然後慢慢翻開。",
+      "一張牌不能定義你的人生，但它可以陪你走過一小段路。",
+      "有時候牌沉默，不是它不理你，而是想要你先聽聽自己的聲音。",
+      "如果同一張牌一直出現，也許它只是想溫柔地說：這個主題值得你多愛自己一點。",
+      "占卜不是要你照做，而是幫你長出「自己選擇」的勇氣。",
+      "抽到讓你害怕的牌時，先深呼吸，問自己：「我可以怎麼好好照顧我自己？」",
+      "你永遠比牌更重要，牌只是提醒，你才是故事真正的作者。"
+    ];
+
+    function pickRandomQuote() {
+      const speechEl = document.getElementById("bearSpeechText");
+      if (!speechEl) return;
+      const idx = Math.floor(Math.random() * TAROT_QUOTES.length);
+      speechEl.textContent = TAROT_QUOTES[idx];
+    }
+
+    function showCopyToast() {
+      const toast = document.getElementById("copyToast");
+      if (!toast) return;
+      toast.classList.add("show");
+      clearTimeout(window._copyToastTimer);
+      window._copyToastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1300);
+    }
+
+    function copyCurrentQuote() {
+      const speechEl = document.getElementById("bearSpeechText");
+      if (!speechEl) return;
+      const text = (speechEl.textContent || "").trim();
+      if (!text) return;
+
+      function fallbackCopy() {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+          showCopyToast();
+        } catch (e) {
+          console.log("複製失敗", e);
+        }
+        document.body.removeChild(ta);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(text)
+          .then(showCopyToast)
+          .catch(() => fallbackCopy());
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function setupLongPressCopy() {
+      const target = document.getElementById("bearSpeechText");
+      if (!target) return;
+
+      let pressTimer = null;
+
+      const start = () => {
+        if (pressTimer !== null) return;
+        pressTimer = setTimeout(() => {
+          copyCurrentQuote();
+          pressTimer = null;
+        }, 650);
+      };
+
+      const cancel = () => {
+        if (pressTimer !== null) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      };
+
+      ["mousedown", "touchstart"].forEach(ev =>
+        target.addEventListener(ev, start)
+      );
+      ["mouseup", "mouseleave", "touchend", "touchcancel", "touchmove"].forEach(
+        ev => target.addEventListener(ev, cancel)
+      );
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const avatar = document.getElementById("tarotBearAvatar");
+      const bubble = document.getElementById("bearSpeech");
+
+      if (avatar) {
+        avatar.addEventListener("click", () => {
+          // 每次點頭像抽一則塔羅小語
+          pickRandomQuote();
+
+          // 顯示對話框
+          if (bubble) {
+            bubble.classList.add("show");
+          }
+
+          // 小晃動動畫
+          avatar.classList.remove("shake");
+          void avatar.offsetWidth;
+          avatar.classList.add("shake");
+        });
+      }
+
+      // 一開始先預設顯示氣泡（有提示文字）
+      if (bubble) {
+        bubble.classList.add("show");
+      }
+
+      // 設定長按複製
+      setupLongPressCopy();
+    });
+  </script>
 </body>
 </html>
