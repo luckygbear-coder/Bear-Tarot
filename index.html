@@ -2,114 +2,571 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>小勇者之旅大冒險 ｜ 主選單</title>
+  <title>冒險者天堂 ｜ 熊熊村長</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 共用樣式 -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2d254a" />
+  <link rel="apple-touch-icon" href="icons/bear-192.png" />
+
+  <!-- 首頁專用小樣式 -->
   <style>
-    * { box-sizing: border-box; }
-    body {
+    body.page-wrap {
       margin: 0;
-      padding: 0;
+      background: #fde9d2;
       font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(180deg, #2d254a, #6a4f9c, #f9e4c8);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      color: #5a3844;
     }
-    .wrap {
+
+    .game-wrap {
       max-width: 480px;
-      width: 100%;
-      padding: 20px 16px 40px;
+      margin: 0 auto;
+      padding: 16px;
     }
-    .panel {
-      background: rgba(255, 247, 230, 0.96);
-      border-radius: 20px;
-      border: 2px solid #f7dba5;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-      padding: 18px 16px 22px;
-      color: #4a3450;
+
+    .card {
+      background: #fff7ec;
+      border-radius: 18px;
+      border: 2px solid #f4d5aa;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 16px 14px;
+      margin-bottom: 16px;
     }
-    h1 {
-      margin: 0 0 6px;
+
+    .home-title {
+      margin: 4px 0 4px;
       font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .08em;
       text-align: center;
-      letter-spacing: 0.12em;
+      color: #6b3430;
     }
+
     .subtitle {
       text-align: center;
       font-size: 13px;
-      color: #7c5c88;
-      margin-bottom: 16px;
+      color: #a0745a;
+      margin-bottom: 8px;
     }
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+
+    /* 🐻 最上面的村長介紹卡片 */
+    .intro-card {
+      position: relative;
     }
-    .menu-btn {
+
+    /* 村長頭像＋對話框橫排：左氣泡、右熊熊 */
+    .intro-main {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 2px solid #f7dba5;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .intro-main-left {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .intro-main-right {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    #quoteBearAvatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #f3d4a0;
+      object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      cursor: pointer;
+      transition: transform .15s ease;
+    }
+
+    #quoteBearAvatar:hover {
+      transform: translateY(-2px);
+    }
+
+    /* 🗨️ 熊熊對話框（在左邊） */
+    .bear-speech {
+      max-width: 260px;
+      padding: 8px 10px;
+      background: #fffdf7;
+      border-radius: 12px;
+      border: 1px solid #f3d4a0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #6b4630;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      opacity: 0;
+      transform: translateY(4px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      position: relative;
+    }
+
+    .bear-speech::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -7px;
+      transform: translateY(-50%);
+      border-width: 7px 0 7px 7px;
+      border-style: solid;
+      border-color: transparent transparent transparent #f3d4a0;
+    }
+
+    .bear-speech::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -6px;
+      transform: translateY(-50%);
+      border-width: 6px 0 6px 6px;
+      border-style: solid;
+      border-color: transparent transparent transparent #fffdf7;
+    }
+
+    .bear-speech.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .intro-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #8b6a52;
+      margin: 6px 0 12px;
+      text-align: left;
+    }
+
+    .intro-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .intro-btn {
+      flex: 1 1 calc(50% - 8px);
+      padding: 9px 0;
+      border-radius: 999px;
+      border: 1px solid #f0cfa4;
+      background: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+      color: #864f3a;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .intro-btn.mail {
+      background: #ffe3dd;
+      border-color: #f7b9a7;
+    }
+
+    .intro-btn.story {
+      background: #ffeecd;
+      border-color: #f7cfa0;
+    }
+
+    .intro-btn.ig {
+      background: #e9e5ff;
+      border-color: #c4b9ff;
+    }
+
+    .intro-tip {
+      font-size: 11px;
+      color: #b0886a;
+      margin: 4px 0 0;
+    }
+
+    /* 四格入口選單 */
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #7b4a7a;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .icon-btn {
       background: #fff9ef;
+      border: 2px solid #f7dba5;
+      border-radius: 16px;
+      padding: 14px 10px 12px;
+      text-align: center;
       text-decoration: none;
       color: #5a3844;
-      font-size: 15px;
-      font-weight: 600;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: transform .12s ease, box-shadow .12s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-height: 90px;
     }
-    .menu-btn span.small {
-      display: block;
-      font-size: 12px;
-      font-weight: 400;
-      color: #a57d8b;
-      margin-top: 2px;
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.14);
     }
-    .menu-btn .icon {
-      font-size: 22px;
-      margin-left: 8px;
+
+    .icon-emoji {
+      font-size: 28px;
     }
-    .footer {
-      margin-top: 14px;
-      text-align: center;
+
+    .icon-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .icon-desc {
       font-size: 11px;
-      color: #edd2f4;
+      opacity: 0.7;
+      line-height: 1.3;
+    }
+
+    /* 點頭像時的可愛晃動 */
+    .shake {
+      animation: bear-shake 0.3s ease;
+    }
+
+    @keyframes bear-shake {
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(-2px); }
+      50%  { transform: translateX(2px); }
+      75%  { transform: translateX(-1px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 400px) {
+      #quoteBearAvatar {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    /* Splash 改奶油色 */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: #fde9d2;
+      color: #5a3844;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .splash-inner {
+      text-align: center;
+    }
+    .splash-inner .hero-bear {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      margin-bottom: 8px;
+    }
+
+    /* 📋 長按複製提示 Toast */
+    .toast-copy {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(65, 48, 40, 0.95);
+      color: #fff7ec;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 1000;
+    }
+    .toast-copy.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <div class="panel">
-      <h1>小勇者之旅大冒險</h1>
-      <div class="subtitle">選擇一個要前往的地方吧～</div>
 
-      <div class="menu">
-        <!-- ✅ 連到小勇者遊戲 -->
-        <a class="menu-btn" href="https://luckygbear-coder.github.io/HeroApp/index.html">
-          <div>
-            🗺️ 小勇者冒險地圖
-            <span class="small">剪刀石頭布對戰、魔物與魔王的冒險旅程</span>
+<body class="page-wrap" data-page="home">
+  <!-- 🔆 啟動畫面 -->
+  <div id="splash">
+    <div class="splash-inner">
+      <img src="icons/bear-192.png" alt="熊熊村長" class="hero-bear">
+      <p>熊熊村長正在準備冒險道具…</p>
+    </div>
+  </div>
+
+  <div class="game-wrap">
+
+    <!-- 🐻 村長熊熊介紹 + 信箱 + 故事屋 + IG -->
+    <div class="card intro-card">
+
+      <!-- 上半部：左邊對話框，右邊村長頭像 -->
+      <div class="intro-main">
+        <div class="intro-main-left">
+          <!-- 🗨️ 熊熊說話的小對話框（顯示小語） -->
+          <div id="bearSpeech" class="bear-speech">
+            <div id="bearSpeechText">
+              今天的熊熊小語在這裡出現～先點點右邊的村長熊熊吧！
+            </div>
           </div>
-          <div class="icon">➡️</div>
+        </div>
+        <div class="intro-main-right">
+          <!-- 點這顆熊熊頭像可以刷新小語 & 顯示對話框 -->
+          <img src="images/bear.png" alt="村長熊熊" id="quoteBearAvatar">
+        </div>
+      </div>
+
+      <h1 class="home-title">熊熊村莊</h1>
+      <p class="subtitle">小勇者，開始今天的小小冒險吧！</p>
+
+      <p class="intro-text">
+        在星星會掉下來的山谷裡，有一隻毛茸茸的小熊，默默陪著每一個需要休息的人。  
+        他把這裡取名為「冒險者天堂」，希望每個來到這裡的人，都能帶著一點點更溫柔的勇氣回家。
+      </p>
+
+      <div class="intro-btn-row">
+        <a href="mailto:luckygbear@gmail.com" class="intro-btn mail">
+          ✉️ 寫信給村長熊熊
+        </a>
+        <a href="stories.html" class="intro-btn story">
+          📖 熊熊故事屋
+        </a>
+        <a href="https://instagram.com/luckygbear" target="_blank" class="intro-btn ig">
+          📷 追蹤 IG 看熊熊日常
+        </a>
+      </div>
+
+      <p class="intro-tip">
+        小秘密：點一下右邊的村長熊熊，熊熊村長會和你對話唷！<br/>
+        長按對話框裡的小語，可以複製起來傳給朋友或貼在社群喔！
+      </p>
+    </div>
+
+    <!-- ✨ 四格入口選單 -->
+    <div class="card">
+      <h3 class="section-title">從這裡選一個入口開始冒險：</h3>
+
+      <div class="icon-grid">
+        <!-- 🔮 熊熊塔羅占卜 -->
+        <a class="icon-btn" href="https://luckygbear-coder.github.io/Bear-Tarot/tarot.html">
+          <div class="icon-emoji">🔮</div>
+          <div class="icon-title">熊熊塔羅占卜</div>
+          <div class="icon-desc">大秘儀｜小指引</div>
         </a>
 
-        <!-- ✅ 連到現在這個熊熊塔羅網站（tarot.html 跟這個 index.html 在同一個資料夾） -->
-        <a class="menu-btn" href="tarot.html">
-          <div>
-            🔮 熊熊塔羅占卜屋
-            <span class="small">22 張大秘儀＋熊熊溫暖語錄，三張牌的小小指引</span>
-          </div>
-          <div class="icon">🐻</div>
+        <!-- 🧿 熊熊易經卜卦 -->
+        <a class="icon-btn" href="https://luckygbear-coder.github.io/Bear8/">
+          <div class="icon-emoji">🧿</div>
+          <div class="icon-title">熊熊易經卜卦</div>
+          <div class="icon-desc">六十四卦｜大道自然</div>
+        </a>
+
+        <!-- 🗺️ 小勇者大冒險 -->
+        <a class="icon-btn" href="https://luckygbear-coder.github.io/HeroApp/choose-hero.html">
+          <div class="icon-emoji">🗺️</div>
+          <div class="icon-title">小勇者大冒險</div>
+          <div class="icon-desc">剪刀石頭布｜安撫魔物</div>
+        </a>
+
+        <!-- 📔 勇者日記（原語錄小屋） -->
+        <a class="icon-btn" href="quotes.html">
+          <div class="icon-emoji">📔</div>
+          <div class="icon-title">小勇者日記&熊熊語錄</div>
+          <div class="icon-desc">一句剛剛好的勇氣</div>
         </a>
       </div>
     </div>
 
-    <div class="footer">
-      村長熊熊 · Little Heroes Adventure
-    </div>
   </div>
+
+  <!-- 📋 複製成功提示 -->
+  <div id="copyToast" class="toast-copy">已複製到剪貼簿</div>
+
+  <!-- 共用 script -->
+  <script src="script.js"></script>
+
+  <!-- Splash + Service Worker -->
+  <script>
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash');
+      if (splash) {
+        setTimeout(() => {
+          splash.style.transition = 'opacity 0.4s ease';
+          splash.style.opacity = '0';
+          setTimeout(() => splash.remove(), 400);
+        }, 800);
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+          console.log('SW 註冊失敗：', err);
+        });
+      }
+    });
+  </script>
+
+  <!-- 隨機 30 句村長小語 + 點頭像刷新 & 對話框 + 長按複製（在氣泡文字上） -->
+  <script>
+    const BEAR_QUOTES = [
+      "溫柔是一種力量，而你也擁有它。",
+      "走得慢沒關係，重要的是你還在往前。",
+      "不知道怎麼辦的日子，就先好好睡一覺。",
+      "你不需要完美，已經很值得被喜歡。",
+      "難過的時候，可以先讓自己當一下小朋友。",
+      "今天有好好吃飯，就是一種勇氣任務完成。",
+      "心裡亂糟糟時，先把房間的一角整理好就好。",
+      "拒絕別人也是在好好照顧自己。",
+      "你可以說「我也會怕」，這句話一點都不丟臉。",
+      "別急著對自己失望，你還在學習而已。",
+      "有情緒，不代表你不夠好，只代表你是人。",
+      "你願意求助時，世界也會伸出一點手。",
+      "小小的開心，可以疊成很大的力量。",
+      "今天如果只做到一件小事，也值得被稱讚。",
+      "放過自己的那一刻，才是真的長大。",
+      "你不一定要當第一名，只要當自己的夥伴。",
+      "不舒服的關係，可以慢慢遠離沒關係。",
+      "別忘了，你也值得被溫柔對待。",
+      "想哭就先哭，再來想要怎麼走下去。",
+      "害怕改變很正常，但你已經在思考就是進步。",
+      "有人懂很好，沒有人懂時，我懂你。",
+      "當你覺得撐不住時，來這裡坐一下就好。",
+      "你現在的樣子，已經比昨天更勇敢一點點。",
+      "不必把所有人都照顧好，先從自己開始。",
+      "世界不一定很溫柔，但我們可以對自己溫柔。",
+      "別把心裡所有聲音都當成真實，可以挑著聽。",
+      "迷路的時候，也是在收集地圖的一部分。",
+      "如果只剩一格電，就留給讓你心安的事情。",
+      "疲累的時候，休息不是懶惰，是在修補翅膀。",
+      "你可以慢慢來，熊熊會在這裡等你。"
+    ];
+
+    function pickRandomQuote() {
+      const speechEl = document.getElementById('bearSpeechText');
+      if (!speechEl) return;
+
+      const idx = Math.floor(Math.random() * BEAR_QUOTES.length);
+      const text = BEAR_QUOTES[idx];
+
+      speechEl.textContent = text;
+    }
+
+    function showCopyToast() {
+      const toast = document.getElementById('copyToast');
+      if (!toast) return;
+      toast.classList.add('show');
+      clearTimeout(window._copyToastTimer);
+      window._copyToastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 1300);
+    }
+
+    function copyCurrentQuote() {
+      const speechEl = document.getElementById('bearSpeechText');
+      if (!speechEl) return;
+      const text = (speechEl.textContent || "").trim();
+      if (!text) return;
+
+      function fallbackCopy() {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showCopyToast();
+        } catch (e) {
+          console.log('複製失敗', e);
+        }
+        document.body.removeChild(ta);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(showCopyToast)
+          .catch(() => fallbackCopy());
+      } else {
+        fallbackCopy();
+      }
+    }
+
+    function setupLongPressCopy() {
+      const target = document.getElementById('bearSpeechText');
+      if (!target) return;
+
+      let pressTimer = null;
+
+      const start = () => {
+        if (pressTimer !== null) return;
+        pressTimer = setTimeout(() => {
+          copyCurrentQuote();
+          pressTimer = null;
+        }, 650); // 長按 0.65 秒觸發
+      };
+
+      const cancel = () => {
+        if (pressTimer !== null) {
+          clearTimeout(pressTimer);
+          pressTimer = null;
+        }
+      };
+
+      ['mousedown', 'touchstart'].forEach(ev =>
+        target.addEventListener(ev, start)
+      );
+      ['mouseup', 'mouseleave', 'touchend', 'touchcancel', 'touchmove'].forEach(ev =>
+        target.addEventListener(ev, cancel)
+      );
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const avatar = document.getElementById('quoteBearAvatar');
+      const bubble = document.getElementById('bearSpeech');
+
+      if (avatar) {
+        avatar.addEventListener('click', () => {
+          // 每次點頭像換一句
+          pickRandomQuote();
+
+          // 顯示對話框
+          if (bubble) {
+            bubble.classList.add('show');
+          }
+
+          // 小晃動動畫
+          avatar.classList.remove('shake');
+          void avatar.offsetWidth;
+          avatar.classList.add('shake');
+        });
+      }
+
+      // 設定長按複製小語（對話框文字）
+      setupLongPressCopy();
+    });
+  </script>
 </body>
 </html>
